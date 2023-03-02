@@ -10,12 +10,6 @@
  * governing permissions and limitations under the License.
  */
 
-/*
- * ------------------------------------------------------------
- * Edit below at your own risk
- * ------------------------------------------------------------
- */
-
 /**
  * The decision engine to decide where to get Milo's libs from.
  */
@@ -42,3 +36,29 @@ export const [setLibs, getLibs] = (() => {
     }, () => libs,
   ];
 })();
+
+/*
+ * ------------------------------------------------------------
+ * Edit above at your own risk
+ * ------------------------------------------------------------
+ */
+
+export function decorateContent() {
+  const miloLibs = getLibs();
+  const topParas = document.body.querySelectorAll('main > div > p');
+  topParas.forEach(async (p) => {
+    // Figure candidate
+    const picCandidate = p.firstElementChild;
+    if (p.childElementCount === 1 && picCandidate.nodeName === 'PICTURE') {
+      const captionCandidate = p.nextElementSibling;
+      if (captionCandidate.nodeName === 'P'
+      && captionCandidate.childElementCount === 1
+      && captionCandidate.firstElementChild.nodeName === 'EM') {
+        const { createTag } = await import(`${miloLibs}/utils/utils.js`);
+        const caption = createTag('figcaption', null, captionCandidate.firstElementChild);
+        const figure = createTag('figure', null, [picCandidate, caption]);
+        p.parentElement.replaceChild(figure, p);
+      }
+    }
+  });
+}
