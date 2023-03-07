@@ -44,75 +44,15 @@ export const [setLibs, getLibs] = (() => {
  * ------------------------------------------------------------
  */
 
-/**
- * Builds a block DOM Element from a two dimensional array
- * @param {string} blockName name of the block
- * @param {any} content two dimensional array or string or object of content
- */
-function buildBlock(blockName, content) {
-  const table = Array.isArray(content) ? content : [[content]];
-  const blockEl = document.createElement('div');
-  // build image block nested div structure
-  blockEl.classList.add(blockName);
-  table.forEach((row) => {
-    const rowEl = document.createElement('div');
-    row.forEach((col) => {
-      const colEl = document.createElement('div');
-      const vals = col.elems ? col.elems : [col];
-      vals.forEach((val) => {
-        if (val) {
-          if (typeof val === 'string') {
-            colEl.innerHTML += val;
-          } else {
-            colEl.appendChild(val);
-          }
-        }
-      });
-      rowEl.appendChild(colEl);
-    });
-    blockEl.appendChild(rowEl);
-  });
-  return (blockEl);
-}
-
-async function buildArticleHeader(el) {
-  const miloLibs = getLibs();
-  const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
-  if (!getTaxonomyModule()) {
-    await loadTaxonomy();
-  }
-  const div = document.createElement('div');
-  div.setAttribute('class', 'section');
-  const h1 = el.querySelector('h1');
-  const picture = el.querySelector('picture');
-  const tag = getMetadata('article:tag');
-  const category = tag || 'News';
-  const author = getMetadata('author');
-  const { codeRoot } = getConfig();
-  const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-')}` : null);
-  const publicationDate = getMetadata('publication-date');
-
-  const categoryTag = getLinkForTopic(category);
-
-  const articleHeaderBlockEl = buildBlock('article-header', [
-    [`<p>${categoryTag}</p>`],
-    [h1],
-    [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
-      <p>${publicationDate}</p>`],
-    [picture],
-  ]);
-  div.append(articleHeaderBlockEl);
-  el.prepend(div);
-}
-
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
-  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  const { getMetadata, loadStyle, getConfig } = await import(`${miloLibs}/utils/utils.js`);
   const mainEl = document.querySelector('main');
   try {
     if (getMetadata('content-type') && !mainEl.querySelector('.article-header')) {
-      buildArticleHeader(mainEl);
+      const { default: decorateHeaderAndTags } = await import('./article-helper.js');
+      await decorateHeaderAndTags(getLibs);
+      loadStyle(`${getConfig().codeRoot}/styles/article.css`);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
