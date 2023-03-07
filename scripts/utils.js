@@ -112,7 +112,7 @@ export async function buildAutoBlocks() {
   const mainEl = document.querySelector('main');
   try {
     if (getMetadata('content-type') && !mainEl.querySelector('.article-header')) {
-      buildArticleHeader(mainEl);
+      await buildArticleHeader(mainEl);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
