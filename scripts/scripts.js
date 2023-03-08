@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { setLibs } from './utils.js';
+import { setLibs, buildAutoBlocks } from './utils.js';
 
 // Add project-wide styles here.
 const STYLES = '';
@@ -59,6 +59,7 @@ const { loadArea, loadDelayed, setConfig } = await import(`${miloLibs}/utils/uti
 
 (async function loadPage() {
   setConfig({ ...CONFIG, miloLibs });
+  await buildAutoBlocks();
   await loadArea();
   loadDelayed();
 }());
