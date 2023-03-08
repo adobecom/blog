@@ -113,7 +113,12 @@ function buildTagsBlock() {
   const main = document.querySelector('main');
   const recBlock = main.querySelector('.recommended-articles');
   if (recBlock) {
-    recBlock.before(tagsBlock);
+    // Put tags block before recommended articles block
+    if (recBlock.parentElement.childElementCount === 1) {
+      recBlock.parentElement.previousElementSibling.append(tagsBlock);
+    } else {
+      recBlock.before(tagsBlock);
+    }
   } else {
     main.lastElementChild.append(tagsBlock);
   }
