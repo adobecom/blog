@@ -83,7 +83,7 @@ async function buildArticleHeader(el) {
     await loadTaxonomy();
   }
   const div = document.createElement('div');
-  div.setAttribute('class', 'section');
+  // div.setAttribute('class', 'section');
   const h1 = el.querySelector('h1');
   const picture = el.querySelector('picture');
   const tag = getMetadata('article:tag');
@@ -106,6 +106,19 @@ async function buildArticleHeader(el) {
   el.prepend(div);
 }
 
+function buildTagsBlock() {
+  const tagsArray = [...document.head.querySelectorAll('meta[property="article:tag"]')].map((el) => el.content) || [];
+
+  const tagsBlock = buildBlock('tags', tagsArray.join(', '));
+  const main = document.querySelector('main');
+  const recBlock = main.querySelector('.recommended-articles');
+  if (recBlock) {
+    recBlock.before(tagsBlock);
+  } else {
+    main.lastElementChild.append(tagsBlock);
+  }
+}
+
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
@@ -113,6 +126,7 @@ export async function buildAutoBlocks() {
   try {
     if (getMetadata('content-type') && !mainEl.querySelector('.article-header')) {
       await buildArticleHeader(mainEl);
+      buildTagsBlock();
     }
   } catch (error) {
     // eslint-disable-next-line no-console
