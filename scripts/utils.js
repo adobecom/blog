@@ -124,12 +124,64 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
+async function buildArticleHeader(el) {
+  const miloLibs = getLibs();
+  const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
+  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
+  if (!getTaxonomyModule()) {
+    await loadTaxonomy();
+  }
+  const div = document.createElement('div');
+  // div.setAttribute('class', 'section');
+  const h1 = el.querySelector('h1');
+  const picture = el.querySelector('picture');
+  const tag = getMetadata('article:tag');
+  const category = tag || 'News';
+  const author = getMetadata('author');
+  const { codeRoot } = getConfig();
+  const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-')}` : null);
+  const publicationDate = getMetadata('publication-date');
+
+  const categoryTag = getLinkForTopic(category);
+
+  const articleHeaderBlockEl = buildBlock('article-header', [
+    [`<p>${categoryTag}</p>`],
+    [h1],
+    [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
+      <p>${publicationDate}</p>`],
+    [picture],
+  ]);
+  div.append(articleHeaderBlockEl);
+  el.prepend(div);
+}
+
+function buildTagsBlock() {
+  const tagsArray = [...document.head.querySelectorAll('meta[property="article:tag"]')].map((el) => el.content) || [];
+
+  const tagsBlock = buildBlock('tags', tagsArray.join(', '));
+  const main = document.querySelector('main');
+  const recBlock = main.querySelector('.recommended-articles');
+  if (recBlock) {
+    // Put tags block before recommended articles block
+    if (recBlock.parentElement.childElementCount === 1) {
+      recBlock.parentElement.previousElementSibling.append(tagsBlock);
+    } else {
+      recBlock.before(tagsBlock);
+    }
+  } else {
+    main.lastElementChild.append(tagsBlock);
+  }
+}
+
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
   const mainEl = document.querySelector('main');
   try {
-    if (getMetadata('content-type') === 'authors') {
+    if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
+      await buildArticleHeader(mainEl);
+      buildTagsBlock();
+    } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }
   } catch (error) {
