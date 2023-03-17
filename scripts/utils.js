@@ -10,7 +10,6 @@
  * governing permissions and limitations under the License.
  */
 
-
 /**
  * The decision engine to decide where to get Milo's libs from.
  */
@@ -44,6 +43,33 @@ export const [setLibs, getLibs] = (() => {
  * ------------------------------------------------------------
  */
 
+export function decorateContent() {
+  const miloLibs = getLibs();
+  const topParas = document.body.querySelectorAll('main > div > p');
+  topParas.forEach(async (p) => {
+    // Figure candidate
+    const picCandidate = p.firstElementChild;
+    if (p.childElementCount === 1 && picCandidate.nodeName === 'PICTURE') {
+      const captionCandidate = p.nextElementSibling;
+      const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
+      if (captionCandidate
+        && captionCandidate.nodeName === 'P'
+        && captionCandidate.childElementCount === 1
+        && captionCandidate.firstChild.nodeName === 'EM') {
+        const caption = createTag('figcaption', null, captionCandidate.firstElementChild);
+        const figure = createTag('figure', { class: 'figure' }, [picCandidate, caption]);
+        const block = createTag('div', { class: 'figure' }, figure);
+        p.parentElement.replaceChild(block, p);
+      } else {
+        const figure = createTag('figure', { class: 'figure' }, picCandidate);
+        const block = createTag('div', { class: 'figure' }, figure);
+        p.parentElement.replaceChild(block, p);
+      }
+      loadStyle(`${miloLibs}/blocks/figure/figure.css`);
+    }
+  });
+}
+
 /**
  * Builds a block DOM Element from a two dimensional array
  * @param {string} blockName name of the block
@@ -73,6 +99,29 @@ function buildBlock(blockName, content) {
     blockEl.appendChild(rowEl);
   });
   return (blockEl);
+}
+
+function buildAuthorHeader(mainEl) {
+  const div = mainEl.querySelector('div');
+  const heading = mainEl.querySelector('h1');
+  const bio = heading.nextElementSibling;
+  const picture = mainEl.querySelector('picture');
+  const social = mainEl.querySelector('h2');
+  const socialLinks = social ? social.nextElementSibling : null;
+
+  const authorHeader = buildBlock('author-header', [
+    [{
+      elems: [
+        heading,
+        picture.closest('p'),
+        bio,
+        social,
+        socialLinks,
+      ],
+    }],
+  ]);
+
+  div.prepend(authorHeader);
 }
 
 async function buildArticleHeader(el) {
@@ -129,9 +178,11 @@ export async function buildAutoBlocks() {
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
   const mainEl = document.querySelector('main');
   try {
-    if (getMetadata('content-type') && !mainEl.querySelector('.article-header')) {
+    if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
       await buildArticleHeader(mainEl);
       buildTagsBlock();
+    } else if (getMetadata('content-type') === 'authors') {
+      buildAuthorHeader(mainEl);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
