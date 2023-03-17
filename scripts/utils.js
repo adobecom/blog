@@ -43,6 +43,33 @@ export const [setLibs, getLibs] = (() => {
  * ------------------------------------------------------------
  */
 
+export function decorateContent() {
+  const miloLibs = getLibs();
+  const topParas = document.body.querySelectorAll('main > div > p');
+  topParas.forEach(async (p) => {
+    // Figure candidate
+    const picCandidate = p.firstElementChild;
+    if (p.childElementCount === 1 && picCandidate.nodeName === 'PICTURE') {
+      const captionCandidate = p.nextElementSibling;
+      const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
+      if (captionCandidate
+        && captionCandidate.nodeName === 'P'
+        && captionCandidate.childElementCount === 1
+        && captionCandidate.firstChild.nodeName === 'EM') {
+        const caption = createTag('figcaption', null, captionCandidate.firstElementChild);
+        const figure = createTag('figure', { class: 'figure' }, [picCandidate, caption]);
+        const block = createTag('div', { class: 'figure' }, figure);
+        p.parentElement.replaceChild(block, p);
+      } else {
+        const figure = createTag('figure', { class: 'figure' }, picCandidate);
+        const block = createTag('div', { class: 'figure' }, figure);
+        p.parentElement.replaceChild(block, p);
+      }
+      loadStyle(`${miloLibs}/blocks/figure/figure.css`);
+    }
+  });
+}
+
 /**
  * Builds a block DOM Element from a two dimensional array
  * @param {string} blockName name of the block
