@@ -39,7 +39,7 @@ export const [setLibs, getLibs] = (() => {
 
 /*
  * ------------------------------------------------------------
- * Edit above at your own risk
+ * Edit below at your own risk
  * ------------------------------------------------------------
  */
 
@@ -70,3 +70,70 @@ export function decorateContent() {
   });
 }
 
+/**
+ * Builds a block DOM Element from a two dimensional array
+ * @param {string} blockName name of the block
+ * @param {any} content two dimensional array or string or object of content
+ */
+function buildBlock(blockName, content) {
+  const table = Array.isArray(content) ? content : [[content]];
+  const blockEl = document.createElement('div');
+  // build image block nested div structure
+  blockEl.classList.add(blockName);
+  table.forEach((row) => {
+    const rowEl = document.createElement('div');
+    row.forEach((col) => {
+      const colEl = document.createElement('div');
+      const vals = col.elems ? col.elems : [col];
+      vals.forEach((val) => {
+        if (val) {
+          if (typeof val === 'string') {
+            colEl.innerHTML += val;
+          } else {
+            colEl.appendChild(val);
+          }
+        }
+      });
+      rowEl.appendChild(colEl);
+    });
+    blockEl.appendChild(rowEl);
+  });
+  return (blockEl);
+}
+
+function buildAuthorHeader(mainEl) {
+  const div = mainEl.querySelector('div');
+  const heading = mainEl.querySelector('h1');
+  const bio = heading.nextElementSibling;
+  const picture = mainEl.querySelector('picture');
+  const social = mainEl.querySelector('h2');
+  const socialLinks = social ? social.nextElementSibling : null;
+
+  const authorHeader = buildBlock('author-header', [
+    [{
+      elems: [
+        heading,
+        picture.closest('p'),
+        bio,
+        social,
+        socialLinks,
+      ],
+    }],
+  ]);
+
+  div.prepend(authorHeader);
+}
+
+export async function buildAutoBlocks() {
+  const miloLibs = getLibs();
+  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  const mainEl = document.querySelector('main');
+  try {
+    if (getMetadata('content-type') === 'authors') {
+      buildAuthorHeader(mainEl);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Auto Blocking failed', error);
+  }
+}
