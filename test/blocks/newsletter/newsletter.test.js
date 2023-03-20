@@ -8,7 +8,7 @@ import { setLibs } from '../../../scripts/utils.js';
 document.body.innerHTML = await readFile({ path: './mocks/body.html' });
 const ogDoc = document.body.innerHTML;
 
-const { default: init } = await import('../../../blocks/newsletter/newsletter.js');
+const { default: init } = await import('../../../blocks/newsletter-modal/newsletter-modal.js');
 
 describe('newsletter modal block', () => {
   before(() => {
