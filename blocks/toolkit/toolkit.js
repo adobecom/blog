@@ -51,7 +51,7 @@ function decorateCTARow(row) {
   }
 }
 
-export default async function decorate(block) {
+export default async function init(block) {
   const miloLibs = getLibs();
   const { createTag } = await import(`${miloLibs}/utils/utils.js`);
   const rows = Array.from(block.children);
