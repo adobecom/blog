@@ -28,6 +28,10 @@
     justify-content: center;
 }
 
+.toolkit .wrapper a {
+  text-decoration: none;
+}
+
 .toolkit .wrapper h2 {
     display: flex;
     margin: 0 0 10px;
