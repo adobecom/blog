@@ -1,4 +1,4 @@
-main .toolkit {
+.toolkit {
     display: flex;
     flex-direction: column;
     max-width: 600px;
@@ -7,82 +7,89 @@ main .toolkit {
     margin-top: 60px;
 }
 
-main .toolkit .container {
+.toolkit .wrapper {
     display: flex;
     flex-direction: column;
     order: 2;
 }
 
-main .toolkit .row {
+.toolkit .row {
     width: 320px;
     display: flex;
-    border: 1px solid #EAEAEA;
+    border: 1px solid var(--color-gray-200);
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 20px;
 }
 
-main .toolkit .container .row .row-content {
+.toolkit .wrapper .row .row-content {
     width: 100%;
-    margin: 15px 15px 5px 15px;
+    margin: var(--spacing-xs);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-main .toolkit .container a {
+.toolkit .wrapper a {
     text-decoration: none;
 }
 
-main .toolkit .container h2 {
+.toolkit .wrapper h2 {
     display: flex;
-    margin: 0 0 10px 0;
-    color: #4D4D4D;
+    margin: 0 0 10px;
+    color: var(--color-gray-700);
     font-size: 16px;
     line-height: 20px;
     align-items: center;
 }
 
-main .toolkit .container h2 img {
+.toolkit .wrapper h2 img {
     width: 18px;
     margin-left: 10px;
 }
 
-main .toolkit .container p {
+.toolkit .wrapper p {
     margin: 0;
-    font-size: 12px;
+    font-size: var(--type-body-xxs-size);
     font-weight: 400;
     letter-spacing: 1px;
-    color: #4D4D4D;
+    color: var(--color-gray-700);
 }
 
-main .toolkit .container .row-content a.button {
+.toolkit .wrapper .row-content a {
     margin: 0;
+    white-space: nowrap;
+    text-align: center;
+    font-size: var(--type-detail-m-size);
 }
 
-main .toolkit .container .row-image {
+.toolkit .wrapper .row-image {
     display: flex;
 }
 
-main .toolkit .container .row-image img {
+.toolkit .wrapper .row-image img {
     max-width: 100px;
     display: block;
     height: 100%;
+    object-fit: cover;
 }
 
-main .toolkit .container .ctas a {
+.toolkit .wrapper .ctas a {
     margin-top: 0;
 }
 
 @media (min-width: 880px) {
-    main .toolkit {
+    .toolkit {
         flex-direction: row;
         max-width: 1000px;
         gap: 40px;
     }
 
-    main .toolkit .column :first-child {
+    .toolkit .column :first-child {
         margin-top: 0;
     }
 
-    main .toolkit .container {
+    .toolkit .wrapper {
         order: initial;
     }
 }

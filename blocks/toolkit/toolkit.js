@@ -25,7 +25,7 @@ function decorateRow(row, createTag) {
   const cta = columns[1].querySelector('a');
 
   if (cta) {
-    cta.classList.add('button', 'small');
+    cta.classList.add('con-button', 'blue');
     cta.target = '_blank';
   } else {
     columns[1].querySelector('h2').append(icon);
@@ -43,11 +43,11 @@ function decorateCTARow(row) {
   }
 
   if (links[0]) {
-    links[0].classList.add('button', 'small', 'light');
+    links[0].classList.add('con-button', 'button-s', 'outline');
   }
 
   if (links[1]) {
-    links[1].classList.add('button', 'small');
+    links[1].classList.add('con-button', 'button-s', 'blue');
   }
 }
 
@@ -55,17 +55,17 @@ export default async function decorate(block) {
   const miloLibs = getLibs();
   const { createTag } = await import(`${miloLibs}/utils/utils.js`);
   const rows = Array.from(block.children);
-  let container;
+  let wrapper;
 
   rows.forEach((row) => {
     const columns = Array.from(row.children);
     if (columns.length === 2) {
-      if (!container) {
-        container = createTag('div', { class: 'container' });
-        block.append(container);
+      if (!wrapper) {
+        wrapper = createTag('div', { class: 'wrapper' });
+        block.append(wrapper);
       }
 
-      container.append(row);
+      wrapper.append(row);
 
       if (columns[0].innerHTML) {
         decorateRow(row, createTag);
