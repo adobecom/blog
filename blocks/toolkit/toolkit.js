@@ -2,9 +2,11 @@ import { getLibs } from '../../scripts/utils.js';
 
 function decorateRow(row, createTag) {
   const columns = Array.from(row.children);
-  const image = columns[0].querySelector('img');
-  const { href } = columns[0].querySelector('a');
-  const icon = createTag('img', { src: '/blocks/toolkit/link-icon.svg' });
+  const firstColumn = columns[0];
+  const secondColumn = columns[1];
+  const image = firstColumn.querySelector('img');
+  const { href } = firstColumn.querySelector('a');
+  const icon = createTag('img', { src: '/blocks/toolkit/link-icon.svg', alt: 'open in a new tab' });
   const link = createTag('a', { href, target: '_blank' });
 
   row.classList.add('row');
@@ -17,18 +19,18 @@ function decorateRow(row, createTag) {
     throw new Error('Expected link');
   }
 
-  columns[0].innerHTML = '';
-  columns[0].append(image);
-  columns[0].classList.add('row-image');
-  columns[1].classList.add('row-content');
+  firstColumn.innerHTML = '';
+  firstColumn.append(image);
+  firstColumn.classList.add('row-image');
+  secondColumn.classList.add('row-content');
 
-  const cta = columns[1].querySelector('a');
+  const cta = secondColumn.querySelector('a');
 
   if (cta) {
     cta.classList.add('con-button', 'blue');
     cta.target = '_blank';
   } else {
-    columns[1].querySelector('h2').append(icon);
+    secondColumn.querySelector('h2').append(icon);
     row.parentElement.append(link);
     link.append(row);
   }
@@ -42,13 +44,8 @@ function decorateCTARow(row) {
     return;
   }
 
-  if (links[0]) {
-    links[0].classList.add('con-button', 'button-s', 'outline');
-  }
-
-  if (links[1]) {
-    links[1].classList.add('con-button', 'button-s', 'blue');
-  }
+  links[0]?.classList.add('con-button', 'button-s', 'outline');
+  links[1]?.classList.add('con-button', 'button-s', 'blue');
 }
 
 export default async function init(block) {
