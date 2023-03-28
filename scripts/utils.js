@@ -79,7 +79,7 @@ export async function decorateContent() {
     } else {
       const picture = createTag('p', null, imgEl.cloneNode(true));
       const em = createTag('p', null, caption.cloneNode(true));
-      const wrapper = createTag('div', null);
+      const wrapper = createTag('div');
       wrapper.append(picture, em);
       row.append(wrapper);
       caption.remove();
