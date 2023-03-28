@@ -10,10 +10,7 @@ body.newsletter-no-scroll {
   overflow: hidden;
 }
 
-.newsletter-modal-banner-container {
-  width: 100%;
-}
-
+.newsletter-modal-banner-container,
 .newsletter-modal-banner-container img {
   width: 100%;
 }
@@ -31,7 +28,7 @@ body.newsletter-no-scroll {
   width: 80%;
   max-width: 420px;
   font-size: var(--type-body-l-size);
-  margin: 0 0 var(--spacing-xs) !important;
+  margin: 0 0 var(--spacing-xs);
 }
 
 .newsletter-modal-form {
@@ -137,7 +134,7 @@ body.newsletter-no-scroll {
   .newsletter-modal {
       max-width: 440px;
       border-radius: 6px;
-      height: auto!important;
+      height: auto;
   }
 
   .newsletter-modal-content {
