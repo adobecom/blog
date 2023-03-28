@@ -69,7 +69,7 @@ export async function decorateContent() {
 
   imgEls.forEach((imgEl) => {
     const block = createTag('div', { class: 'figure' });
-    const row = createTag('div', null);
+    const row = createTag('div');
     const caption = getImageCaption(imgEl);
     const parentEl = imgEl.closest('p');
 
