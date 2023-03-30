@@ -24,17 +24,18 @@ body.newsletter-no-scroll {
   min-height: 365px;
 }
 
-.newsletter-modal-text {
+.newsletter-modal-text-container, .newsletter-modal-form {
   width: 80%;
   max-width: 420px;
+}
+
+.newsletter-modal-title {
   font-size: var(--type-body-l-size);
   margin: 0 0 var(--spacing-xs);
 }
 
 .newsletter-modal-form {
   display: flex;
-  max-width: 420px;
-  width: 80%;
   align-items: center;
 }
 
@@ -94,8 +95,6 @@ body.newsletter-no-scroll {
 }
 
 .newsletter-modal-disclaimer {
-  width: 80%;
-  max-width: 360px;
   font-size: var(--type-detail-s-size);
   color: var(--text-color);
   margin-bottom: var(--spacing-l);

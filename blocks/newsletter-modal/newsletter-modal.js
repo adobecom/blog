@@ -66,40 +66,32 @@ export default async function init(block) {
   const children = block.querySelectorAll(':scope > div');
   if (children.length < 4) return;
 
-  block.innerHTML = '';
   const { createTag } = await import(`${getLibs()}/utils/utils.js`);
 
-  const picture = children[0].querySelector('picture');
-  const text = children[1].querySelector('div > p:nth-child(1)').textContent;
-  const disclaimer = children[1].querySelector('div > p:nth-child(2)').textContent;
+  children[0].classList.add('newsletter-modal-banner-container');
+
+  const content = children[1];
+  content.classList.add('newsletter-modal-content');
+  content.firstElementChild.classList.add('newsletter-modal-text-container');
+  content.firstElementChild.firstElementChild.classList.add('newsletter-modal-title');
+  content.firstElementChild.lastElementChild.classList.add('newsletter-modal-disclaimer');
 
   const emailText = children[2].querySelector('div p:nth-child(1)').textContent;
   const emailPlaceholder = children[2].querySelector('div p:nth-child(2)').textContent;
   const cta = children[2].querySelector('div p:nth-child(3)').textContent;
-
-  const successMsg = children[3].querySelector(':scope > div:nth-child(1) ').textContent;
-  const errorMsg = children[3].querySelector(':scope > div:nth-child(2) ').textContent;
-
-  const bannerContainer = createTag('div', { class: 'newsletter-modal-banner-container' }, picture);
-  const content = createTag('div', { class: 'newsletter-modal-content' });
-
-  const textEl = createTag('p', { class: 'newsletter-modal-text' }, text);
   const form = createTag('form', { class: 'newsletter-modal-form' });
-
   const emailTextEl = createTag('span', { class: 'newsletter-modal-email-text', id: 'newsletter_email' }, emailText);
   const emailEl = createTag('input', { type: 'email', class: 'newsletter-modal-email', required: 'required' });
   const emailLabelEl = createTag('label', { class: 'newsletter-modal-email-label', for: 'newsletter_email' }, emailTextEl);
   emailLabelEl.append(emailEl);
   emailEl.placeholder = emailPlaceholder;
-
   const ctaEl = createTag('button', { type: 'submit', class: 'newsletter-modal-cta' }, cta);
-  const disclaimerEl = createTag('p', { class: 'newsletter-modal-disclaimer' }, disclaimer);
-
-  addClickEvent({ emailEl, ctaEl, content, successMsg, errorMsg }, createTag);
-
   form.append(emailLabelEl, ctaEl);
+  content.append(form);
 
-  content.append(textEl, disclaimerEl, form);
-
-  block.append(bannerContainer, content);
+  const successMsg = children[3].querySelector(':scope > div:nth-child(1) ').textContent;
+  const errorMsg = children[3].querySelector(':scope > div:nth-child(2) ').textContent;
+  addClickEvent({ emailEl, ctaEl, content, successMsg, errorMsg }, createTag);
+  children[3].remove();
+  children[2].remove();
 }
