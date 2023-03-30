@@ -6,7 +6,7 @@ function decorateRow(row, createTag) {
   const secondColumn = columns[1];
   const image = firstColumn.querySelector('img');
   const { href } = firstColumn.querySelector('a');
-  const icon = createTag('img', { src: '/blocks/toolkit/link-icon.svg', alt: 'open in a new tab' });
+  const icon = createTag('img', { src: '/blocks/toolkit/link-icon.svg', alt: 'open in a new tab', width: '18px', height: '18px' });
   const link = createTag('a', { href, target: '_blank' });
 
   row.classList.add('row');
