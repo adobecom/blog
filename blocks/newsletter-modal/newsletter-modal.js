@@ -1,18 +1,5 @@
 import { getLibs } from '../../scripts/utils.js';
 
-function closeModal() {
-  const qModals = document.querySelectorAll('.dialog-modal');
-  if (qModals?.length) {
-    qModals.forEach((modal) => {
-      if (modal.nextElementSibling?.classList.contains('modal-curtain')) {
-        modal.nextElementSibling.remove();
-      }
-      modal.remove();
-    });
-    window.history.pushState('', document.title, `${window.location.pathname}${window.location.search}`);
-  }
-}
-
 function displayConfirmation(content, message, createTag) {
   const confirmationText = createTag('p', { class: 'newsletter-modal-confirmation' }, message);
   const confirmationClose = createTag('button', { class: 'newsletter-modal-confirmation-close' }, 'Close');
@@ -20,9 +7,9 @@ function displayConfirmation(content, message, createTag) {
   content.innerHTML = '';
   content.append(confirmationText, confirmationClose);
 
-  confirmationClose.addEventListener('click', (e) => {
-    e.preventDefault();
-    closeModal();
+  confirmationClose.addEventListener('click', ({ target }) => {
+    const modalClose = target.closest('.dialog-modal')?.querySelector('.dialog-close');
+    modalClose?.click();
   });
 }
 
