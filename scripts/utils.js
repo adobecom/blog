@@ -43,30 +43,50 @@ export const [setLibs, getLibs] = (() => {
  * ------------------------------------------------------------
  */
 
-export function decorateContent() {
+function getImageCaption(picture) {
+  // Check if the parent element has a caption
+  const parentEl = picture.parentNode;
+  let caption = parentEl.querySelector('em');
+  if (caption) return caption;
+
+  // If the parent element doesn't have a caption, check if the next sibling does
+  const parentSiblingEl = parentEl.nextElementSibling;
+  caption = parentSiblingEl
+    && !parentSiblingEl.querySelector('picture')
+    && parentSiblingEl.firstChild.tagName === 'EM'
+    ? parentSiblingEl.querySelector('em')
+    : undefined;
+  return caption;
+}
+
+export async function decorateContent() {
   const miloLibs = getLibs();
-  const topParas = document.body.querySelectorAll('main > div > p');
-  topParas.forEach(async (p) => {
-    // Figure candidate
-    const picCandidate = p.firstElementChild;
-    if (p.childElementCount === 1 && picCandidate.nodeName === 'PICTURE') {
-      const captionCandidate = p.nextElementSibling;
-      const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
-      if (captionCandidate
-        && captionCandidate.nodeName === 'P'
-        && captionCandidate.childElementCount === 1
-        && captionCandidate.firstChild.nodeName === 'EM') {
-        const caption = createTag('figcaption', null, captionCandidate.firstElementChild);
-        const figure = createTag('figure', { class: 'figure' }, [picCandidate, caption]);
-        const block = createTag('div', { class: 'figure' }, figure);
-        p.parentElement.replaceChild(block, p);
-      } else {
-        const figure = createTag('figure', { class: 'figure' }, picCandidate);
-        const block = createTag('div', { class: 'figure' }, figure);
-        p.parentElement.replaceChild(block, p);
-      }
-      loadStyle(`${miloLibs}/blocks/figure/figure.css`);
+  const imgEls = document.querySelectorAll('main > div > p > picture');
+  if (!imgEls.length) return;
+
+  const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
+  loadStyle(`${miloLibs}/blocks/figure/figure.css`);
+
+  imgEls.forEach((imgEl) => {
+    const block = createTag('div', { class: 'figure' });
+    const row = createTag('div');
+    const caption = getImageCaption(imgEl);
+    const parentEl = imgEl.closest('p');
+
+    if (!caption) {
+      const wrapper = createTag('div', null, imgEl.cloneNode(true));
+      row.append(wrapper);
+    } else {
+      const picture = createTag('p', null, imgEl.cloneNode(true));
+      const em = createTag('p', null, caption.cloneNode(true));
+      const wrapper = createTag('div');
+      wrapper.append(picture, em);
+      row.append(wrapper);
+      caption.remove();
     }
+
+    block.append(row.cloneNode(true));
+    parentEl.replaceWith(block);
   });
 }
 
