@@ -1,31 +1,31 @@
 .toolkit {
-    display: flex;
-    flex-direction: column;
-    max-width: 600px;
-    margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 60px auto;
 }
 
 .toolkit .wrapper {
-    display: flex;
-    flex-direction: column;
-    order: 2;
+  display: flex;
+  flex-direction: column;
+  order: 2;
 }
 
 .toolkit .row {
-    width: 320px;
-    display: flex;
-    border: 1px solid var(--color-gray-200);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 20px;
+  width: 320px;
+  display: flex;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .toolkit .wrapper .row .row-content {
-    width: 100%;
-    margin: var(--spacing-xs);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  width: 100%;
+  margin: var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .toolkit .wrapper a {
@@ -33,57 +33,57 @@
 }
 
 .toolkit .wrapper h2 {
-    display: flex;
-    margin: 0 0 10px;
-    color: var(--color-gray-700);
-    font-size: 16px;
-    line-height: 20px;
-    align-items: center;
+  display: flex;
+  margin: 0 0 10px;
+  color: var(--color-gray-700);
+  font-size: 16px;
+  line-height: 20px;
+  align-items: center;
 }
 
 .toolkit .wrapper h2 img {
-    width: 18px;
-    margin-left: 10px;
+  width: 18px;
+  margin-left: 10px;
 }
 
 .toolkit .wrapper p {
-    margin: 0;
-    font-size: var(--type-body-xxs-size);
-    font-weight: 400;
-    letter-spacing: 1px;
-    color: var(--color-gray-700);
+  margin: 0;
+  font-size: var(--type-body-xxs-size);
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: var(--color-gray-700);
 }
 
 .toolkit .wrapper .row-content a {
-    margin: 0;
-    white-space: nowrap;
-    text-align: center;
-    font-size: var(--type-detail-m-size);
+  margin: 0;
+  white-space: nowrap;
+  text-align: center;
+  font-size: var(--type-detail-m-size);
 }
 
 .toolkit .wrapper .row-image img {
-    max-width: 100px;
-    display: block;
-    height: 100%;
-    object-fit: cover;
+  max-width: 100px;
+  display: block;
+  height: 100%;
+  object-fit: cover;
 }
 
 .toolkit .wrapper .ctas a {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 @media (min-width: 880px) {
-    .toolkit {
-        flex-direction: row;
-        max-width: 1000px;
-        gap: 40px;
-    }
+  .toolkit {
+    flex-direction: row;
+    max-width: 1000px;
+    gap: 40px;
+  }
 
-    .toolkit .column :first-child {
-        margin-top: 0;
-    }
+  .toolkit .column :first-child {
+    margin-top: 0;
+  }
 
-    .toolkit .wrapper {
-        order: initial;
-    }
+  .toolkit .wrapper {
+    order: initial;
+  }
 }
