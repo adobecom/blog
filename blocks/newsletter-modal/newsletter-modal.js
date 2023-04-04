@@ -13,7 +13,9 @@ function displayConfirmation(content, message, createTag) {
   });
 }
 
-function addClickEvent({ emailEl, ctaEl, content, successMsg, errorMsg }, createTag) {
+function addClickEvent({
+  emailEl, ctaEl, content, successMsg, errorMsg, consentNotice,
+}, createTag) {
   ctaEl.addEventListener('click', (e) => {
     e.preventDefault();
     const email = emailEl.value;
@@ -22,10 +24,11 @@ function addClickEvent({ emailEl, ctaEl, content, successMsg, errorMsg }, create
       const headers = new Headers();
       headers.append('Content-Type', 'application/json');
 
+      const defaultConsentNotice = '<div class="disclaimer detail-spectrum-m" style="letter-spacing: 0px; padding-top: 15px;">The Adobe family of companies may keep me informed with personalized emails from the Adobe Blog team. See our <a href="https://www.adobe.com/privacy/policy.html" target="_blank">Privacy Policy</a> for more details or to opt-out at any time.</div>';
       const body = {
         sname: 'adbeblog',
         email,
-        consent_notice: '<div class="disclaimer detail-spectrum-m" style="letter-spacing: 0px; padding-top: 15px;">The Adobe family of companies may keep me informed with personalized emails from the Adobe Blog team. See our <a href="https://www.adobe.com/privacy/policy.html" target="_blank">Privacy Policy</a> for more details or to opt-out at any time.</div>',
+        consent_notice: consentNotice || defaultConsentNotice,
         current_url: window.location.href,
       };
 
@@ -78,7 +81,11 @@ export default async function init(block) {
 
   const successMsg = children[3].querySelector(':scope > div:nth-child(1) ').textContent;
   const errorMsg = children[3].querySelector(':scope > div:nth-child(2) ').textContent;
-  addClickEvent({ emailEl, ctaEl, content, successMsg, errorMsg }, createTag);
+  const consentNotice = children[4]?.querySelector(':scope > div:nth-child(1) ')?.innerHTML;
+  addClickEvent({
+    emailEl, ctaEl, content, successMsg, errorMsg, consentNotice,
+  }, createTag);
+  children[4]?.remove();
   children[3].remove();
   children[2].remove();
 }
