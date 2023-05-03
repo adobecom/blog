@@ -32,8 +32,8 @@ const CONFIG = {
     it: { ietf: 'it', tk: 'bbf5pok.css' },
     jp: { ietf: 'ja', tk: 'dvg6awq' },
     br: { ietf: 'pt', tk: 'inq1xob.css' },
-    'en/uk': { ietf: 'en-GB', tk: 'hah7vzn.css' },
-    'en/apac': { ietf: 'en', tk: 'hah7vzn.css' },
+//     'en/uk': { ietf: 'en-GB', tk: 'hah7vzn.css' },
+//     'en/apac': { ietf: 'en', tk: 'hah7vzn.css' },
   },
 };
 
