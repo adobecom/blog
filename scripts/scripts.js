@@ -62,9 +62,18 @@ const miloLibs = setLibs(LIBS);
   });
 }());
 
+function decorateFigure() {
+  const imagesBlocks = document.querySelectorAll('.images');
+  imagesBlocks.forEach((block) => {
+    block.classList.remove('images');
+    block.classList.add('figure');
+  });
+}
+
 const { loadArea, loadDelayed, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
+  decorateFigure();
   decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
