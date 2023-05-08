@@ -62,17 +62,42 @@ const miloLibs = setLibs(LIBS);
 }());
 
 function decorateFigure() {
-  const imagesBlocks = document.querySelectorAll('.images');
+  const imagesBlocks = document.querySelectorAll('.images, .image, .infograph');
   imagesBlocks.forEach((block) => {
-    block.classList.remove('images');
+    if (block.classList.contains('infograph')) {
+      const img = block.querySelector(':scope picture > img');
+      img.classList.add('infograph');
+    }
+    block.classList.remove('images') || block.classList.remove('image') || block.classList.remove('infograph');
     block.classList.add('figure');
   });
 }
+
+function decorateVideo() {
+  const videoBlocks = document.querySelectorAll('.embed, .video, .animation');
+  videoBlocks.forEach((block) => {
+    const link =  block.querySelector(':scope a');
+    const videoCaption =  block.querySelector(':scope p:last-of-type');
+    const url = block.classList.contains('autoplay') || block.classList.contains('animation')
+      ? `${link.href}#_autoplay`
+      : link.href;
+    const para =  document.createElement('p');
+
+    link.href = url;
+    para.append(link);
+    block.insertAdjacentElement("beforebegin", para);
+    block.remove();
+    
+    if (!videoCaption) return;
+    videoCaption.classList.add('video-caption');
+    para.insertAdjacentElement("afterend", videoCaption);
+  });
 
 const { loadArea, loadDelayed, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
   decorateFigure();
+  decorateVideo();
   decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
