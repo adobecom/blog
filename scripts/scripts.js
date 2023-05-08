@@ -92,6 +92,7 @@ function decorateVideo() {
     videoCaption.classList.add('video-caption');
     para.insertAdjacentElement("afterend", videoCaption);
   });
+}
 
 const { loadArea, loadDelayed, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
