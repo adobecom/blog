@@ -62,13 +62,13 @@ const miloLibs = setLibs(LIBS);
 }());
 
 function decorateFigure() {
-  const imagesBlocks = document.querySelectorAll('.images, .image, .infograph');
+  const imagesBlocks = document.querySelectorAll('.images, .image, .infograph, .infographic');
   imagesBlocks.forEach((block) => {
-    if (block.classList.contains('infograph')) {
+    if (block.classList.contains('infograph') || block.classList.contains('infographic')) {
       const img = block.querySelector(':scope picture > img');
       img.classList.add('infograph');
     }
-    block.classList.remove('images') || block.classList.remove('image') || block.classList.remove('infograph');
+    block.classList.remove('images') || block.classList.remove('image') || block.classList.remove('infograph') || block.classList.remove('infographic');
     block.classList.add('figure');
   });
 }
