@@ -50,9 +50,17 @@ const CONFIG = {
 
 const miloLibs = setLibs(LIBS);
 
-(function loadStyles() {
+(async function loadStyles() {
   const paths = [`${miloLibs}/styles/styles.css`];
-  if (STYLES) { paths.push(STYLES); }
+  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  
+  /* 
+   * Currently only serving styles.css for article pages.
+   * This is an effort to keep blog content simple to author with 
+   * less section-metadata use for spacing.
+   * Other pages are styled from blocks in Milo.
+  */
+  if (STYLES && getMetadata('content-type') === 'article') { paths.push(STYLES); }
   paths.forEach((path) => {
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
