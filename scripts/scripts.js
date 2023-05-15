@@ -13,7 +13,7 @@
 import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
 
 // Add project-wide styles here.
-const STYLES = '';
+const STYLES = '/styles/styles.css';
 
 // Use '/libs' if your live site maps '/libs' to milo's origin.
 const LIBS = 'https://milo.adobe.com/libs';
