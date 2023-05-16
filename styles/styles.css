@@ -6,10 +6,11 @@
  * 
  *
  */
- main h1, main h2, main h3, main h4, main h5, main h6 {
+main h1, main h2, main h3, main h4, main h5, main h6 {
   margin-top: 48px;
   margin-bottom: 16px;
- }
+  scroll-margin-top: 90px;
+}
 
 main .section{
   margin-top: 64px
