@@ -15,6 +15,11 @@
 /*
  * Footer styles
 */
+
+main + .footer-info {
+  margin-top: 20px;
+}
+
 main + footer .footer-region-text {
   font-size: var(--type-detail-m-size);
 }
