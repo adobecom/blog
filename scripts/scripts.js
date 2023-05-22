@@ -13,10 +13,10 @@
 import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
 
 // Add project-wide styles here.
-const STYLES = '/styles/styles.css';
+const STYLES = ['/styles/styles.css', '/styles/articles.css'];
 
 // Use '/libs' if your live site maps '/libs' to milo's origin.
-const LIBS = 'https://milo.adobe.com/libs';
+const LIBS = '/libs';
 
 // Add any config options.
 const CONFIG = {
@@ -53,19 +53,27 @@ const miloLibs = setLibs(LIBS);
 (async function loadStyles() {
   const paths = [`${miloLibs}/styles/styles.css`];
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
-  
-  /* 
-   * Currently only serving styles.css for article pages.
-   * This is an effort to keep blog content simple to author with 
-   * less section-metadata use for spacing.
-   * Other pages are styled from blocks in Milo.
-  */
-  if (STYLES && getMetadata('content-type') === 'article') { paths.push(STYLES); }
-  paths.forEach((path) => {
+
+  if (STYLES) { 
+    paths.push(...(Array.isArray(STYLES) ? STYLES : [STYLES]));
+  }
+
+  function createStyleLink(path) {
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('href', path);
     document.head.appendChild(link);
+  }
+
+  paths.forEach((path) => {
+    // Load article.css only for article pages
+    if (getMetadata('content-type') === 'article' && path.includes('/articles.css')) {
+      createStyleLink(path);
+    }
+    // Load style.css for all pages
+    if (!path.includes('/articles.css')) {
+      createStyleLink(path);
+    }
   });
 }());
 

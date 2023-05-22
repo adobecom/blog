@@ -6,34 +6,46 @@
  * 
  *
  */
-main h1, main h2, main h3, main h4, main h5, main h6 {
-  margin-top: 48px;
-  margin-bottom: 16px;
-  scroll-margin-top: 90px;
+
+ .video-caption {
+  margin-top: 0;
+  text-align: center;
+ }
+
+/*
+ * Footer styles
+*/
+main + footer .footer-region-text {
+  font-size: var(--type-detail-m-size);
 }
 
-main .section{
-  margin-top: 64px
+main + footer .footer-region .fragment {
+  min-width: 165px;
 }
 
-main .figure .figure img {
-  width: 100%;
-  max-width: 100%;
-  max-height: initial;
+main + footer .footer-region-button.inline-dialog-active + .fragment p {
+  font-size: var(--type-detail-l-size);
+  margin-top: 20px;
+  margin-bottom: 0;
 }
 
-main .figure .figure .infograph,
-main .article-header .article-category,
-main .article-header .article-title,
-main .article-header .article-byline {
-  max-height: initial;
-  max-width: 800px;
+main + footer .footer-region-button.inline-dialog-active + .fragment p:first-child {
+  margin-top: 0;
 }
 
-@media (min-width: 700px) {
-  main .section > div > :not(div) {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+main + footer .footer-region-button.inline-dialog-active + .fragment p strong > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+main + footer .footer-region-button.inline-dialog-active + .fragment p strong > a::after {
+  content: ' ';
+  display: block;
+  margin: 0 2px;
+  width: 6px;
+  height: 16px;
+  border: solid var(--color-info-accent);
+  border-width: 0 1px 1px 0;
+  transform: rotate(45deg);
 }
