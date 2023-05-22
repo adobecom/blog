@@ -16,7 +16,7 @@
  * Footer styles
 */
 
-main + .footer-info {
+main + footer .footer-info {
   margin-top: 20px;
 }
 
