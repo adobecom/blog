@@ -22,7 +22,7 @@ const LIBS = '/libs';
 const CONFIG = {
   // codeRoot: '',
   // contentRoot: '',
-  // imsClientId: 'college',
+  imsClientId: 'theblog-helix',
   locales: {
     '': { ietf: 'en-US', tk: 'hah7vzn.css' },
     de: { ietf: 'de-DE', tk: 'hah7vzn.css' },
@@ -37,10 +37,10 @@ const CONFIG = {
 };
 
 // Default to loading the first image as eager.
-(async function loadLCPImage() {
-  const lcpImg = document.querySelector('img');
+async function loadLCPImage() {
+  const lcpImg = document.querySelector('main img');
   lcpImg?.setAttribute('loading', 'eager');
-}());
+};
 
 /*
  * ------------------------------------------------------------
@@ -110,7 +110,7 @@ function decorateVideo() {
   });
 }
 
-const { loadArea, loadDelayed, setConfig } = await import(`${miloLibs}/utils/utils.js`);
+const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
   decorateFigure();
@@ -119,5 +119,5 @@ const { loadArea, loadDelayed, setConfig } = await import(`${miloLibs}/utils/uti
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
   await loadArea();
-  loadDelayed();
+  loadLCPImage();
 }());
