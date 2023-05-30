@@ -3,18 +3,47 @@ version: 1
 # https://www.hlx.live/developer/sitemap
 sitemaps:
   website:
-    origin: https://www.blog.adobe.com
+    origin: https://blog.adobe.com
     lastmod: YYYY-MM-DD
     default: en-US
     languages:
       en:
-        source: /query-index.json
-        alternate: /{path}
-        destination: /sitemap.xml
+        source: /en/query-index.json
+        destination: /en/sitemap.xml
         hreflang: en
-
+        alternate: /en/{path}
+      ko:
+        source: /ko/query-index.json
+        destination: /ko/sitemap.xml
+        hreflang: ko
+        alternate: /ko/{path}
+      jp:
+        source: /jp/query-index.json
+        destination: /jp/sitemap.xml
+        hreflang: ja
+        alternate: /jp/{path}
+      it:
+        source: /it/query-index.json
+        destination: /it/sitemap.xml
+        hreflang: it
+        alternate: /it/{path}
+      fr:
+        source: /fr/query-index.json
+        destination: /fr/sitemap.xml
+        hreflang: fr
+        alternate: /fr/{path}
+      es:
+        source: /es/query-index.json
+        destination: /es/sitemap.xml
+        hreflang: es
+        alternate: /es/{path}
+      de:
+        source: /de/query-index.json
+        destination: /de/sitemap.xml
+        hreflang: de
+        alternate: /de/{path}
       br:
         source: /br/query-index.json
-        alternate: /br/{path}
         destination: /br/sitemap.xml
-        hreflang: br
+        hreflang: pt
+        alternate: /br/{path}
