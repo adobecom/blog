@@ -31,7 +31,8 @@ main .article-header .article-byline {
 }
 
 @media (min-width: 700px) {
-  main .section > div > :not(div):not(h1) {
+  main .section > div > :not(div):not(h1),
+  main .section > .tags {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
