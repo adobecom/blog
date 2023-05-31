@@ -106,7 +106,25 @@ function decorateVideo() {
     
     if (!videoCaption) return;
     videoCaption.classList.add('video-caption');
-    para.insertAdjacentElement("afterend", videoCaption);
+    para.insertAdjacentElement('afterend', videoCaption);
+  });
+}
+
+function decorateQuote() {
+  const quoteBlocks = document.querySelectorAll('.pull-quote');
+  quoteBlocks.forEach((block) => {
+    const paras = block.querySelectorAll(':scope p');
+    paras.forEach((p) => {
+      if (p.innerHTML.startsWith('“') && p.innerHTML.endsWith('”')) {
+        const quote = p.textContent;
+        const blockquote = document.createElement('blockquote');
+        blockquote.append(quote);
+        p.insertAdjacentElement('afterend', blockquote);
+        p.remove();
+      }
+    });
+    block.classList.remove('pull-quote');
+    block.classList.add('text', 'inset', 'quote');
   });
 }
 
@@ -115,6 +133,7 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 (async function loadPage() {
   decorateFigure();
   decorateVideo();
+  decorateQuote();
   decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
