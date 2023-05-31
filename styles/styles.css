@@ -6,11 +6,38 @@
  * 
  *
  */
+:root {
+  --color-quote: #367ea8;
+}
 
- .video-caption {
-  margin-top: 0;
-  text-align: center;
- }
+.video-caption {
+ margin-top: 0;
+ text-align: center;
+}
+
+/*
+ Text block quote styles
+*/
+
+.text-block.inset.quote blockquote{
+ margin: 0 0 16px 0;
+ color: var(--color-quote);
+ font-weight: var(--type-heading-all-weight);
+ line-height: var(--type-heading-base-lh);
+ font-size: var(--type-heading-l-size);
+}
+
+.text-block.inset.quote .foreground {
+ border-left: 3px solid var(--color-quote);
+}
+
+.text-block.inset.quote picture img{
+ height: 96px;
+ width: 96px;
+ object-fit: cover;
+ border-radius: 100%;
+ margin-bottom: 40px;
+}
 
 /*
  * Footer styles
