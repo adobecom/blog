@@ -19,6 +19,14 @@
  Text block quote styles
 */
 
+main .inset.text-block .foreground > div {
+  padding-left: var(--spacing-l);
+}
+
+main .inset.text-block .foreground::before {
+  position: unset;
+}
+
 .text-block.inset.quote blockquote{
  margin: 0 0 16px 0;
  color: var(--color-quote);
