@@ -20,8 +20,9 @@ const LIBS = '/libs';
 
 // Add any config options.
 const CONFIG = {
-  codeRoot: '/en',
+  // codeRoot: '',
   // contentRoot: '',
+  englishRoot: '/en',
   imsClientId: 'theblog-helix',
   locales: {
     '': { ietf: 'en-US', tk: 'hah7vzn.css' },
