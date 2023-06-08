@@ -142,5 +142,5 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
   await loadArea();
-  loadLCPImage();
+  // loadLCPImage();
 }());
