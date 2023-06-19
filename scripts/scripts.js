@@ -41,10 +41,10 @@ const CONFIG = {
 };
 
 // Default to loading the first image as eager.
-async function loadLCPImage() {
-  const lcpImg = document.querySelector('main img');
+(async function loadLCPImage() {
+  const lcpImg = document.querySelector('img');
   lcpImg?.setAttribute('loading', 'eager');
-};
+}());
 
 /*
  * ------------------------------------------------------------
@@ -142,5 +142,4 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
   await loadArea();
-  // loadLCPImage();
 }());
