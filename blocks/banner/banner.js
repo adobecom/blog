@@ -1,17 +1,18 @@
 import {
   createOptimizedPicture,
   normalizeHeadings,
-} from '../../scripts/scripts.js';
+} from '../../scripts/utils.js';
 
 export default async function init(block) {
   const bannerContents = document.createElement('div');
   bannerContents.classList.add('banner-contents');
   block.querySelectorAll('a').forEach(async (a) => {
-    if (a && a.href) {
-      // content wrapper
-      const bannerContent = document.createElement('div');
-      bannerContent.classList.add('content-wrapper');
+    if (!a?.href) return;
+    // content wrapper
+    const bannerContent = document.createElement('div');
+    bannerContent.classList.add('content-wrapper');
 
+    try {
       // get response from the URL
       const { pathname } = new URL(a);
       const path = pathname?.replace(/\.html$/, '');
@@ -53,6 +54,8 @@ export default async function init(block) {
           block.remove();
         }
       }
+    } catch (e) {
+      // do nothing
     }
   });
 }
