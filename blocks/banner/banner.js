@@ -45,8 +45,7 @@ export default async function init(block) {
           bannerText.append(responseEl);
 
           // appending DOM objects
-          bannerContent.append(bannerImage);
-          bannerContent.append(bannerText);
+          bannerContent.append(bannerImage, bannerText);
           bannerContents.append(bannerContent);
           block.innerHTML = '';
           block.append(bannerContents);
