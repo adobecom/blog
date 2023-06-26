@@ -64,7 +64,7 @@ const miloLibs = setLibs(LIBS);
   const paths = [`${miloLibs}/styles/styles.css`];
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
-  if (STYLES) { 
+  if (STYLES) {
     paths.push(...(Array.isArray(STYLES) ? STYLES : [STYLES]));
   }
 
@@ -140,6 +140,14 @@ function decorateQuote() {
 
 const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
+function overrideMiloToc() {
+  const tocs = document.querySelectorAll('.table-of-contents');
+  tocs.forEach((toc) => {
+    toc.classList.remove('table-of-contents');
+    toc.classList.add('table-of-contents-override');
+  });
+}
+
 (async function loadPage() {
   decorateFigure();
   decorateVideo();
@@ -147,5 +155,6 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
+  overrideMiloToc();
   await loadArea();
 }());
