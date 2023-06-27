@@ -6,6 +6,8 @@
   "scripts": {
     "test": "wtr \"./test/**/*.test.js\" --node-resolve --port=2000 --coverage",
     "test:watch": "npm test -- --watch",
+    "test:file": "wtr --node-resolve --port=2000 --coverage",
+    "test:file:watch": "wtr --node-resolve --port=2000 --coverage --watch",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "eslint .",
     "lint:css": "stylelint 'blocks/**/*.css' 'styles/*.css'"
