@@ -141,27 +141,43 @@ export async function decorateContent() {
   const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
   loadStyle(`${miloLibs}/blocks/figure/figure.css`);
 
-  imgEls.forEach((imgEl) => {
-    const block = createTag('div', { class: 'figure' });
-    const row = createTag('div');
-    const caption = getImageCaption(imgEl);
-    const parentEl = imgEl.closest('p');
-
-    if (!caption) {
-      const wrapper = createTag('div', null, imgEl.cloneNode(true));
-      row.append(wrapper);
-    } else {
-      const picture = createTag('p', null, imgEl.cloneNode(true));
-      const em = createTag('p', null, caption.cloneNode(true));
-      const wrapper = createTag('div');
-      wrapper.append(picture, em);
-      row.append(wrapper);
-      caption.remove();
-    }
-
-    block.append(row.cloneNode(true));
-    parentEl.replaceWith(block);
-  });
+  if (window.location.pathname.includes('/topics/')) {
+    /* 
+     * Topic pages have a unique page header.
+     * Transform it into a Milo marquee with a custom "mini" variant.
+    */
+    const parentEl = document.querySelector('main > div > p');
+    const imageEl = document.querySelector('main > div > p > picture');
+    const heading = document.querySelector('main > div > p + h1, main > div > p + h2');
+    const container = createTag('div', { class: 'marquee mini'});
+    const background = createTag('div', { class: 'background'}, imageEl);
+    const text = createTag('div', {}, heading);
+    const foreground = createTag('div', { class: 'foreground'}, text);
+    container.append(background, foreground);
+    parentEl.replaceWith(container);
+  } else {
+    imgEls.forEach((imgEl) => {
+      const block = createTag('div', { class: 'figure' });
+      const row = createTag('div');
+      const caption = getImageCaption(imgEl);
+      const parentEl = imgEl.closest('p');
+  
+      if (!caption) {
+        const wrapper = createTag('div', null, imgEl.cloneNode(true));
+        row.append(wrapper);
+      } else {
+        const picture = createTag('p', null, imgEl.cloneNode(true));
+        const em = createTag('p', null, caption.cloneNode(true));
+        const wrapper = createTag('div');
+        wrapper.append(picture, em);
+        row.append(wrapper);
+        caption.remove();
+      }
+  
+      block.append(row.cloneNode(true));
+      parentEl.replaceWith(block);
+    });
+  }
 }
 
 /**
