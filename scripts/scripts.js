@@ -94,6 +94,7 @@ function decorateFigure() {
       const img = block.querySelector(':scope picture > img');
       img.classList.add('infograph');
     }
+    // eslint-disable-next-line no-unused-expressions
     block.classList.remove('images') || block.classList.remove('image') || block.classList.remove('infograph') || block.classList.remove('infographic');
     block.classList.add('figure');
   });
@@ -102,18 +103,18 @@ function decorateFigure() {
 function decorateVideo() {
   const videoBlocks = document.querySelectorAll('.embed, .video, .animation');
   videoBlocks.forEach((block) => {
-    const link =  block.querySelector(':scope a');
-    const videoCaption =  block.querySelector(':scope p:last-of-type');
+    const link = block.querySelector(':scope a');
+    const videoCaption = block.querySelector(':scope p:last-of-type');
     const url = block.classList.contains('autoplay') || block.classList.contains('animation')
       ? `${link.href}#_autoplay`
       : link.href;
-    const para =  document.createElement('p');
+    const para = document.createElement('p');
 
     link.href = url;
     para.append(link);
-    block.insertAdjacentElement("beforebegin", para);
+    block.insertAdjacentElement('beforebegin', para);
     block.remove();
-    
+
     if (!videoCaption) return;
     videoCaption.classList.add('video-caption');
     para.insertAdjacentElement('afterend', videoCaption);
@@ -152,7 +153,7 @@ function overrideMiloToc() {
   decorateFigure();
   decorateVideo();
   decorateQuote();
-  decorateContent();
+  await decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
   overrideMiloToc();

@@ -1,9 +1,9 @@
-/* 
+/*
  * Put project specific base styles here.
  *
  * Note: The proect does not load this file.
  *       You will need to load these using scripts.js.
- * 
+ *
  *
  */
 :root {
@@ -45,6 +45,32 @@ main .inset.text-block .foreground::before {
  object-fit: cover;
  border-radius: 100%;
  margin-bottom: 40px;
+}
+
+/* 
+ * Topics Header/Marquee
+*/
+
+.marquee.mini {
+  min-height: 100px;
+}
+
+.marquee.mini .foreground {
+  padding: 0;
+}
+
+.marquee.mini .foreground.container {
+  width: 100%;
+}
+
+.marquee.mini .foreground.container .text {
+  background-image: rgba(0, 0, 0, 0.8);
+  background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0));
+  box-sizing: border-box;
+  max-width: none;
+  margin: 2rem 0;
+  padding: 2rem;
+  width: 100%;
 }
 
 /*
