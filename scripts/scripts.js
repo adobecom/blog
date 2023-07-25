@@ -141,6 +141,14 @@ function decorateQuote() {
 
 const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
+function overrideMiloToc() {
+  const tocs = document.querySelectorAll('.table-of-contents');
+  tocs.forEach((toc) => {
+    toc.classList.remove('table-of-contents');
+    toc.classList.add('blog-table-of-contents');
+  });
+}
+
 (async function loadPage() {
   decorateFigure();
   decorateVideo();
@@ -148,5 +156,6 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   await decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
+  overrideMiloToc();
   await loadArea();
 }());
