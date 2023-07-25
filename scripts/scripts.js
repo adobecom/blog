@@ -145,7 +145,7 @@ function overrideMiloToc() {
   const tocs = document.querySelectorAll('.table-of-contents');
   tocs.forEach((toc) => {
     toc.classList.remove('table-of-contents');
-    toc.classList.add('table-of-contents-override');
+    toc.classList.add('blog-table-of-contents');
   });
 }
 

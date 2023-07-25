@@ -6,14 +6,14 @@ import { setLibs } from '../../../scripts/utils.js';
 
 document.body.innerHTML = await readFile({ path: './mocks/body.html' });
 
-const { default: init } = await import('../../../blocks/table-of-contents-override/table-of-contents-override.js');
+const { default: init } = await import('../../../blocks/blog-table-of-contents/blog-table-of-contents.js');
 
 describe('table-of-contents block', () => {
   before(() => {
     setLibs('https://milo.adobe.com/libs');
   });
 
-  it('should initialize the table-of-contents-override modal block', async () => {
+  it('should initialize the blog-table-of-contents modal block', async () => {
     const block = document.querySelector('.table-of-contents');
     await init(block);
 
