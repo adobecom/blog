@@ -148,7 +148,7 @@ export async function decorateContent() {
     */
     const parentEl = document.querySelector('main > div > p');
     const imageEl = document.querySelector('main > div > p > picture');
-    const heading = document.querySelector('main > div > p + h1, main > div > p + h2');
+    const heading = document.querySelector('main > div > p + h1, main > div > p + h2, main > div > h1, main > div > h2');
     const container = createTag('div', { class: 'marquee mini'});
     const background = createTag('div', { class: 'background'}, imageEl);
     const text = createTag('div', {}, heading);
