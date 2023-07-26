@@ -8,11 +8,21 @@
  */
 :root {
   --color-quote: #367ea8;
+  --page-top-spacing: 128px;
 }
 
 .video-caption {
  margin-top: 0;
  text-align: center;
+}
+
+main .section:first-of-type:not([class*='-spacing']) > .content:first-of-type {
+  margin-top: var(--page-top-spacing);
+}
+
+main .section:first-of-type:not([class*='-spacing']) > .featured-article:first-child {
+  margin-top: var(--page-top-spacing);
+  margin-bottom: 64px;
 }
 
 /*
