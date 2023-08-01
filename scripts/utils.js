@@ -133,6 +133,22 @@ function getImageCaption(picture) {
   return caption;
 }
 
+/* 
+  * Topic pages have a unique page header.
+  * Transform it into a Milo marquee with custom blog "mini" variant.
+*/
+async function topicHeader(createTag) {
+  const parentEl = document.querySelector('main > div > p');
+  const imageEl = document.querySelector('main > div > p > picture');
+  const heading = document.querySelector('main > div > p + h1, main > div > p + h2, main > div > h1, main > div > h2');
+  const container = createTag('div', { class: 'marquee mini'});
+  const background = createTag('div', { class: 'background'}, imageEl);
+  const text = createTag('div', {}, heading);
+  const foreground = createTag('div', { class: 'foreground'}, text);
+  container.append(background, foreground);
+  parentEl.replaceWith(container);
+}
+
 export async function decorateContent() {
   const miloLibs = getLibs();
   const imgEls = document.querySelectorAll('main > div > p > picture');
@@ -141,43 +157,30 @@ export async function decorateContent() {
   const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
   loadStyle(`${miloLibs}/blocks/figure/figure.css`);
 
-  if (window.location.pathname.includes('/topics/')) {
-    /* 
-     * Topic pages have a unique page header.
-     * Transform it into a Milo marquee with a custom "mini" variant.
-    */
-    const parentEl = document.querySelector('main > div > p');
-    const imageEl = document.querySelector('main > div > p > picture');
-    const heading = document.querySelector('main > div > p + h1, main > div > p + h2, main > div > h1, main > div > h2');
-    const container = createTag('div', { class: 'marquee mini'});
-    const background = createTag('div', { class: 'background'}, imageEl);
-    const text = createTag('div', {}, heading);
-    const foreground = createTag('div', { class: 'foreground'}, text);
-    container.append(background, foreground);
-    parentEl.replaceWith(container);
-  } else {
-    imgEls.forEach((imgEl) => {
-      const block = createTag('div', { class: 'figure' });
-      const row = createTag('div');
-      const caption = getImageCaption(imgEl);
-      const parentEl = imgEl.closest('p');
-  
-      if (!caption) {
-        const wrapper = createTag('div', null, imgEl.cloneNode(true));
-        row.append(wrapper);
-      } else {
-        const picture = createTag('p', null, imgEl.cloneNode(true));
-        const em = createTag('p', null, caption.cloneNode(true));
-        const wrapper = createTag('div');
-        wrapper.append(picture, em);
-        row.append(wrapper);
-        caption.remove();
-      }
-  
-      block.append(row.cloneNode(true));
-      parentEl.replaceWith(block);
-    });
-  }
+  if (window.location.pathname.includes('/topics/')) return topicHeader(createTag);
+  if (window.location.pathname.includes('/authors/')) return;
+
+  imgEls.forEach((imgEl) => {
+    const block = createTag('div', { class: 'figure' });
+    const row = createTag('div');
+    const caption = getImageCaption(imgEl);
+    const parentEl = imgEl.closest('p');
+
+    if (!caption) {
+      const wrapper = createTag('div', null, imgEl.cloneNode(true));
+      row.append(wrapper);
+    } else {
+      const picture = createTag('p', null, imgEl.cloneNode(true));
+      const em = createTag('p', null, caption.cloneNode(true));
+      const wrapper = createTag('div');
+      wrapper.append(picture, em);
+      row.append(wrapper);
+      caption.remove();
+    }
+
+    block.append(row.cloneNode(true));
+    parentEl.replaceWith(block);
+  });
 }
 
 /**
@@ -213,16 +216,25 @@ function buildBlock(blockName, content) {
 
 function buildAuthorHeader(mainEl) {
   const div = mainEl.querySelector('div');
-  const heading = mainEl.querySelector('h1');
-  const bio = heading.nextElementSibling;
-  const picture = mainEl.querySelector('picture');
-  const social = mainEl.querySelector('h2');
+  const heading = div.querySelector('h1, h2');
+  const bio = div.querySelector('h1 + p, h2 + p');
+  const picture = div.querySelector('picture');
+  const social = div.querySelector('h3');
   const socialLinks = social ? social.nextElementSibling : null;
+  let title;
 
+  if (heading.tagName !== 'H1') {
+    title = document.createElement('h1');
+    title.textContent = heading.textContent;
+    title.id = heading.id;
+    heading.replaceWith(title)
+  }
+
+  const authorHeading = title ? title : heading; 
   const authorHeader = buildBlock('author-header', [
     [{
       elems: [
-        heading,
+        authorHeading,
         picture.closest('p'),
         bio,
         social,

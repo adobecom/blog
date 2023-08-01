@@ -25,6 +25,16 @@ main .section:first-of-type:not([class*='-spacing']) > .featured-article:first-c
   margin-bottom: 64px;
 }
 
+.author-header + .article-feed,
+.author-header + .content + .article-feed {
+  background: #fff;
+}
+
+.author-header-wrapper .author-header + .content {
+  max-width: 800px;
+  text-align: initial;
+}
+
 /*
  Text block quote styles
 */
