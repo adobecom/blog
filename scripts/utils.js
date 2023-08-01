@@ -166,16 +166,16 @@ export async function decorateContent() {
     const caption = getImageCaption(imgEl);
     const parentEl = imgEl.closest('p');
 
-    if (!caption) {
-      const wrapper = createTag('div', null, imgEl.cloneNode(true));
-      row.append(wrapper);
-    } else {
+    if (caption) {
       const picture = createTag('p', null, imgEl.cloneNode(true));
       const em = createTag('p', null, caption.cloneNode(true));
       const wrapper = createTag('div');
       wrapper.append(picture, em);
       row.append(wrapper);
       caption.remove();
+    } else {
+      const wrapper = createTag('div', null, imgEl.cloneNode(true));
+      row.append(wrapper);
     }
 
     block.append(row.cloneNode(true));
