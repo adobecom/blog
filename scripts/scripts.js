@@ -46,6 +46,15 @@ const CONFIG = {
   },
 };
 
+// Milo blocks overridden by the Blog project
+const OVERRIDE_MILO_BLOCKS = [{
+  milo: 'table-of-contents',
+  blog: 'blog-table-of-contents',
+}, {
+  milo: 'carousel',
+  blog: 'blog-carousel',
+}];
+
 // Default to loading the first image as eager.
 (async function loadLCPImage() {
   const lcpImg = document.querySelector('img');
@@ -139,15 +148,17 @@ function decorateQuote() {
   });
 }
 
-const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
-
-function overrideMiloToc() {
-  const tocs = document.querySelectorAll('.table-of-contents');
-  tocs.forEach((toc) => {
-    toc.classList.remove('table-of-contents');
-    toc.classList.add('blog-table-of-contents');
+function overrideMiloBlocks() {
+  OVERRIDE_MILO_BLOCKS.forEach((block) => {
+    const miloBlocks = document.querySelectorAll(`.${block.milo}`);
+    miloBlocks.forEach((miloBlock) => {
+      miloBlock.classList.remove(block.milo);
+      miloBlock.classList.add(block.blog);
+    });
   });
 }
+
+const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
   decorateFigure();
@@ -156,6 +167,6 @@ function overrideMiloToc() {
   await decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
-  overrideMiloToc();
+  overrideMiloBlocks();
   await loadArea();
 }());
