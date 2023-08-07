@@ -138,15 +138,17 @@ function getImageCaption(picture) {
   * Transform it into a Milo marquee with custom blog "mini" variant.
 */
 async function topicHeader(createTag) {
-  const parentEl = document.querySelector('main > div > p');
-  const imageEl = document.querySelector('main > div > p > picture');
+  const imageEl = document.querySelector('main > div:first-of-type > p > picture');
+  if(!imageEl) return;
+
+  const para = document.querySelector('main > div > p');
   const heading = document.querySelector('main > div > p + h1, main > div > p + h2, main > div > h1, main > div > h2');
   const container = createTag('div', { class: 'marquee mini'});
   const background = createTag('div', { class: 'background'}, imageEl);
   const text = createTag('div', {}, heading);
   const foreground = createTag('div', { class: 'foreground'}, text);
   container.append(background, foreground);
-  parentEl.replaceWith(container);
+  para.replaceWith(container);
 }
 
 export async function decorateContent() {
