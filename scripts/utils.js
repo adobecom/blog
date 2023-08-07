@@ -133,7 +133,7 @@ function getImageCaption(picture) {
   return caption;
 }
 
-/* 
+/*
   * Topic pages have a unique page header.
   * Transform it into a Milo marquee with custom blog "mini" variant.
 */
@@ -230,7 +230,7 @@ function buildAuthorHeader(mainEl) {
     heading.replaceWith(title)
   }
 
-  const authorHeading = title ? title : heading; 
+  const authorHeading = title ? title : heading;
   const authorHeader = buildBlock('author-header', [
     [{
       elems: [
@@ -257,6 +257,9 @@ async function buildArticleHeader(el) {
   // div.setAttribute('class', 'section');
   const h1 = el.querySelector('h1');
   const picture = el.querySelector('picture');
+  const caption = getImageCaption(picture);
+  const figure = document.createElement('div');
+  figure.append(picture, caption);
   const tag = getMetadata('article:tag');
   const category = tag || 'News';
   const author = getMetadata('author') || 'Adobe Communications Team';
@@ -271,7 +274,7 @@ async function buildArticleHeader(el) {
     [h1],
     [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
       <p>${publicationDate}</p>`],
-    [picture],
+    [figure],
   ]);
   div.append(articleHeaderBlockEl);
   el.prepend(div);
