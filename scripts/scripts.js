@@ -22,7 +22,6 @@ const LIBS = '/libs';
 const CONFIG = {
   // codeRoot: '',
   // contentRoot: '',
-  englishRoot: '/en',
   imsClientId: 'theblog-helix',
   stage: {
     edgeConfigId: '8d2805dd-85bf-4748-82eb-f99fdad117a6',
@@ -130,6 +129,30 @@ function decorateVideo() {
   });
 }
 
+function getMediaFilename (a) {
+  try {
+    const mediaUrl = new URL(a.href);
+    return mediaUrl.pathname.split('/').pop();
+  } catch (e) {
+    console.log('Error parsing media url', e);
+  }
+  return '';
+};
+
+function decorateGif() {
+  const gifs = document.querySelectorAll(':scope p > a[href*=".gif"]');
+  gifs.forEach((gif) => {
+    const img = document.createElement('img');
+    const picture = document.createElement('picture');
+
+    img.src = getMediaFilename(gif);
+    img.setAttribute('loading', 'lazy');
+    picture.append(img);
+    gif.parentElement.append(picture);
+    gif.remove();
+  });
+}
+
 function decorateQuote() {
   const quoteBlocks = document.querySelectorAll('.pull-quote');
   quoteBlocks.forEach((block) => {
@@ -164,6 +187,7 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   decorateFigure();
   decorateVideo();
   decorateQuote();
+  decorateGif();
   await decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();

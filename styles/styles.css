@@ -11,7 +11,8 @@
   --page-top-spacing: 128px;
 }
 
-.video-caption {
+.video-caption,
+figcaption {
  margin-top: 0;
  text-align: center;
 }
