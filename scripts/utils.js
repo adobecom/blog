@@ -141,12 +141,12 @@ async function topicHeader(createTag) {
   const imageEl = document.querySelector('main > div:first-of-type > p > picture');
   if(!imageEl) return;
 
-  const para = document.querySelector('main > div > p');
   const heading = document.querySelector('main > div > p + h1, main > div > p + h2, main > div > h1, main > div > h2');
   const container = createTag('div', { class: 'marquee mini'});
   const background = createTag('div', { class: 'background'}, imageEl);
   const text = createTag('div', {}, heading);
   const foreground = createTag('div', { class: 'foreground'}, text);
+  const para = document.querySelector('main > div > p');
   container.append(background, foreground);
   para.replaceWith(container);
 }
