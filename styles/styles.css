@@ -98,6 +98,11 @@ main .inset.text-block .foreground::before {
  * Footer styles
 */
 
+main + footer .feds-regionPicker:hover {
+  color: var(--color-gray-500);
+  border-color: var(--color-gray-500);
+  fill: var(--color-gray-500);
+}
 main + footer .footer-info {
   margin-top: 20px;
 }
@@ -106,27 +111,49 @@ main + footer .footer-region-text {
   font-size: var(--type-detail-m-size);
 }
 
-main + footer .footer-region .fragment {
+main + footer .footer-region .fragment,
+main + footer .feds-regionPicker-wrapper .fragment {
   min-width: 165px;
 }
 
-main + footer .footer-region-button.inline-dialog-active + .fragment p {
+main + footer .feds-regionPicker-wrapper > .fragment {
+  max-height: none;
+  border: 1px solid #D4D4D4;
+  box-sizing: border-box;
+}
+
+main + footer .footer-region-button.inline-dialog-active + .fragment p,
+main + footer .feds-regionPicker + .fragment p {
   font-size: var(--type-detail-l-size);
   margin-top: 20px;
   margin-bottom: 0;
 }
 
-main + footer .footer-region-button.inline-dialog-active + .fragment p:first-child {
+main + footer .footer-region-button.inline-dialog-active + .fragment p:first-child,
+main + footer .feds-regionPicker + .fragment p:first-child {
   margin-top: 0;
 }
 
-main + footer .footer-region-button.inline-dialog-active + .fragment p strong > a {
+main + footer .feds-regionPicker-wrapper > .fragment a {
+  line-height: 1;
+  padding: 0;
+  color: var(--color-gray-700);
+}
+
+main + footer .feds-regionPicker-wrapper > .fragment a:hover {
+  color: var(--color-gray-500);
+  background: none;
+}
+
+main + footer .footer-region-button.inline-dialog-active + .fragment p strong > a,
+main + footer .feds-regionPicker + .fragment p strong > a {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-main + footer .footer-region-button.inline-dialog-active + .fragment p strong > a::after {
+main + footer .footer-region-button.inline-dialog-active + .fragment p strong > a::after,
+main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
   content: ' ';
   display: block;
   margin: 0 2px;
