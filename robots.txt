@@ -1,0 +1,11 @@
+user-agent: *
+allow: /
+
+Sitemap: https://blog.adobe.com/en/sitemap.xml
+Sitemap: https://blog.adobe.com/br/sitemap.xml
+Sitemap: https://blog.adobe.com/de/sitemap.xml
+Sitemap: https://blog.adobe.com/es/sitemap.xml
+Sitemap: https://blog.adobe.com/fr/sitemap.xml
+Sitemap: https://blog.adobe.com/it/sitemap.xml
+Sitemap: https://blog.adobe.com/jp/sitemap.xml
+Sitemap: https://blog.adobe.com/ko/sitemap.xml
