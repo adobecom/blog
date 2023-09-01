@@ -182,9 +182,23 @@ function overrideMiloBlocks() {
   });
 }
 
+function decorateTopicPage() {
+  if (window.location.href.includes('/topics/')) {
+    const sections = [...document.querySelectorAll('main > div')];
+    if (sections.length = 1) {
+      const articleFeed = document.querySelector('main div .article-feed');
+      if (!articleFeed) return;
+      const newSection = document.createElement('div');
+      newSection.append(articleFeed);
+      document.querySelector('main').append(newSection);
+    }
+  }
+}
+
 const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
+  decorateTopicPage();
   decorateFigure();
   decorateVideo();
   decorateQuote();
