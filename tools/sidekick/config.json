@@ -1,6 +1,12 @@
 {
   "project": "Blog",
   "host": "blog.adobe.com",
+  "libraries": [
+    {
+      "text": "Blocks",
+      "paths": ["https://main--blog--adobecom.hlx.page/docs/library/blocks.json"]
+    }
+  ],
   "plugins": [
     {
       "containerId": "tools",
