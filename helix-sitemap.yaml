@@ -1,11 +1,9 @@
 version: 1
 
-# https://www.hlx.live/developer/sitemap
 sitemaps:
-  website:
+  blog:
     origin: https://blog.adobe.com
     lastmod: YYYY-MM-DD
-    default: en-US
     languages:
       en:
         source: /en/query-index.json
