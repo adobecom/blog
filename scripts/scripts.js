@@ -195,6 +195,17 @@ function decorateTopicPage() {
   }
 }
 
+function initSidekick() {
+  const initPlugins = async () => { await import('./sidekick.js'); };
+  if (document.querySelector('helix-sidekick')) {
+    initPlugins();
+  } else {
+    document.addEventListener('sidekick-ready', () => {
+      initPlugins();
+    });
+  }
+}
+
 const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
@@ -208,4 +219,5 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  initSidekick();
 }());

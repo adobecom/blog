@@ -1,0 +1,21 @@
+.predict-banner {
+  padding: 12px;
+  position: fixed;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #631736;
+  color: #FFF;
+  display: flex;
+  justify-content: start;
+  gap: 24px;
+}
+
+.predict-text {
+  margin: 0;
+}
+
+.con-button {
+  font-family: var(--body-font-family);
+}
