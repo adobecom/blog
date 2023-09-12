@@ -11,6 +11,12 @@
   --page-top-spacing: 128px;
 }
 
+/* Add correct font family for Consonant Cards  */
+.consonant-Wrapper {
+  font-family: var(--body-font-family);
+}
+
+
 .video-caption,
 figcaption {
  margin-top: 0;
