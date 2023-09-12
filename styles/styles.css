@@ -16,6 +16,10 @@
   font-family: var(--body-font-family);
 }
 
+.xxl-spacing > .text.blog-no-spacing {
+  padding-top: 0px;
+}
+
 
 .video-caption,
 figcaption {
