@@ -12,7 +12,9 @@
 }
 
 /* Add correct font family for Consonant Cards  */
-.consonant-Wrapper {
+.consonant-Wrapper,
+.consonant-OneHalfCard-text,
+.consonant-OneHalfCard-title {
   font-family: var(--body-font-family);
 }
 
