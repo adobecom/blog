@@ -12,10 +12,10 @@
 }
 
 /* Add correct font family for Consonant Cards  */
-.consonant-Wrapper,
-.consonant-OneHalfCard-text,
-.consonant-OneHalfCard-title {
-  font-family: var(--body-font-family);
+.milo-card-wrapper .consonant-Wrapper,
+.milo-card-wrapper .consonant-OneHalfCard-text,
+.milo-card-wrapper .consonant-OneHalfCard-title {
+  font-family: var(--body-font-family) !important;
 }
 
 .xxl-spacing > .text.blog-no-spacing {
