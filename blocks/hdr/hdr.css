@@ -1,0 +1,48 @@
+.hdr {
+  margin: 40px 0;
+}
+.hdr .caption {
+  margin: 5px auto 0;
+  text-align: center;
+}
+
+.hdr .hdr-container {
+  position: relative;
+}
+
+.hdr.vertical .hdr-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.hdr .hdr-container.multiple img:last-child {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hdr .hdr-container.multiple:hover img:last-child {
+  display: block;
+  z-index: 2;
+}
+
+.hdr .hdr-container.multiple:hover:after {
+  content: 'HDR';
+  position: absolute;
+  bottom: 15px;
+  left: 10px;
+  display: block;
+  font-weight: 900;
+  font-size: 30px;
+  color: #fff;
+  z-index: 3;
+}
+
+/* Same as figure block */
+@media (min-width: 700px) {
+  .hdr .hdr-container {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+}
