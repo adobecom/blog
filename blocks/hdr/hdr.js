@@ -11,7 +11,7 @@ function getMediaFilename(a) {
 };
 
 export default async function init(el) {
-  const links = el.querySelectorAll(':scope a');
+  const links = el.querySelectorAll('a[href*=".jpg"], a[href*=".png"]');
   if (!links.length) return;
 
   const { createTag } = await import(`${getLibs()}/utils/utils.js`);
@@ -19,24 +19,22 @@ export default async function init(el) {
   const container = createTag('div', { class: 'hdr-container' }, null);
   el.innerHTML = '';
 
-  if(links.length > 1) {
+  if (links.length > 1) {
     container.classList.add('multiple');
   }
   el.append(container);
 
   links.forEach((link) => {
-    const img = document.createElement('img');
+    const img = createTag('img', { loading: 'lazy' }, null);
 
     img.src = getMediaFilename(link);
-    img.setAttribute('loading', 'lazy');
     container.append(img);
     link.remove();
   });
 
-  if(!caption) return;
-  const para = document.createElement('p');
+  if (!caption) return;
+  const para = createTag('p', { class: 'caption'}, null);
 
-  para.classList.add('caption');
   para.append(caption);
   el.append(para);
 }
