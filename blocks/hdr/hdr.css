@@ -17,14 +17,14 @@
 }
 
 .hdr .hdr-container.multiple img:last-child {
-  display: none;
+  opacity: 0;
   position: absolute;
   top: 0;
   left: 0;
 }
 
 .hdr .hdr-container.multiple:hover img:last-child {
-  display: block;
+  opacity: 1;
   z-index: 2;
 }
 
