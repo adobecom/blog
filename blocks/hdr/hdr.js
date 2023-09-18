@@ -24,8 +24,12 @@ export default async function init(el) {
   }
   el.append(container);
 
-  links.forEach((link) => {
+  links.forEach((link, idx) => {
     const img = createTag('img', { loading: 'lazy' }, null);
+
+    if (idx === 1) {
+      img.classList.add('hdr-image');
+    }
 
     img.src = getMediaFilename(link);
     container.append(img);

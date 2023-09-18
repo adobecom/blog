@@ -16,16 +16,18 @@
   margin: 0 auto;
 }
 
-.hdr .hdr-container.multiple img:last-child {
+.hdr .hdr-container.multiple .hdr-image {
   opacity: 0;
+  visibility: hidden;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
 }
 
-.hdr .hdr-container.multiple:hover img:last-child {
+.hdr .hdr-container.multiple:hover .hdr-image {
   opacity: 1;
-  z-index: 2;
+  visibility: visible;
 }
 
 .hdr .hdr-container.multiple:hover:after {
