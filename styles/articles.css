@@ -16,12 +16,6 @@ main .section{
   margin-top: 64px
 }
 
-main .figure .figure img {
-  width: 100%;
-  max-width: 100%;
-  max-height: initial;
-}
-
 main .figure .figure .infograph,
 main .article-header .article-category,
 main .article-header .article-title,
