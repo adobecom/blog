@@ -8,7 +8,7 @@ function getMediaFilename(a) {
     console.log('Error parsing media url', e);
   }
   return '';
-};
+}
 
 export default async function init(el) {
   const links = el.querySelectorAll('a[href*=".jpg"], a[href*=".png"]');
@@ -21,11 +21,22 @@ export default async function init(el) {
 
   if (links.length > 1) {
     container.classList.add('multiple');
+    const img = createTag(
+      'img',
+      {
+        loading: 'lazy',
+        class: 'hdr-pixel',
+        src: '/blocks/hdr/img/hdr.jpg',
+        alt: '',
+      },
+      null,
+    );
+    container.append(img);
   }
   el.append(container);
 
   links.forEach((link) => {
-    const img = createTag('img', { loading: 'lazy' }, null);
+    const img = createTag('img', { loading: 'lazy', alt: '' }, null);
 
     img.src = getMediaFilename(link);
     container.append(img);
@@ -33,7 +44,7 @@ export default async function init(el) {
   });
 
   if (!caption) return;
-  const para = createTag('p', { class: 'caption'}, null);
+  const para = createTag('p', { class: 'caption' }, null);
 
   para.append(caption);
   el.append(para);
