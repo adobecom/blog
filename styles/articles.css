@@ -28,6 +28,12 @@ main .article-header .article-byline {
   max-width: 800px;
 }
 
+main video {
+  max-height: 600px;
+  margin: 40px auto;
+  display: block;
+}
+
 @media (min-width: 700px) {
   main .section > div > :not(div):not(h1),
   main .section > .tags {
