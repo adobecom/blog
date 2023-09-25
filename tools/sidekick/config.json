@@ -50,7 +50,6 @@
       "excludePaths": [ "/**" ],
       "includePaths": [ "**/drafts/**" ]
     },
-    , 
     {
       "containerId": "tools",
       "id": "localize",
