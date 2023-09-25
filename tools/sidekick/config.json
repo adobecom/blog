@@ -50,6 +50,18 @@
       "excludePaths": [ "/**" ],
       "includePaths": [ "**/drafts/**" ]
     },
+    , 
+    {
+      "containerId": "tools",
+      "id": "localize",
+      "title": "Localize project",
+      "environments": [ "edit" ],
+      "passConfig": true,
+      "url": "https://locui--milo--adobecom.hlx.page/tools/loc",
+      "passReferrer": true,
+      "excludePaths": [ "/**" ],
+      "includePaths": [ "**/:x**" ]
+    },
     {
       "id": "publish",
       "excludePaths": [ "**/drafts/**" ]
