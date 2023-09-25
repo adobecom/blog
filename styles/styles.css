@@ -11,6 +11,10 @@
   --page-top-spacing: 128px;
 }
 
+body header .gnav-wrapper a.gnav-brand {
+  color: #EB1000;
+}
+
 /* Add correct font family for Consonant Cards  */
 .milo-card-wrapper .consonant-Wrapper,
 .milo-card-wrapper .consonant-OneHalfCard-text,
