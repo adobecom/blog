@@ -101,13 +101,24 @@ main .inset.text-block .foreground::before {
 }
 
 .marquee.mini .foreground.container .text {
-  background-image: rgba(0, 0, 0, 0.8);
-  background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0));
+  background-image: rgba(0 0 0 / 80%);
+  background-image: linear-gradient(to right, rgba(0 0 0 / 80%), rgba(0 0 0 / 0%));
   box-sizing: border-box;
   max-width: none;
   margin: 2rem 0;
   padding: 2rem;
   width: 100%;
+}
+
+main .embed-instagram {
+  margin: 64px auto;
+}
+
+main .embed-instagram,
+main .embed-instagram iframe.instagram-media {
+  background: white;
+  height: 502px;
+  width: 320px;
 }
 
 /*
@@ -119,6 +130,7 @@ main + footer .feds-regionPicker:hover {
   border-color: var(--color-gray-500);
   fill: var(--color-gray-500);
 }
+
 main + footer .footer-info {
   margin-top: 20px;
 }
@@ -178,4 +190,12 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
   border: solid var(--color-info-accent);
   border-width: 0 1px 1px 0;
   transform: rotate(45deg);
+}
+
+@media (min-width: 600px) {
+  main .embed-instagram,
+  main .embed-instagram iframe.instagram-media {
+    width: 550px;
+    height: 784px;
+ }
 }
