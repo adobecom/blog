@@ -119,7 +119,7 @@ function getImageCaption(picture) {
   const parentSiblingEl = parentEl.nextElementSibling;
   caption = parentSiblingEl
     && !parentSiblingEl.querySelector('picture')
-    && parentSiblingEl.firstChild.tagName === 'EM'
+    && parentSiblingEl.firstChild?.tagName === 'EM'
     ? parentSiblingEl.querySelector('em')
     : undefined;
   return caption;
@@ -131,13 +131,13 @@ function getImageCaption(picture) {
 */
 async function topicHeader(createTag) {
   const imageEl = document.querySelector('main > div:first-of-type > p > picture');
-  if(!imageEl) return;
+  if (!imageEl) return;
 
   const heading = document.querySelector('main > div > p + h1, main > div > p + h2, main > div > h1, main > div > h2');
-  const container = createTag('div', { class: 'marquee mini'});
-  const background = createTag('div', { class: 'background'}, imageEl);
+  const container = createTag('div', { class: 'marquee mini' });
+  const background = createTag('div', { class: 'background' }, imageEl);
   const text = createTag('div', {}, heading);
-  const foreground = createTag('div', { class: 'foreground'}, text);
+  const foreground = createTag('div', { class: 'foreground' }, text);
   const para = document.querySelector('main > div > p');
   container.append(background, foreground);
   para.replaceWith(container);
@@ -221,7 +221,7 @@ function buildAuthorHeader(mainEl) {
     title = document.createElement('h1');
     title.textContent = heading.textContent;
     title.id = heading.id;
-    heading.replaceWith(title)
+    heading.replaceWith(title);
   }
 
   const authorHeading = title ? title : heading;
@@ -250,7 +250,7 @@ async function buildArticleHeader(el) {
   const div = document.createElement('div');
   // div.setAttribute('class', 'section');
   const h1 = el.querySelector('h1');
-  const picture = el.querySelector('picture');
+  const picture = el.querySelector('a[href*=".mp4"], picture');
   const caption = getImageCaption(picture);
   const figure = document.createElement('div');
   figure.append(picture, caption);
