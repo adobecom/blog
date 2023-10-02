@@ -114,10 +114,11 @@ function decorateVideo() {
   videoBlocks.forEach((block) => {
     const link = block.querySelector(':scope a');
     const videoCaption = block.querySelector(':scope p:last-of-type');
-    const url = block.classList.contains('autoplay') || block.classList.contains('animation')
-      ? `${link.href}#_autoplay`
-      : link.href;
     const para = document.createElement('p');
+    const url = block.classList.contains('autoplay') || block.classList.contains('animation')
+      ? `${link?.href}#_autoplay`
+      : link?.href;
+    if (!url) return;
 
     link.href = url;
     para.append(link);
