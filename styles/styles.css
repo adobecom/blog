@@ -199,3 +199,11 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
     height: 784px;
  }
 }
+
+@media screen and (max-width: 1200px) {
+  .tab-content .section[class*='grid-width-'] {
+    justify-content: center;
+    padding-left: inherit;
+    padding-right: inherit;
+  }
+}
