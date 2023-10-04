@@ -19,6 +19,8 @@
 
 .sticky-header img {
     display: block;
+    width: 12px;
+    height: 12px;
 }
 
 @keyframes buttonGradient {

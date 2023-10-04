@@ -36,7 +36,8 @@ main video {
 
 @media (min-width: 700px) {
   main .section > div > :not(div):not(h1),
-  main .section > .tags {
+  main .section > .tags,
+  main .columns, main .columns.contained {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;

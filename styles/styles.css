@@ -64,7 +64,7 @@ main .inset.text-block .foreground::before {
   position: unset;
 }
 
-.text-block.inset.quote blockquote{
+.text-block.inset.quote blockquote {
  margin: 0 0 16px 0;
  color: var(--color-quote);
  font-weight: var(--type-heading-all-weight);
@@ -76,7 +76,7 @@ main .inset.text-block .foreground::before {
  border-left: 3px solid var(--color-quote);
 }
 
-.text-block.inset.quote picture img{
+.text-block.inset.quote picture img {
  height: 96px;
  width: 96px;
  object-fit: cover;
@@ -127,6 +127,31 @@ main .embed-instagram iframe.instagram-media {
   background: white;
   height: 502px;
   width: 320px;
+}
+
+.columns.blog-social-links > .row > .col {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.columns.blog-social-links.center > .row > .col {
+  justify-content: center;
+}
+
+.columns.blog-social-links > .row > .col p {
+  margin: 0;
+}
+
+.columns.blog-social-links > .row > .col p a {
+  padding: 5px;
+  display: block;
+}
+
+.columns.blog-social-links > .row > .col p a:hover,
+.columns.blog-social-links > .row > .col p a:focus {
+  opacity: .7;
 }
 
 /*
@@ -206,6 +231,14 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
     width: 550px;
     height: 784px;
  }
+
+  .columns.blog-social-links > .row > .col {
+    flex-flow: row wrap;
+  }
+
+  .columns.blog-social-links > .row > .col p {
+    margin: revert;
+  }
 }
 
 @media screen and (max-width: 1200px) {
