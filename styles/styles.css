@@ -85,6 +85,14 @@ main .inset.text-block .foreground::before {
 }
 
 /* 
+ * Modal
+*/
+
+.dialog-modal video {
+  max-height: 700px;
+}
+
+/* 
  * Topics Header/Marquee
 */
 
