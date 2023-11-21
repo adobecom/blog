@@ -22,14 +22,13 @@ const LIBS = '/libs';
 const CONFIG = {
   // codeRoot: '',
   // contentRoot: '',
+  links: 'on',
   imsClientId: 'theblog-helix',
   stage: {
     edgeConfigId: '72b074a6-76d2-43de-a210-124acc734f1c',
     marTechUrl: 'https://assets.adobedtm.com/d4d114c60e50/a0e989131fd5/launch-2c94beadc94f-development.min.js',
   },
-  prod: {
-    edgeConfigId: '913eac4d-900b-45e8-9ee7-306216765cd2',
-  },
+  prod: { edgeConfigId: '913eac4d-900b-45e8-9ee7-306216765cd2' },
   locales: {
     '': { ietf: 'en-US', tk: 'hah7vzn.css' },
     en: { ietf: 'en-US', tk: 'hah7vzn.css' },
@@ -131,7 +130,7 @@ function decorateVideo() {
   });
 }
 
-function getMediaFilename (a) {
+function getMediaFilename(a) {
   try {
     const mediaUrl = new URL(a.href);
     return mediaUrl.pathname.split('/').pop();
@@ -139,7 +138,7 @@ function getMediaFilename (a) {
     console.log('Error parsing media url', e);
   }
   return '';
-};
+}
 
 function decorateGif() {
   const gifs = document.querySelectorAll(':scope p > a[href*=".gif"]');
