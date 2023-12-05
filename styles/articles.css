@@ -12,8 +12,12 @@ main h1, main h2, main h3, main h4, main h5, main h6 {
   scroll-margin-top: 90px;
 }
 
-main .section{
+main .section:not(.no-margin-top){
   margin-top: 64px
+}
+
+main .section.no-margin {
+  margin: 0;
 }
 
 main .figure .figure img {
