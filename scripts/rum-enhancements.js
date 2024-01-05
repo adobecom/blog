@@ -38,3 +38,57 @@ export function observeBackgroundImages(elements) {
     });
   }
 }
+
+class ArticleFeedObserver {
+  #feed;
+
+  #observedElements = [];
+
+  constructor(feed) {
+    this.#feed = feed;
+  }
+
+  start() {
+    if (this.#feed.classList.contains('appear')) {
+      // the observer was started after the feed appeared, so observe the blocks and media now.
+      this.#triggerRUMObserve();
+      this.#startChildMutationObserver();
+    } else {
+      // otherwise, wait until the feed appears.
+      new MutationObserver((mutations, observer) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class' && mutation.target.classList.contains('appear')) {
+            observer.disconnect();
+            this.#triggerRUMObserve();
+            this.#startChildMutationObserver();
+          }
+        });
+      }).observe(this.#feed, { attributes: true });
+    }
+  }
+
+  #triggerRUMObserve() {
+    const elementsToObserve = Array.from(this.#feed.querySelectorAll('.article-card, picture > img'))
+      .filter((element) => !this.#observedElements.includes(element));
+    this.#observedElements.push(...elementsToObserve);
+    sampleRUM.observe(elementsToObserve);
+  }
+
+  // handle dynamically added article cards by re-triggering RUM observation
+  // don't need to be super precise here, since we are tracking which elements
+  // have already been observed in #observe()
+  #startChildMutationObserver() {
+    const articleCards = this.#feed.querySelector('.article-cards');
+    if (articleCards) {
+      new MutationObserver(() => {
+        this.#triggerRUMObserve();
+      }).observe(articleCards, { childList: true });
+    }
+  }
+}
+
+if (isSelected) {
+  document.querySelectorAll('.article-feed').forEach((articleFeed) => {
+    new ArticleFeedObserver(articleFeed).start();
+  });
+}
