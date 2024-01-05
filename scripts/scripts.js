@@ -207,6 +207,12 @@ function initSidekick() {
   }
 }
 
+async function customizeRUM() {
+  const { observeBackgroundImages } = await import('./rum-enhancements.js');
+
+  observeBackgroundImages(document.querySelectorAll('[style*="background-image"]'));
+}
+
 const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
@@ -220,5 +226,6 @@ const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  await customizeRUM();
   initSidekick();
 }());
