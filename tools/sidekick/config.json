@@ -1,7 +1,7 @@
 {
   "project": "Blog",
   "host": "blog.adobe.com",
-  "reviewHost": "main--blog--adobecom.aem.page",
+  "previewHost": "main--blog--adobecom.aem.page",
   "liveHost": "main--blog--adobecom.aem.live",
   "plugins": [
     {
