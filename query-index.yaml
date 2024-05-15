@@ -44,6 +44,11 @@ indices:
         select: none
         value: |
           parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
+  no-en:
+    <<: *default
+    include:
+      - /en/publish/*/*/*/*
+    target: /query-index.xlsx
 
   brazilian:
     <<: *default
