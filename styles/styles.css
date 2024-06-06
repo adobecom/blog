@@ -52,6 +52,11 @@ main .section:first-of-type:not([class*='-spacing']) > .featured-article:first-c
   text-align: initial;
 }
 
+/* Disable Featured Article */
+.hide-feat-img .article-feature-image {
+  display: none;
+}
+
 /*
  Text block quote styles
 */

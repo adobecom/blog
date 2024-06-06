@@ -207,9 +207,15 @@ function initSidekick() {
   }
 }
 
-const { loadArea, setConfig } = await import(`${miloLibs}/utils/utils.js`);
+function decorateFeatImg(getMetadata) {
+  const featImgMeta = getMetadata('blog-featured-image');
+  if (featImgMeta === 'off') document.body.classList.add('hide-feat-img');
+}
+
+const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
+  decorateFeatImg(getMetadata);
   decorateTopicPage();
   decorateFigure();
   decorateVideo();
