@@ -48,7 +48,7 @@ const CONFIG = {
     'blog.adobe.com': 'blog.stage.adobe.com',
     'news.adobe.com': 'news.stage.adobe.com',
     'business.adobe.com': 'business.stage.adobe.com',
-    'www.adobe.com': 'www.stage.adobe.com'
+    'www.adobe.com': 'www.stage.adobe.com',
   }
 };
 
