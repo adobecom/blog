@@ -121,7 +121,7 @@ function getImageCaption(picture) {
     && !parentSiblingEl.querySelector('picture')
     && parentSiblingEl.firstChild?.tagName === 'EM'
     ? parentSiblingEl.querySelector('em')
-    : undefined;
+    : '';
   return caption;
 }
 
