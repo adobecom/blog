@@ -151,6 +151,7 @@ export async function decorateContent() {
   const { createTag, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
   loadStyle(`${miloLibs}/blocks/figure/figure.css`);
 
+  // eslint-disable-next-line consistent-return
   if (window.location.pathname.includes('/topics/')) return topicHeader(createTag);
   if (window.location.pathname.includes('/authors/')) return;
 
@@ -224,7 +225,7 @@ function buildAuthorHeader(mainEl) {
     heading.replaceWith(title);
   }
 
-  const authorHeading = title ? title : heading;
+  const authorHeading = title || heading;
   const authorHeader = buildBlock('author-header', [
     [{
       elems: [
@@ -240,46 +241,50 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
-async function buildArticleHeader(el) {
-  const miloLibs = getLibs();
-  const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
-  if (!getTaxonomyModule()) {
-    await loadTaxonomy();
-  }
-  const div = document.createElement('div');
-  const h1 = el.querySelector('h1');
-  const picture = el.querySelector('a[href*=".mp4"], picture');
-  const caption = getImageCaption(picture);
-  const figure = document.createElement('div');
-  figure.append(picture, caption);
-  const tag = getMetadata('article:tag');
-  const category = tag || 'News';
-  const author = getMetadata('author') || 'Adobe Communications Team';
-  const { codeRoot } = getConfig();
-  const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}` : null);
-  const publicationDate = getMetadata('publication-date');
+// article v2 header
+// async function buildArticleHeader(el) {
+//   const miloLibs = getLibs();
+//   const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
+//   const { loadTaxonomy, getLinkForTopic, getTaxonomyModule }
+//      = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
+//   if (!getTaxonomyModule()) {
+//     await loadTaxonomy();
+//   }
+//   const div = document.createElement('div');
+//   const h1 = el.querySelector('h1');
+//   const picture = el.querySelector('a[href*=".mp4"], picture');
+//   const caption = getImageCaption(picture);
+//   const figure = document.createElement('div');
+//   figure.append(picture, caption);
+//   const tag = getMetadata('article:tag');
+//   const category = tag || 'News';
+//   const author = getMetadata('author') || 'Adobe Communications Team';
+//   const { codeRoot } = getConfig();
+//   const authorURL =
+//         getMetadata('author-url') || (author ?
+//         `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}`
+//         : null);
+//   const publicationDate = getMetadata('publication-date');
 
-  const categoryTag = getLinkForTopic(category);
+//   const categoryTag = getLinkForTopic(category);
 
-  const articleHeaderBlockEl = buildBlock('article-header', [
-    [`<p>${categoryTag}</p>`],
-    [h1],
-    [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
-      <p>${publicationDate}</p>`],
-    [figure],
-  ]);
-  div.append(articleHeaderBlockEl);
-  el.prepend(div);
-}
+//   const articleHeaderBlockEl = buildBlock('article-header', [
+//     [`<p>${categoryTag}</p>`],
+//     [h1],
+//     [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
+//       <p>${publicationDate}</p>`],
+//     [figure],
+//   ]);
+//   div.append(articleHeaderBlockEl);
+//   el.prepend(div);
+// }
 
 function addArticleVersionClassForStyling() {
   const main = document.querySelector('main');
   main.classList.add('article-v3');
 }
 
-async function buildArticleHeroBanner(el) { 
-
+async function buildArticleHeroBanner(el) {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
   const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
@@ -302,21 +307,21 @@ async function buildArticleHeroBanner(el) {
 
   const tagEl = document.createElement('p');
   tagEl.textContent = category;
-  
+
   // use marquee (split, large) for hero
   const marqueeEl = buildBlock('marquee', [
-    [`<p>#000</p>`],
+    ['<p>#000</p>'],
     [
       {
         elems: [
           categoryTag,
           h1,
-          `<p>${description}</p>`,  // TODO: discuss if we want this
-        ]
+          `<p>${description}</p>`, // TODO: discuss if we want this
+        ],
       },
-      picture
-    ]
-  ],);
+      picture,
+    ],
+  ]);
 
   marqueeEl.classList.add('split', 'medium');
 
@@ -371,8 +376,7 @@ export async function buildAutoBlocks() {
   const mainEl = document.querySelector('main');
 
   try {
-    if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {      
-
+    if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
       addArticleVersionClassForStyling();
       await buildArticleHeroBanner(mainEl);
       buildTagsBlock(mainEl);
@@ -382,7 +386,7 @@ export async function buildAutoBlocks() {
       // await buildArticleHeader(mainEl);
       // buildTagsBlock(mainEl);
 
-    // TODO: confirm which type of page is this 
+    // TODO: confirm which type of page is this
     } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }

@@ -48,7 +48,7 @@ export default async function init(block) {
               desc.classList.add('heading-m', 'banner-description');
             }
           });
-  
+
           const link = responseEl.querySelector('a');
           if (link) link.classList.add('con-button');
 

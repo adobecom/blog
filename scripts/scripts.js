@@ -27,9 +27,7 @@ const CONFIG = {
     edgeConfigId: '72b074a6-76d2-43de-a210-124acc734f1c',
     marTechUrl: 'https://assets.adobedtm.com/d4d114c60e50/a0e989131fd5/launch-2c94beadc94f-development.min.js',
   },
-  prod: {
-    edgeConfigId: '913eac4d-900b-45e8-9ee7-306216765cd2',
-  },
+  prod: { edgeConfigId: '913eac4d-900b-45e8-9ee7-306216765cd2' },
   locales: {
     '': { ietf: 'en-US', tk: 'hah7vzn.css' },
     en: { ietf: 'en-US', tk: 'hah7vzn.css' },
@@ -131,7 +129,7 @@ function decorateVideo() {
   });
 }
 
-function getMediaFilename (a) {
+function getMediaFilename(a) {
   try {
     const mediaUrl = new URL(a.href);
     return mediaUrl.pathname.split('/').pop();
@@ -139,7 +137,7 @@ function getMediaFilename (a) {
     console.log('Error parsing media url', e);
   }
   return '';
-};
+}
 
 function decorateGif() {
   const gifs = document.querySelectorAll(':scope p > a[href*=".gif"]');
@@ -186,7 +184,7 @@ function overrideMiloBlocks() {
 function decorateTopicPage() {
   if (window.location.href.includes('/topics/')) {
     const sections = [...document.querySelectorAll('main > div')];
-    if (sections.length = 1) {
+    if (sections.length === 1) {
       const articleFeed = document.querySelector('main div .article-feed');
       if (!articleFeed) return;
       const newSection = document.createElement('div');
@@ -230,7 +228,7 @@ function initSidebar() {
   cloneBlockToSidebar(sidebar, 'banner');
   cloneBlockToSidebar(sidebar, 'tags');
 
-  return sidebar; 
+  return sidebar;
 }
 
 function moveRecommendedArticleAsFinalSection(main) {
@@ -256,7 +254,7 @@ function setUpSidebarLayoutForBlogPage() {
   const blogWrapper = document.createElement('div');
   blogWrapper.classList.add('blog-wrapper');
   main.insertBefore(blogWrapper, mainContent);
-  
+
   // Put sidebar + content into blog wrapper
   const sidebar = initSidebar();
   // const sidebar = buildBlock('blog-sidebar', '');
