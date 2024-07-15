@@ -248,7 +248,6 @@ async function buildArticleHeader(el) {
     await loadTaxonomy();
   }
   const div = document.createElement('div');
-  // div.setAttribute('class', 'section');
   const h1 = el.querySelector('h1');
   const picture = el.querySelector('a[href*=".mp4"], picture');
   const caption = getImageCaption(picture);
@@ -274,12 +273,65 @@ async function buildArticleHeader(el) {
   el.prepend(div);
 }
 
-function buildTagsBlock() {
+function addArticleVersionClassForStyling() {
+  const main = document.querySelector('main');
+  main.classList.add('article-v3');
+}
+
+async function buildArticleHeroBanner(el) { 
+
+  const miloLibs = getLibs();
+  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
+  if (!getTaxonomyModule()) {
+    await loadTaxonomy();
+  }
+
+  const div = document.createElement('div');
+
+  const tag = getMetadata('article:tag');
+  const category = tag || 'News';
+  const categoryTag = getLinkForTopic(category); // category link
+
+  const h1 = el.querySelector('h1');
+  const description = getMetadata('description');
+  const picture = el.querySelector('a[href*=".mp4"], picture');
+  const caption = getImageCaption(picture);
+  const figure = document.createElement('div');
+  figure.append(picture, caption);
+
+  const tagEl = document.createElement('p');
+  tagEl.textContent = category;
+  
+  // use marquee (split, large) for hero
+  const marqueeEl = buildBlock('marquee', [
+    [`<p>#000</p>`],
+    [
+      {
+        elems: [
+          categoryTag,
+          h1,
+          `<p>${description}</p>`,  // TODO: discuss if we want this
+        ]
+      },
+      picture
+    ]
+  ],);
+
+  marqueeEl.classList.add('split', 'medium');
+
+  const categoryLink = marqueeEl.querySelector('a');
+  categoryLink.classList.add('article-hero-category-link');
+
+  div.append(marqueeEl);
+  el.prepend(div);
+}
+
+function buildTagsBlock(mainEl) {
   const tagsArray = [...document.head.querySelectorAll('meta[property="article:tag"]')].map((el) => el.content) || [];
 
   const tagsBlock = buildBlock('tags', tagsArray.join(', '));
-  const main = document.querySelector('main');
-  const recBlock = main.querySelector('.recommended-articles');
+  const recBlock = mainEl.querySelector('.recommended-articles');
   if (recBlock) {
     // Put tags block before recommended articles block
     if (recBlock.parentElement.childElementCount === 1) {
@@ -288,18 +340,49 @@ function buildTagsBlock() {
       recBlock.before(tagsBlock);
     }
   } else {
-    main.lastElementChild.append(tagsBlock);
+    mainEl.lastElementChild.append(tagsBlock);
   }
+}
+
+async function buildArticleMeta(mainEl) {
+  const miloLibs = getLibs();
+  const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
+
+  // author + publication date
+  const author = getMetadata('author') || 'Adobe Communications Team';
+  const { codeRoot } = getConfig();
+  const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}` : null);
+
+  const publicationDate = getMetadata('publication-date');
+
+  const articleMeta = buildBlock('article-meta', [
+    [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
+      <p>${publicationDate}</p>`],
+  ]);
+
+  // put article meta (author + link sharings) before tags
+  const tagsBlock = mainEl.querySelector('.tags');
+  tagsBlock.before(articleMeta);
 }
 
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
   const mainEl = document.querySelector('main');
+
   try {
-    if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
-      await buildArticleHeader(mainEl);
-      buildTagsBlock();
+    if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {      
+
+      addArticleVersionClassForStyling();
+      await buildArticleHeroBanner(mainEl);
+      buildTagsBlock(mainEl);
+      await buildArticleMeta(mainEl);
+
+      // original:
+      // await buildArticleHeader(mainEl);
+      // buildTagsBlock(mainEl);
+
+    // TODO: confirm which type of page is this 
     } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }

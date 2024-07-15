@@ -212,6 +212,60 @@ function decorateFeatImg(getMetadata) {
   if (featImgMeta === 'off') document.body.classList.add('hide-feat-img');
 }
 
+function cloneBlockToSidebar(sidebar, blockClass) {
+  const targetBlock = document.querySelector(`.${blockClass}`);
+  if (!targetBlock) return;
+
+  const clonedBlock = targetBlock.cloneNode(true);
+  targetBlock.classList.add('hide-if-sidebar-visible');
+
+  sidebar.append(clonedBlock);
+}
+
+function initSidebar() {
+  const sidebar = document.createElement('div');
+  sidebar.classList.add('blog-wrapper-sidebar');
+
+  cloneBlockToSidebar(sidebar, 'article-meta');
+  cloneBlockToSidebar(sidebar, 'banner');
+  cloneBlockToSidebar(sidebar, 'tags');
+
+  return sidebar; 
+}
+
+function moveRecommendedArticleAsFinalSection(main) {
+  const recBlock = main.querySelector('.recommended-articles');
+  if (!recBlock) return;
+
+  const section = document.createElement('div');
+  section.classList.add('section');
+  section.append(recBlock);
+  main.append(section);
+}
+
+function setUpSidebarLayoutForBlogPage() {
+  const main = document.querySelector('main');
+  const childContent = document.querySelector('.content');
+  if (!childContent) return;
+
+  // div that holds all content
+  const mainContent = childContent.closest('.section');
+  mainContent.classList.add('blog-wrapper-content');
+
+  // Put blog wrapper (wraps sidebar + content) first
+  const blogWrapper = document.createElement('div');
+  blogWrapper.classList.add('blog-wrapper');
+  main.insertBefore(blogWrapper, mainContent);
+  
+  // Put sidebar + content into blog wrapper
+  const sidebar = initSidebar();
+  // const sidebar = buildBlock('blog-sidebar', '');
+  blogWrapper.append(sidebar, mainContent);
+
+  // Move recommended-articles as last separate section if any
+  moveRecommendedArticleAsFinalSection(main);
+}
+
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
@@ -226,5 +280,6 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  setUpSidebarLayoutForBlogPage();
   initSidekick();
 }());

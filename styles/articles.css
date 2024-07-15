@@ -12,8 +12,8 @@ main h1, main h2, main h3, main h4, main h5, main h6 {
   scroll-margin-top: 90px;
 }
 
-main .section{
-  margin-top: 64px
+main .section:first-of-type {
+  margin-top: 57px;
 }
 
 main .figure .figure img {
@@ -42,4 +42,165 @@ main video {
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+@media (min-width: 900px) {
+  main .section:first-of-type {
+    margin-top: var(--global-height-nav);
+  } 
+}
+
+/* Article v3 related styles */
+
+/* TODO: styles here may need to be moved into blocks once ui is approved, but needs to confirm if they're used in other places first */
+
+/* tags */
+.article-v3 .tags {
+  max-width: none;
+  margin-top: var(--spacing-m);
+}
+
+.article-v3 .tags a {
+  font-weight: 700;
+  letter-spacing: normal;
+  padding: 12px;
+  margin: 0 12px 12px 0;
+}
+
+@media (min-width: 900px) {
+  .article-v3 .tags {
+    margin-top: 24px;
+  }
+}
+
+/* recommended articles */
+main .recommended-articles-content-wrapper {
+  background: var(--color-white);
+}
+
+main .recommended-articles > h3 {
+  padding-top: 0;
+  margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-s);
+}
+ 
+main .recommended-articles .article-card-body h3 {
+  margin-bottom: var(--spacing-xxs);
+}
+
+.article-card .article-card-image {
+  height: 215px;
+}
+
+main .article-card .article-card-category {
+  margin-top: 0;
+}
+
+main .article-card .article-card-body {
+  padding: 20px 20px 24px;
+}
+
+main .article-card .article-card-body h3 {
+  font-size: var(--type-heading-xs-size);
+  line-height: var(--type-heading-xs-lh);
+  margin: 0 0 8px;
+}
+
+main .article-card .article-card-body .article-card-description {
+  font-size: var(--type-body-xs-size);
+  line-height: var(--type-body-xs-lh);
+  margin: 8px 0;
+}
+
+@media (min-width: 600px) {
+  main .recommended-articles h3 {
+    margin-bottom: var(--spacing-m);
+  }
+
+  main .recommended-articles .article-card-body h3 {
+    margin-bottom: var(--spacing-xxs);
+    -webkit-line-clamp: 2;
+    min-height: 2.2rem;
+  }
+}
+
+/* Blog styles */
+main .article-hero-category-link {
+  display: inline-block;
+  color: var(--color-white);
+}
+
+.blog-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--spacing-xs);
+  margin: 0 auto;
+  max-width: var(--grid-container-width);
+  padding-bottom: var(--spacing-l);
+}
+
+.blog-wrapper-sidebar {
+  display: none;
+}
+
+.blog-wrapper-sidebar .tags {
+  max-width: none;
+}
+
+.blog-wrapper-sidebar .tags a {
+  padding: 12px;
+  margin: 0 8px 8px 0;
+}
+
+@media (min-width: 900px) {
+  .blog-wrapper {
+    flex-direction: row;
+    gap: var(--spacing-s);
+  }
+
+  .blog-wrapper-sidebar {
+    display: block;
+    position: sticky;
+    top: var(--spacing-m);
+    min-width: 240px;
+    width: 30%;
+    height: fit-content;
+    padding: calc(24px + var(--spacing-m)) 0 24px;
+    max-height: calc(100vh - var(--global-height-nav));
+    overflow-y: auto;
+    padding-right: var(--spacing-xxs);
+  }
+
+  .blog-wrapper-content {
+    max-width: 70%;
+    padding: 24px 0;
+  }
+
+  .blog-wrapper-content p:first-of-type {
+    margin-top: var(--spacing-m);
+  }
+
+  main .embed-instagram, main .embed-instagram iframe.instagram-media {
+    max-width: max-content;
+  }
+
+  .hide-if-sidebar-visible {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .blog-wrapper {
+    gap: var(--spacing-m);
+  }
+
+  .blog-wrapper-sidebar {
+    width: 28%;
+    min-width: 280px;
+  }
+}
+
+/* TODO: clean this up after develop, used to hide cookies temporarily */
+#onetrust-consent-sdk {
+  display: none;
 }

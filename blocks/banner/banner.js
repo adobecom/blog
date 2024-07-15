@@ -27,7 +27,7 @@ export default async function init(block) {
           const bannerImage = document.createElement('div');
           const bannerText = document.createElement('div');
           bannerImage.classList.add('banner-image');
-          bannerText.classList.add('banner-text');
+          bannerText.classList.add('banner-text', 'dark');
 
           // banner image content
           const img = responseEl.querySelector('img');
@@ -40,8 +40,18 @@ export default async function init(block) {
 
           // banner text content
           normalizeHeadings(responseEl, ['h3']);
+          const heading = responseEl.querySelector('h3');
+          heading.classList.add('detail-m');
+          const descriptions = responseEl.querySelectorAll('p');
+          descriptions.forEach((desc) => {
+            if (!desc.querySelector('a') && desc.textContent.trim().length > 0) {
+              desc.classList.add('heading-m', 'banner-description');
+            }
+          });
+  
           const link = responseEl.querySelector('a');
-          link.classList.add('cta-link');
+          if (link) link.classList.add('con-button');
+
           bannerText.append(responseEl);
 
           // appending DOM objects
