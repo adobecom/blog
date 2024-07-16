@@ -257,7 +257,6 @@ function setUpSidebarLayoutForBlogPage() {
 
   // Put sidebar + content into blog wrapper
   const sidebar = initSidebar();
-  // const sidebar = buildBlock('blog-sidebar', '');
   blogWrapper.append(sidebar, mainContent);
 
   // Move recommended-articles as last separate section if any

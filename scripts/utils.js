@@ -279,11 +279,6 @@ function buildAuthorHeader(mainEl) {
 //   el.prepend(div);
 // }
 
-function addArticleVersionClassForStyling() {
-  const main = document.querySelector('main');
-  main.classList.add('article-v3');
-}
-
 async function buildArticleHeroBanner(el) {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
@@ -377,7 +372,6 @@ export async function buildAutoBlocks() {
 
   try {
     if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
-      addArticleVersionClassForStyling();
       await buildArticleHeroBanner(mainEl);
       buildTagsBlock(mainEl);
       await buildArticleMeta(mainEl);

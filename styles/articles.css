@@ -1,7 +1,7 @@
 /* 
  * Put project specific base styles here.
  *
- * Note: The proect does not load this file.
+ * Note: The project does not load this file.
  *       You will need to load these using scripts.js.
  * 
  *
@@ -55,12 +55,12 @@ main video {
 /* TODO: styles here may need to be moved into blocks once ui is approved, but needs to confirm if they're used in other places first */
 
 /* tags */
-.article-v3 .tags {
+main .tags {
   max-width: none;
   margin-top: var(--spacing-m);
 }
 
-.article-v3 .tags a {
+main .tags a {
   font-weight: 700;
   letter-spacing: normal;
   padding: 12px;
@@ -68,12 +68,12 @@ main video {
 }
 
 @media (min-width: 900px) {
-  .article-v3 .tags {
-    margin-top: 24px;
+  main .tags {
+    margin-top: var(--spacing-s);
   }
 }
 
-/* Blog styles */
+/* Blog Styles (sidebar + content) */
 main .article-hero-category-link {
   display: inline-block;
   color: var(--color-white);
@@ -147,70 +147,4 @@ main .blog-wrapper-sidebar .tags a {
     width: 28%;
     min-width: 280px;
   }
-}
-
-/* recommended articles */
-main .recommended-articles-content-wrapper {
-  background: var(--color-white);
-}
-
-main .recommended-articles > h3 {
-  padding-top: 0;
-  margin-top: var(--spacing-m);
-  margin-bottom: var(--spacing-s);
-}
- 
-main .recommended-articles .article-card-body h3 {
-  margin-bottom: var(--spacing-xxs);
-}
-
-.article-card .article-card-image {
-  height: 215px;
-}
-
-main .article-card .article-card-category {
-  margin-top: 0;
-}
-
-main .article-card .article-card-body {
-  padding: 20px 20px 24px;
-}
-
-main .article-card .article-card-body h3 {
-  font-size: var(--type-heading-xs-size);
-  line-height: var(--type-heading-xs-lh);
-  margin: 0 0 8px;
-}
-
-main .article-card .article-card-body .article-card-description {
-  font-size: var(--type-body-xs-size);
-  line-height: var(--type-body-xs-lh);
-  margin: 8px 0;
-}
-
-main .article-card-body p.article-card-category, 
-main .article-card-body p.article-card-category a, 
-main .article-card-body p.article-card-date {
-  font-size: var(--type-body-xs-size);
-  line-height: var(--type-body-xs-lh);
-  letter-spacing: normal;
-  font-weight: 400;
-  color: var(--text-color);
-}
-
-@media (min-width: 600px) {
-  main .recommended-articles h3 {
-    margin-bottom: var(--spacing-m);
-  }
-
-  main .recommended-articles .article-card-body h3 {
-    margin-bottom: var(--spacing-xxs);
-    -webkit-line-clamp: 2;
-    min-height: 2.2rem;
-  }
-}
-
-/* TODO: clean this up after develop, used to hide cookies temporarily */
-#onetrust-consent-sdk {
-  display: none;
 }

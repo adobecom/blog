@@ -259,3 +259,69 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
     padding-right: inherit;
   }
 }
+
+/* recommended articles */
+main .recommended-articles-content-wrapper {
+  background: var(--color-white);
+}
+
+main .recommended-articles > h3 {
+  padding-top: 0;
+  margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-s);
+}
+ 
+main .recommended-articles .article-card-body h3 {
+  margin-bottom: var(--spacing-xxs);
+}
+
+.article-card .article-card-image {
+  height: 215px;
+}
+
+main .article-card .article-card-category {
+  margin-top: 0;
+}
+
+main .article-card .article-card-body {
+  padding: 20px 20px 24px;
+}
+
+main .article-card .article-card-body h3 {
+  font-size: var(--type-heading-xs-size);
+  line-height: var(--type-heading-xs-lh);
+  margin: 0 0 8px;
+}
+
+main .article-card .article-card-body .article-card-description {
+  font-size: var(--type-body-xs-size);
+  line-height: var(--type-body-xs-lh);
+  margin: 8px 0;
+}
+
+main .article-card-body p.article-card-category, 
+main .article-card-body p.article-card-category a, 
+main .article-card-body p.article-card-date {
+  font-size: var(--type-body-xs-size);
+  line-height: var(--type-body-xs-lh);
+  letter-spacing: normal;
+  font-weight: 400;
+  color: var(--text-color);
+}
+
+@media (min-width: 600px) {
+  main .recommended-articles h3 {
+    margin-bottom: var(--spacing-m);
+  }
+
+  main .article-card-body h3 {
+    margin-bottom: var(--spacing-xxs);
+    -webkit-line-clamp: 2;
+    min-height: 2.2rem;
+  }
+}
+
+/* TODO: clean this up after develop, used to hide cookies temporarily */
+#onetrust-consent-sdk {
+  display: none;
+}
