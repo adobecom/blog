@@ -28,7 +28,7 @@ main .article-header .article-byline {
   max-width: 800px;
 }
 
-main video {
+main .blog-wrapper video {
   max-height: 600px;
   margin: 40px auto;
   display: block;

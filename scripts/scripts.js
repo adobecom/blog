@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import { decorateContent, setLibs, buildAutoBlocks, changeHTMLTag } from './utils.js';
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -210,6 +210,38 @@ function decorateFeatImg(getMetadata) {
   if (featImgMeta === 'off') document.body.classList.add('hide-feat-img');
 }
 
+// new functions
+function decorateMediaBlock() {
+  const mediaBlocks = document.querySelectorAll('.media');
+  if (!mediaBlocks || mediaBlocks.length === 0) return;
+
+  mediaBlocks.forEach((block) => {
+    // TODO: see if move this to milo
+    if (block.classList.contains('card-as-link')) {
+      const link = block.querySelector('a');
+      if (!link) console.error('missing link in Media card');
+
+      const cardLink = document.createElement('a');
+      cardLink.setAttribute('class', block.classList);
+      cardLink.href = link.href;
+      cardLink.target = link.target;
+
+      if (block.classList.contains('hide-link-text')) {
+        const linkParent = link.closest('p');
+        if (linkParent) {
+          linkParent.remove(); 
+        } else {
+          link.remove();
+        }
+      }
+
+      cardLink.innerHTML = block.innerHTML;
+
+      block.parentNode.replaceChild(cardLink, block);
+    }
+  });
+}
+
 function cloneBlockToSidebar(sidebar, blockClass) {
   const targetBlock = document.querySelector(`.${blockClass}`);
   if (!targetBlock) return;
@@ -278,5 +310,6 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   overrideMiloBlocks();
   await loadArea();
   setUpSidebarLayoutForBlogPage();
+  decorateMediaBlock();
   initSidekick();
 }());

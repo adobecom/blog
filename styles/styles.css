@@ -321,6 +321,181 @@ main .article-card-body p.article-card-date {
   }
 }
 
+/* aside */
+main .aside .foreground.container .text .heading-xl {
+  margin: 0;
+}
+
+main .aside .foreground.container .text .heading-xl:last-of-type {
+  margin-bottom: var(--spacing-xs);
+}
+
+@media (min-width: 1200px) {
+  main .aside .foreground.container .text {
+    padding-right: var(--spacing-l);
+  }
+}
+
+/* media: added link + new variant - border styles (can be moved to milo) */
+main a.media {
+  color: var(--text-color);
+}
+
+main a.media .image {
+  background: var(--color-black);
+  border-radius: 8px 8px 0 0;
+  aspect-ratio: 16 / 9;
+}
+
+main a.media .image img {
+  transition: var(--transition-all-ease-in-out-1);
+}
+
+main a.media:hover {
+  text-decoration: none;
+}
+
+main a.media:hover .image img {
+  opacity: 0.6;
+}
+
+main .media.border {
+  padding: 0;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+main .media.border .text {
+  box-sizing: border-box;
+  padding: 20px 20px 24px;
+}
+
+main .media.border .image img {
+  max-height: 316px;
+}
+
+main .media.border .foreground > .media-row {
+  gap: 0;
+}
+
+main div[class*="-up"] .media.border .foreground > .media-row {
+  padding: 0;
+}
+
+main .media[class*="-up"].border .foreground > .media-row .image, 
+main div[class*="-up"] .media.border .foreground > .media-row .image {
+  margin-bottom: 0;
+}
+
+/* home page */
+main.page-homepage .masonry-layout {
+  padding-bottom: var(--spacing-xxl);
+}
+
+main.page-homepage .masonry-layout .foreground {
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+}
+
+main.page-homepage .masonry-layout .foreground .brick-media {
+  display: block;
+}
+
+main.page-homepage .masonry-layout img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  main.page-homepage .masonry-layout .foreground {
+    padding: var(--spacing-s);
+  }
+}
+
+@media (min-width: 600px) {
+  main.page-homepage .masonry-layout img {
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 800px) {
+  main.page-homepage .masonry-layout .brick.stack .foreground .brick-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+}
+
+@media (min-width: 1200px) {
+  main.page-homepage .masonry-layout {
+    grid-template-rows: auto 540px;
+  }
+
+  main.page-homepage .masonry-layout .brick.stack .foreground {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--spacing-m);
+    padding: var(--spacing-m);
+  }
+}
+
+/* TODO: maybe new components */
+/* article grid */
+main .section.article-grid {
+  padding-bottom: var(--spacing-xxl);
+}
+
+main .article-grid .media {
+  padding: 0;
+}
+
+main .article-grid a.media .image {
+  border-radius: 8px;
+}
+
+
+main .article-grid .media .image img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+main div.article-grid .media .foreground > div.media-row {
+  padding: 0;
+}
+
+main .article-grid .banner {
+  max-width: none;
+  aspect-ratio: 1 / 1;
+}
+
+main .article-grid .banner,
+main .article-grid .banner .banner-contents {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+main .article-grid .banner .content-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 700px) {
+  main .section.article-grid {
+    gap: var(--spacing-l) var(--spacing-m);
+  }
+}
+
+
 /* TODO: clean this up after develop, used to hide cookies temporarily */
 #onetrust-consent-sdk {
   display: none;
