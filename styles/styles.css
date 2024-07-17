@@ -495,7 +495,6 @@ main .article-grid .banner .content-wrapper {
   }
 }
 
-
 /* TODO: clean this up after develop, used to hide cookies temporarily */
 #onetrust-consent-sdk {
   display: none;

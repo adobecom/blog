@@ -44,10 +44,6 @@ main .banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-
-  /* TODO: remove this */
-
-  /* display: none; */
 }
 
 
@@ -71,6 +67,15 @@ main .banner .banner-text h3 {
 main .banner .banner-text .banner-description {
   font-weight: 700;
   margin-bottom: 24px;
+}
+
+main .banner.bg-gradient-red {
+  background: var(--color-red-gradient);
+}
+
+main .banner.bg-gradient-red img,
+main .banner.bg-gradient-red .content-wrapper::before {
+  display: none;
 }
 
 @media (min-width: 900px) {

@@ -45,7 +45,7 @@ export default async function init(block) {
           const descriptions = responseEl.querySelectorAll('p');
           descriptions.forEach((desc) => {
             if (!desc.querySelector('a') && desc.textContent.trim().length > 0) {
-              desc.classList.add('heading-m', 'banner-description');
+              desc.classList.add('heading-l', 'banner-description');
             }
           });
 
