@@ -495,13 +495,6 @@ main .article-grid .banner .content-wrapper {
   }
 }
 
-/* global style */
-.text h1, .text h2,
-.text h3, .text h4,
-.text h5, .text h6 {
-  font-weight: 800;
-}
-
 /* TODO: clean this up after develop, used to hide cookies temporarily */
 #onetrust-consent-sdk {
   display: none;
