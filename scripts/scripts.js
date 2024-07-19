@@ -11,6 +11,7 @@
  */
 
 import { decorateContent, setLibs, buildAutoBlocks, changeHTMLTag } from './utils.js';
+import { initSharingLinkFunction } from '../blocks/article-meta/article-meta.js'
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -250,13 +251,16 @@ function cloneBlockToSidebar(sidebar, blockClass) {
   targetBlock.classList.add('hide-if-sidebar-visible');
 
   sidebar.append(clonedBlock);
+
+  return clonedBlock;
 }
 
-function initSidebar() {
+async function initSidebar() {
   const sidebar = document.createElement('div');
   sidebar.classList.add('blog-wrapper-sidebar');
 
-  cloneBlockToSidebar(sidebar, 'article-meta');
+  const sidebarArticleMeta = cloneBlockToSidebar(sidebar, 'article-meta');
+  await initSharingLinkFunction(sidebarArticleMeta);
   cloneBlockToSidebar(sidebar, 'banner');
   cloneBlockToSidebar(sidebar, 'tags');
 
@@ -273,7 +277,7 @@ function moveRecommendedArticleAsFinalSection(main) {
   main.append(section);
 }
 
-function setUpSidebarLayoutForBlogPage() {
+async function setUpSidebarLayoutForBlogPage() {
   const main = document.querySelector('main');
   const childContent = document.querySelector('.content');
   if (!childContent) return;
@@ -288,7 +292,7 @@ function setUpSidebarLayoutForBlogPage() {
   main.insertBefore(blogWrapper, mainContent);
 
   // Put sidebar + content into blog wrapper
-  const sidebar = initSidebar();
+  const sidebar = await initSidebar();
   blogWrapper.append(sidebar, mainContent);
 
   // Move recommended-articles as last separate section if any
@@ -309,7 +313,7 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
-  setUpSidebarLayoutForBlogPage();
+  await setUpSidebarLayoutForBlogPage();
   decorateMediaBlock();
   initSidekick();
 }());
