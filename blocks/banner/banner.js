@@ -4,15 +4,11 @@ import {
 } from '../../scripts/utils.js';
 
 export default async function init(block) {
-  console.log("am i runned");
-  console.log(block);
 
   const bannerContents = document.createElement('div');
   bannerContents.classList.add('banner-contents');
 
   block.querySelectorAll('a').forEach(async (a) => {
-    console.log("am i runned 2");
-
     if (!a?.href) return;
     // content wrapper
     const bannerContent = document.createElement('div');
@@ -65,9 +61,7 @@ export default async function init(block) {
           bannerContents.append(bannerContent);
           block.innerHTML = '';
           block.append(bannerContents);
-
-          console.log('banner testing:');
-          console.log(bannerContents);
+          
         } else {
           block.remove();
         }

@@ -241,6 +241,7 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
+// TODO: cleanup
 // article v2 header
 // async function buildArticleHeader(el) {
 //   const miloLibs = getLibs();
@@ -330,7 +331,7 @@ async function buildArticleHeroBanner(el) {
         elems: [
           categoryTag,
           h1,
-          `<p>${description}</p>`, // TODO: discuss if we want this
+          `<p>${description}</p>`,
         ],
       },
       picture,

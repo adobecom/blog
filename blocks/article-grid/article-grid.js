@@ -2,7 +2,6 @@ import { getLibs, buildBlock, normalizeHeadings } from '../../scripts/utils.js';
 import initBanner from '../banner/banner.js';
 
 const defaultLimit = 9;
-const ROOT_MARGIN = 50;
 const blogIndex = {
   data: [],
   byPath: {},
@@ -11,6 +10,7 @@ const blogIndex = {
   config: {},
   offsetData: [],
 };
+const ROOT_MARGIN = 50;
 
 // get data
 async function fetchArticleFeedData() {
@@ -101,75 +101,9 @@ async function filterArticleDataBasedOnConfig() {
   blogIndex.data = filteredArticleData;
 }
 
-function buildMediaBlock() {
-  let mediaHTML = `
-    <div class="media small con-block"> 
-      <div class="container foreground">
-        <div class="media-row">
-          <div data-valign="middle" class="image">
-            ${pictureTag}
-          </div>
-          <div data-valign="middle" class="text">
-            <p class="detail-m"><strong>${categoryText}</strong></p>
-            <h2 class="heading-xs">
-              <strong>${title}</strong>
-            </h2>
-            <p class="body-s">${description}</p>
-            <div class="cta-container">
-              <p class="body-s action-area">
-                <a href="${path}" class="con-button outline">Read More</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `; 
-}
-
-async function buildBannerBlock(path) {
-  const response = await fetch(`${path}.plain.html`);
-  if (!response.ok) return false;
-
-  const responseEl = document.createElement('div');
-  responseEl.innerHTML = await response.text();
-
-  // grab data
-  const img = responseEl.querySelector('img');
-  const pictureTag = createOptimizedPicture(img.src, img.alt);
-
-  normalizeHeadings(responseEl, ['h3']);
-  const heading = responseEl.querySelector('h3');
-
-  let bannerHTML = `
-    <div class="banner is-loaded">
-      <div class="banner-contents">
-        <div class="content-wrapper">
-          <div class="banner-image">
-          ${pictureTag.outerHTML}
-          </div>
-
-          <div class="banner-text dark">
-            <div>
-              <div>
-                <p></p>
-                <h3 class="detail-m">${heading.textContent}</h3>
-                <p class="heading-l banner-description">${description}</p>
-                <a href="https://www.adobe.com/products/photoshop-lightroom.html" class="con-button">Learn More</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  return bannerHTML;
-}
-
 async function decorateArticleGrid(block) {
   const miloLibs = getLibs();
-  const { createOptimizedPicture, getArticleTaxonomy, getLinkForTopic } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
+  const { createOptimizedPicture, getArticleTaxonomy } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
 
   const articleData = blogIndex.data;
   const { banner } = blogIndex.config;
@@ -196,28 +130,27 @@ async function decorateArticleGrid(block) {
     } else {
 
       const articleItem = articleData[articleIndex];
-      const { author, title, date, description, image, imageAlt, path } = articleItem;
+      const { title, description, image, imageAlt, path } = articleItem;
       const picture = createOptimizedPicture(image, imageAlt, [{ width: '750' }]);
       const pictureTag = picture.outerHTML;
 
       const articleTax = getArticleTaxonomy(articleItem);
-      // const categoryTag = getLinkForTopic(articleTax.category, path);
 
-      // TODO: test here
       const mediaBlock = buildBlock('media', [
-        [pictureTag],
         [
+          pictureTag,
           {
             elems: [
-              `<p> categoryTag </p>`,
-              `<h2> ${title} </h2>`,
-              `<p> ${description} </p>`,
-              `<a href="${path}"> Read More </a>`, // TODO: this may needs to be localized
+              `<p> ${articleTax.category} </p>`,
+              `<h2 class="title"> ${title} </h2>`,
+              `<p class="body-s description"> ${description} </p>`,
+              `<p class="action-area"><a href="${path}" class="con-button outline"> Read More </a></p>`, // TODO: may needs to be localized
             ]
           }
         ]
       ]);
 
+      mediaBlock.classList.add('small');
       window.initMediaBlock(mediaBlock);
       block.append(mediaBlock);
 
@@ -226,9 +159,6 @@ async function decorateArticleGrid(block) {
   }
 
   section.replaceWith(block);
-
-  // console.log("filterArticleDataBasedOnConfig:");
-  // console.log(blogIndex.data);
 }
 
 async function loadAndExposeMediaBlock() {
@@ -236,38 +166,40 @@ async function loadAndExposeMediaBlock() {
   try {
       const module = await import(`${miloLibs}/blocks/media/media.js`);
       window.initMediaBlock = module.default;
-      console.log('initMediaBlock function is now globally accessible.');
+      // console.log('initMediaBlock function is now globally accessible.');
   } catch (error) {
       console.error('Error loading the module:', error);
   }
 }
 
-
-
-// move init into utils
-// find ways to init later
 export default async function init(block) { 
   const miloLibs = getLibs();
-  const { loadStyle } = await import(`${miloLibs}/utils/utils.js`);
   const { readBlockConfig } = await import(`${miloLibs}/blocks/article-feed/article-feed.js`);
-
-  await loadAndExposeMediaBlock();
-
-  const styleLoaded = new Promise((resolve) => {
-    loadStyle(`${miloLibs}/blocks/media/media.css`, resolve);
-  })
-  await styleLoaded;
+  blogIndex.config = readBlockConfig(block);
 
   const initArticleGrid = async () => {
-
-
-    blogIndex.config = readBlockConfig(block);
+    await loadAndExposeMediaBlock();          // for reusing media block init
 
     await fetchArticleFeedData();             // fetch data
     await filterArticleDataBasedOnConfig();   // filtered data based on config
 
-    // await decorateArticleGrid(block);
+    await decorateArticleGrid(block);
+    block.classList.add('ready');
   }
 
-  initArticleGrid();
+  async function handleIntersection(entries, observer) {
+    for (const entry of entries) {
+        if (entry.isIntersecting) {
+            await initArticleGrid();
+            observer.unobserve(entry.target);
+        }
+    }
+  }
+
+  // reduce inital load time
+  const observer = new IntersectionObserver(handleIntersection, {
+      root: null,          // Use the viewport as the root
+      rootMargin: `${ROOT_MARGIN}px`,
+  });
+  observer.observe(block);
 }

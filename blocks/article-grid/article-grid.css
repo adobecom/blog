@@ -1,5 +1,34 @@
+/* use styles based on live milo libs */
+@import "https://main--milo--adobecom.hlx.live/libs/blocks/section-metadata/section-metadata.css";
+@import "https://main--milo--adobecom.hlx.live/libs/blocks/media/media.css";
+@import "../banner/banner.css";
+
 .article-grid {
   position: relative;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 
-/* styles cloned from media, banner */
+.article-grid.ready {
+  opacity: 1;
+}
+
+.article-grid .media .text .description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 3.2rem;
+}
+
+@media (min-width: 768px) {
+  .article-grid .media .text h2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.8rem;
+  }
+}
