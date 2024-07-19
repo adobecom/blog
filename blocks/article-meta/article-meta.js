@@ -67,10 +67,25 @@ async function buildAuthorInfo(authorEl, bylineContainer) {
   }
 }
 
-async function buildSharing() {
+export async function initSharingLinkFunction(sharing) {
+  const miloLibs = getLibs();
+  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
+  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
+  const { copyToClipboard } = await import(`${miloLibs}/utils/tools.js`);
+
+  sharing.querySelectorAll('[data-href]').forEach((link) => {
+    link.addEventListener('click', openPopup);
+  });
+  const copyButton = sharing.querySelector('#copy-to-clipboard');
+  copyButton.addEventListener('click', async () => {
+    const copyText = await replaceKey('copied-to-clipboard', getConfig());
+    await copyToClipboard(copyButton, copyText);
+  });
+}
+
+export async function buildSharing() {
   const miloLibs = getLibs();
   const { createTag, getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { copyToClipboard } = await import(`${miloLibs}/utils/tools.js`);
   const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
   const { fetchIcons } = await import(`${miloLibs}/features/icons/icons.js`);
 
@@ -119,14 +134,7 @@ async function buildSharing() {
     sharing.append(span);
   });
 
-  sharing.querySelectorAll('[data-href]').forEach((link) => {
-    link.addEventListener('click', openPopup);
-  });
-  const copyButton = sharing.querySelector('#copy-to-clipboard');
-  copyButton.addEventListener('click', async () => {
-    const copyText = await replaceKey('copied-to-clipboard', getConfig());
-    await copyToClipboard(copyButton, copyText);
-  });
+  await initSharingLinkFunction(sharing);
 
   return sharing;
 }
