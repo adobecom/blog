@@ -148,3 +148,21 @@ main .blog-wrapper-sidebar .tags a {
     min-width: 280px;
   }
 }
+
+/* TODO: maybe new component */
+.progress-bar-container {
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform-origin: 0%;
+  width: 100%;
+  height: 4px;
+}
+
+.progress-bar {
+  background-color: var(--feds-color-adobeBrand);
+  height: 100%;
+  width: 5%;
+}

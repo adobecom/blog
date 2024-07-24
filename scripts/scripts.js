@@ -301,7 +301,49 @@ async function setUpSidebarLayoutForBlogPage() {
 
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
+async function buildProgressBar() {
+  const { createTag } = await import(`${miloLibs}/utils/utils.js`);
+  if (!getMetadata('content-type') === 'article' || document.querySelector('.article-header')) return;
+
+  const progressBarContainer = createTag('div', { class: 'progress-bar-container' });
+  const progressBar = createTag('div', { class: 'progress-bar' });
+  progressBarContainer.appendChild(progressBar);
+
+  const body = document.querySelector('body');
+  body.append(progressBarContainer);
+
+  window.onscroll = function() {
+    updateProgressBar();
+  };
+
+  function updateProgressBar() {
+    // .blog-wrapper
+    const content = document.querySelector("main");
+
+    let contentHeight = content.scrollHeight;
+    let contentRect = content.getBoundingClientRect();
+    let contentTop = contentRect.top + window.scrollY;
+    var windowHeight = window.innerHeight;
+    var scrollPosition = window.scrollY;
+
+    let initialWidth = 5;
+    let progress = initialWidth;
+    
+    if (scrollPosition >= contentTop && scrollPosition <= contentTop + contentHeight - windowHeight) {
+        var scrolled = scrollPosition - contentTop;
+        var totalScrollableHeight = contentHeight - windowHeight;
+        var scrollProgress = (scrolled / totalScrollableHeight) * (100 - initialWidth);
+        progress = initialWidth + scrollProgress;
+    } else if (scrollPosition > contentTop + contentHeight - windowHeight) {
+        progress = 100;
+    }
+
+    progressBar.style.width = progress + "%";
+  }
+}
+
 (async function loadPage() {
+  await buildProgressBar();
   decorateFeatImg(getMetadata);
   decorateTopicPage();
   decorateFigure();

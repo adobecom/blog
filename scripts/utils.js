@@ -393,6 +393,7 @@ async function addContentTypeToMainClass(mainEl) {
   mainEl.classList.add(pageClass);
 }
 
+
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
