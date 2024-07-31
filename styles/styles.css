@@ -410,6 +410,10 @@ main.page-homepage .masonry-layout img {
   overflow: hidden;
 }
 
+main.page-homepage .category-section {
+  padding-bottom: var(--spacing-xxl);
+}
+
 @media (max-width: 600px) {
   main.page-homepage .masonry-layout .foreground {
     padding: var(--spacing-s);
