@@ -1,29 +1,82 @@
-import { getLibs, buildBlock, normalizeHeadings } from '../../scripts/utils.js';
+import { getLibs, buildBlock } from '../../scripts/utils.js';
 import initBanner from '../banner/banner.js';
 
+const miloLibs = getLibs();
 const defaultLimit = 9;
-const blogIndex = {
-  data: [],
-  byPath: {},
-  offset: 0,
-  complete: false,
-  config: {},
-  offsetData: [],
-};
 const ROOT_MARGIN = 50;
 
+// Used for getting localized text
+const replacePlaceholder = async (key) => {
+  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
+  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
+  const result = await replaceKey(key, getConfig());
+
+  return result;
+};
+
 // get data
-async function fetchArticleFeedData() {
-  const miloLibs = getLibs();
+function getMetadataTags(doc) {
+  const metaTagElements = doc.head.querySelectorAll('meta[property="article:tag"]');
+  const tagContents = Array.from(metaTagElements, metaTag => metaTag.getAttribute('content')).filter(Boolean);
+  
+  return JSON.stringify(tagContents);
+}
+
+async function getArticleDetails(articleLink) {
+  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+
+  const path = new URL(articleLink).pathname;
+  const resp = await fetch(path);
+  if (!resp || !resp.ok) {
+    // eslint-disable-next-line no-console
+    console.log(`Could not retrieve metadata for ${path}`);
+    return null;
+  }
+  const html = await resp.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const trimEndings = ['|Adobe', '| Adobe', '| Adobe Blog', '|Adobe Blog'];
+  let title = getMetadata('og:title', doc).trim();
+  const ending = trimEndings.find((el) => title.endsWith(el));
+  [title] = title.split(ending);
+
+  const image = doc.querySelector('img')
+
+  // same data format for decorating media block
+  return {
+    title,
+    description: getMetadata('description', doc),
+    image: image.src,
+    imageAlt: image.alt ? image.alt : title,
+    tags: getMetadataTags(doc),
+    path,
+  };
+}
+
+async function fetchArticleFeedData(blogIndex) {
   const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
   const { updateLinkWithLangRoot } = await import(`${miloLibs}/utils/helpers.js`);
-  const { feed, limit } = blogIndex.config;
+  const { feed, articles, limit } = blogIndex.config;
 
-  const finalLimit = limit ? limit : defaultLimit;
+  // fetch article data based on links
+  if (articles) {
+    const fetchArticleDataPromise = articles.map((article) => getArticleDetails(article));
+    let articleData = [];
+
+    articleData = await Promise.all(fetchArticleDataPromise);
+    articleData.forEach((data) => {
+      if (data) blogIndex.data.push(data);
+    });
+    blogIndex.complete = true;
+    blogIndex.limit = defaultLimit;
+    return;
+  }
+
+  // fetch feed data
+  const finalLimit = limit || 500;
   blogIndex.limit = finalLimit;
-  const pageSize = Number(finalLimit) * 5;  // 5 times should be enough for filtering excluded items
-
-  const queryParams = `?limit=${pageSize}&offset=${blogIndex.offset}`;
+  const queryParams = `?limit=${finalLimit}&offset=${blogIndex.offset}`;
   const defaultPath = updateLinkWithLangRoot(`${getConfig().locale.contentRoot}/query-index.json`);
 
   const indexPath = feed
@@ -48,8 +101,7 @@ async function fetchArticleFeedData() {
 // filter data
 const isInList = (list, val) => list && list.map((t) => t.toLowerCase()).includes(val);
 
-async function filterArticleDataBasedOnConfig() {
-  const miloLibs = getLibs();
+async function filterArticleDataBasedOnConfig(blogIndex) {
   const { getArticleTaxonomy } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
 
   /* filter posts by category, tag and author */
@@ -101,68 +153,112 @@ async function filterArticleDataBasedOnConfig() {
   blogIndex.data = filteredArticleData;
 }
 
-async function decorateArticleGrid(block) {
-  const miloLibs = getLibs();
+async function decorateMediaBlock(articleItem) {
   const { createOptimizedPicture, getArticleTaxonomy } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
 
+  const { title, description, image, imageAlt, path } = articleItem;
+  const picture = createOptimizedPicture(image, imageAlt, [{ width: '750' }]);
+  const pictureTag = picture.outerHTML;
+  const articleTax = getArticleTaxonomy(articleItem);
+
+  const readMore = await replacePlaceholder('read-more');
+
+  const mediaBlock = buildBlock('media', [
+    [
+      pictureTag,
+      {
+        elems: [
+          `<p> ${articleTax.category} </p>`,
+          `<h2 class="title"> ${title} </h2>`,
+          `<p class="body-s description"> ${description} </p>`,
+          `<p class="action-area"><a href="${path}" class="con-button outline"> ${readMore} </a></p>`,
+        ]
+      }
+    ]
+  ]);
+
+  mediaBlock.classList.add('small');
+  window.initMediaBlock(mediaBlock);
+
+  return mediaBlock;
+}
+
+async function decorateLoadMoreButton() {
+  const loadMore = document.createElement('a');
+  loadMore.className = 'load-more con-button outline';
+  loadMore.href = '#';
+  loadMore.textContent = await replacePlaceholder('load-more');
+
+  return loadMore;
+}
+
+async function decorateArticleGrid(block, blogIndex) {
   const articleData = blogIndex.data;
+  // const { offset, dataOffset } = blogIndex;
+  const { offset } = blogIndex;
   const { banner } = blogIndex.config;
 
-  const bannerPosConfig = blogIndex.config['banner-position'] ?  blogIndex.config['banner-position'] : false;
-  const bannerPos = bannerPosConfig ? bannerPosConfig.split(',') : [];
+  const bannerPosConfig = blogIndex.config['banner-position'] ? blogIndex.config['banner-position'] : false;
+  const bannerData = typeof banner === 'string' ? [banner] : banner;
 
-  const section = block.closest('.section');
+  // [5, 9]
+  const bannerPos = bannerPosConfig ? bannerPosConfig.split(',').map(pos => pos.trim()) : [];
+  
   block.classList.add('section', 'three-up', 'l-spacing');
-  block.innerHTML = "";
+  if (offset == 0) {
+    block.innerHTML = "";
+  }
 
-  let articleIndex = 0;
+  let articleIndex = offset;
+  let limit = offset + defaultLimit; // 9
+  let displayLimit = limit > articleData.length ? (articleData.length + bannerPos.length) : limit;
+  
+  for (let i = offset; i < displayLimit; i++) { 
+    let existingBannerIndex = bannerPos.indexOf(`${i + 1}`);
 
-  for (let i = 1; i <= defaultLimit; i++) { 
-    let existingBannerIndex = bannerPos.indexOf(`${i}`);
+    if (existingBannerIndex != -1 && bannerData && bannerData[existingBannerIndex].length > 0) {
 
-    if (existingBannerIndex != -1) {
       const bannerBlock = buildBlock('banner', [
-        [`<p> <a href="${banner[existingBannerIndex]}"></a> </p>`]
+        [`<p> <a href="${bannerData[existingBannerIndex]}"></a> </p>`]
       ]);
       await initBanner(bannerBlock);
+      bannerBlock.classList.add('article-grid-item')
       block.append(bannerBlock);
+
+      // remove banner link after already loaded on page
+      bannerData[existingBannerIndex] = '';
 
     } else {
 
       const articleItem = articleData[articleIndex];
-      const { title, description, image, imageAlt, path } = articleItem;
-      const picture = createOptimizedPicture(image, imageAlt, [{ width: '750' }]);
-      const pictureTag = picture.outerHTML;
-
-      const articleTax = getArticleTaxonomy(articleItem);
-
-      const mediaBlock = buildBlock('media', [
-        [
-          pictureTag,
-          {
-            elems: [
-              `<p> ${articleTax.category} </p>`,
-              `<h2 class="title"> ${title} </h2>`,
-              `<p class="body-s description"> ${description} </p>`,
-              `<p class="action-area"><a href="${path}" class="con-button outline"> Read More </a></p>`, // TODO: may needs to be localized
-            ]
-          }
-        ]
-      ]);
-
-      mediaBlock.classList.add('small');
-      window.initMediaBlock(mediaBlock);
+      let mediaBlock = await decorateMediaBlock(articleItem);
+      mediaBlock.classList.add('article-grid-item');
       block.append(mediaBlock);
 
       articleIndex++;
     }
   }
 
-  section.replaceWith(block);
+  blogIndex.offset = articleIndex;
+  
+  if (articleData.length > blogIndex.dataOffset) {
+    let loadMoreButton = await decorateLoadMoreButton();
+    // used p to allow selecting last odd item in tablet mode easier
+    const loadMoreContainer = document.createElement('p');
+    loadMoreContainer.classList.add('load-more-container');
+    loadMoreContainer.append(loadMoreButton);
+    block.append(loadMoreContainer);
+
+    loadMoreButton.addEventListener('click', async (e) => {
+      e.preventDefault();
+      loadMoreContainer.remove();
+      await decorateArticleGrid(block, blogIndex);
+    });
+  }
+
 }
 
 async function loadAndExposeMediaBlock() {
-  const miloLibs = getLibs();
   try {
       const module = await import(`${miloLibs}/blocks/media/media.js`);
       window.initMediaBlock = module.default;
@@ -172,18 +268,30 @@ async function loadAndExposeMediaBlock() {
   }
 }
 
+// need to allow custom article + load more latest articles
+// column key: articles -> fetch data based on article links
+// column key: feed -> fetch data based on feed single link (has load more button)
 export default async function init(block) { 
-  const miloLibs = getLibs();
   const { readBlockConfig } = await import(`${miloLibs}/blocks/article-feed/article-feed.js`);
+
+  const blogIndex = {
+    data: [],
+    byPath: {},
+    offset: 0,       // number of total items (article + banner)
+    // dataOffset: 0,   // number of article data used
+    complete: false,
+    config: {},
+    offsetData: [],
+  };
   blogIndex.config = readBlockConfig(block);
 
   const initArticleGrid = async () => {
     await loadAndExposeMediaBlock();          // for reusing media block init
 
-    await fetchArticleFeedData();             // fetch data
-    await filterArticleDataBasedOnConfig();   // filtered data based on config
+    await fetchArticleFeedData(blogIndex);             // fetch data
+    await filterArticleDataBasedOnConfig(blogIndex);   // filtered data based on config
 
-    await decorateArticleGrid(block);
+    await decorateArticleGrid(block, blogIndex);
     block.classList.add('ready');
   }
 

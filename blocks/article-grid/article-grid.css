@@ -22,6 +22,23 @@
   min-height: 3.2rem;
 }
 
+.article-grid .load-more-container {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.article-grid .con-button {
+  text-transform: capitalize;
+}
+
+@media (min-width: 700px) {
+  .article-grid div.article-grid-item:last-of-type:nth-child(odd) {
+    display: none;
+  }
+}
+
 @media (min-width: 768px) {
   .article-grid .media .text h2 {
     display: -webkit-box;
@@ -30,5 +47,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     min-height: 2.8rem;
+  }
+}
+
+@media (min-width: 1070px) {
+  .article-grid div.article-grid-item:last-of-type:nth-child(odd) {
+    display: flex;
   }
 }
