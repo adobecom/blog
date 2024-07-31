@@ -3,7 +3,7 @@ import initBanner from '../banner/banner.js';
 
 const miloLibs = getLibs();
 const defaultLimit = 9;
-const ROOT_MARGIN = 50;
+const ROOT_MARGIN = 20;
 
 // Used for getting localized text
 const replacePlaceholder = async (key) => {
@@ -241,7 +241,7 @@ async function decorateArticleGrid(block, blogIndex) {
 
   blogIndex.offset = articleIndex;
   
-  if (articleData.length > blogIndex.dataOffset) {
+  if (articleData.length > blogIndex.offset) {
     let loadMoreButton = await decorateLoadMoreButton();
     // used p to allow selecting last odd item in tablet mode easier
     const loadMoreContainer = document.createElement('p');
