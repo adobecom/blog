@@ -292,6 +292,7 @@ export default async function init(block) {
     await filterArticleDataBasedOnConfig(blogIndex);   // filtered data based on config
 
     await decorateArticleGrid(block, blogIndex);
+    
     block.classList.add('ready');
   }
 
