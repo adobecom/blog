@@ -203,10 +203,19 @@ async function decorateArticleGrid(block, blogIndex) {
 
   // [5, 9]
   const bannerPos = bannerPosConfig ? bannerPosConfig.split(',').map(pos => pos.trim()) : [];
-  
-  block.classList.add('section', 'three-up', 'l-spacing');
+
+  let resultContainer = block.querySelector('.article-grid-result');
+  if (!resultContainer) {
+    resultContainer = document.createElement('div');
+    resultContainer.classList.add('article-grid-result','section', 'three-up', 'l-spacing');
+  }
+
   if (offset == 0) {
     block.innerHTML = "";
+    let loadingContainer = decorateLoadingContainer();
+    block.prepend(loadingContainer);
+    block.append(resultContainer);
+    block.classList.add('loading');
   }
 
   let articleIndex = offset;
@@ -223,7 +232,7 @@ async function decorateArticleGrid(block, blogIndex) {
       ]);
       await initBanner(bannerBlock);
       bannerBlock.classList.add('article-grid-item')
-      block.append(bannerBlock);
+      resultContainer.append(bannerBlock);
 
       // remove banner link after already loaded on page
       bannerData[existingBannerIndex] = '';
@@ -233,7 +242,7 @@ async function decorateArticleGrid(block, blogIndex) {
       const articleItem = articleData[articleIndex];
       let mediaBlock = await decorateMediaBlock(articleItem);
       mediaBlock.classList.add('article-grid-item');
-      block.append(mediaBlock);
+      resultContainer.append(mediaBlock);
 
       articleIndex++;
     }
@@ -247,7 +256,7 @@ async function decorateArticleGrid(block, blogIndex) {
     const loadMoreContainer = document.createElement('p');
     loadMoreContainer.classList.add('load-more-container');
     loadMoreContainer.append(loadMoreButton);
-    block.append(loadMoreContainer);
+    resultContainer.append(loadMoreContainer);
 
     loadMoreButton.addEventListener('click', async (e) => {
       e.preventDefault();
@@ -266,6 +275,16 @@ async function loadAndExposeMediaBlock() {
   } catch (error) {
       console.error('Error loading the module:', error);
   }
+}
+
+function decorateLoadingContainer() {
+  const container = document.createElement('div');
+  container.classList.add('loading-container');
+  const spinner = document.createElement('div');
+  spinner.classList.add('spinner');
+
+  container.append(spinner);
+  return container;
 }
 
 // need to allow custom article + load more latest articles
