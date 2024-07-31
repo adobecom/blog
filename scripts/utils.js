@@ -183,7 +183,7 @@ export async function decorateContent() {
  * @param {string} blockName name of the block
  * @param {any} content two dimensional array or string or object of content
  */
-function buildBlock(blockName, content) {
+export function buildBlock(blockName, content) {
   const table = Array.isArray(content) ? content : [[content]];
   const blockEl = document.createElement('div');
   // build image block nested div structure
@@ -241,6 +241,7 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
+// TODO: cleanup
 // article v2 header
 // async function buildArticleHeader(el) {
 //   const miloLibs = getLibs();
@@ -330,7 +331,7 @@ async function buildArticleHeroBanner(el) {
         elems: [
           categoryTag,
           h1,
-          `<p>${description}</p>`, // TODO: discuss if we want this
+          `<p>${description}</p>`,
         ],
       },
       picture,

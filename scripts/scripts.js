@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { decorateContent, setLibs, buildAutoBlocks, changeHTMLTag } from './utils.js';
+import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
 import { initSharingLinkFunction } from '../blocks/article-meta/article-meta.js'
 
 // Add project-wide styles here.
