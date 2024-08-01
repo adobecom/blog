@@ -6,28 +6,14 @@
 .article-grid {
   position: relative;
   opacity: 0;
+  padding-bottom: var(--spacing-l);
 }
 
+/* spinner styles in style */
 .article-grid .loading-container {
   width: 100%;
   height: 70vh;
   position: relative;
-}
-
-.spinner {
-  content: '';
-  position: absolute;
-  top: 40%;
-  left: calc(50% - 1.6rem);
-  border: 2px dotted var(--color-gray-100);
-  border-bottom: 2px dotted var(--color-gray-200);
-  border-left: 2px dotted var(--color-gray-400);
-  border-top: 2px dotted var(--color-gray-800);
-  border-radius: 50%;
-  width: 1.6rem;
-  height: 1.6rem;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
 }
 
 .article-grid .article-grid-result {
@@ -47,26 +33,6 @@
   opacity: 1;
 }
 
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 .article-grid .media .text .description {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -74,6 +40,44 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-height: 3.2rem;
+}
+
+.article-grid .media {
+  padding: 0;
+}
+
+.article-grid a.media .image {
+  border-radius: 8px;
+}
+
+.article-grid .media .image img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+div.article-grid .media .foreground > div.media-row {
+  padding: 0;
+}
+
+.article-grid .banner {
+  max-width: none;
+  aspect-ratio: 1 / 1;
+}
+
+.article-grid .banner,
+.article-grid .banner .banner-contents {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.article-grid .banner .content-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }
 
 .article-grid .load-more-container {
@@ -88,6 +92,10 @@
 }
 
 @media (min-width: 700px) {
+  .article-grid .article-grid-result {
+    gap: var(--spacing-l) var(--spacing-m);
+  }
+
   .article-grid div.article-grid-item:last-of-type:nth-child(odd) {
     display: none;
   }

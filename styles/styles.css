@@ -388,6 +388,46 @@ main div[class*="-up"] .media.border .foreground > .media-row .image {
   margin-bottom: 0;
 }
 
+/*
+ * spinner for loading animation
+*/
+
+.spinner {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: calc(50% - 1.6rem);
+  border: 2px dotted var(--color-gray-100);
+  border-bottom: 2px dotted var(--color-gray-200);
+  border-left: 2px dotted var(--color-gray-400);
+  border-top: 2px dotted var(--color-gray-800);
+  border-radius: 50%;
+  width: 1.6rem;
+  height: 1.6rem;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* home page */
 main.page-homepage .masonry-layout {
   padding-bottom: var(--spacing-xxl);
@@ -445,57 +485,6 @@ main.page-homepage .category-section {
     justify-content: space-between;
     gap: var(--spacing-m);
     padding: var(--spacing-m);
-  }
-}
-
-/* TODO: maybe new components */
-/* article grid */
-main .section.article-grid {
-  padding-bottom: var(--spacing-xxl);
-}
-
-main .article-grid .media {
-  padding: 0;
-}
-
-main .article-grid a.media .image {
-  border-radius: 8px;
-}
-
-
-main .article-grid .media .image img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-main div.article-grid .media .foreground > div.media-row {
-  padding: 0;
-}
-
-main .article-grid .banner {
-  max-width: none;
-  aspect-ratio: 1 / 1;
-}
-
-main .article-grid .banner,
-main .article-grid .banner .banner-contents {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-}
-
-main .article-grid .banner .content-wrapper {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-}
-
-@media (min-width: 700px) {
-  main .section.article-grid {
-    gap: var(--spacing-l) var(--spacing-m);
   }
 }
 
