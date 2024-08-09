@@ -487,7 +487,7 @@ main.page-homepage .category-section {
 
 @media (min-width: 1200px) {
   main.page-homepage .masonry-layout {
-    grid-template-rows: auto 540px;
+    grid-template-rows: auto auto 540px;
   }
 
   main.page-homepage .masonry-layout .text-block .foreground {
