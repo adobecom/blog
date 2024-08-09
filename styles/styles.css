@@ -533,10 +533,14 @@ main.page-homepage .category-section {
 }
 
 @media (min-width: 768px) {
-  .background-circle-gradient::before,
-  .background-circle-gradient::after {
+  .background-circle-gradient::before {
     width: 80%;
     height: 80%;
+  }
+
+  .background-circle-gradient::after {
+    width: 90%;
+    height: 90%;
   }
 }
 
