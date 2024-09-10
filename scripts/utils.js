@@ -241,45 +241,6 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
-// TODO: cleanup
-// article v2 header
-// async function buildArticleHeader(el) {
-//   const miloLibs = getLibs();
-//   const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-//   const { loadTaxonomy, getLinkForTopic, getTaxonomyModule }
-//      = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
-//   if (!getTaxonomyModule()) {
-//     await loadTaxonomy();
-//   }
-//   const div = document.createElement('div');
-//   const h1 = el.querySelector('h1');
-//   const picture = el.querySelector('a[href*=".mp4"], picture');
-//   const caption = getImageCaption(picture);
-//   const figure = document.createElement('div');
-//   figure.append(picture, caption);
-//   const tag = getMetadata('article:tag');
-//   const category = tag || 'News';
-//   const author = getMetadata('author') || 'Adobe Communications Team';
-//   const { codeRoot } = getConfig();
-//   const authorURL =
-//         getMetadata('author-url') || (author ?
-//         `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}`
-//         : null);
-//   const publicationDate = getMetadata('publication-date');
-
-//   const categoryTag = getLinkForTopic(category);
-
-//   const articleHeaderBlockEl = buildBlock('article-header', [
-//     [`<p>${categoryTag}</p>`],
-//     [h1],
-//     [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
-//       <p>${publicationDate}</p>`],
-//     [figure],
-//   ]);
-//   div.append(articleHeaderBlockEl);
-//   el.prepend(div);
-// }
-
 /**
  * * @param {HTMLElement} element
  * * @param {string} targetTag, like 'ul' or 'div'
@@ -325,7 +286,7 @@ async function buildArticleHeroBanner(el) {
 
   // use marquee (split, large) for hero
   const marqueeEl = buildBlock('marquee', [
-    ['<p>#000</p>'],
+    ['<p>transparent</p>'],
     [
       {
         elems: [
@@ -338,7 +299,7 @@ async function buildArticleHeroBanner(el) {
     ],
   ]);
 
-  marqueeEl.classList.add('split', 'medium');
+  marqueeEl.classList.add('split', 'medium', 'light', 'circle-gradient-pink', 'article-hero-banner');
 
   const categoryLink = marqueeEl.querySelector('a');
   categoryLink.classList.add('article-hero-category-link');
@@ -380,9 +341,9 @@ async function buildArticleMeta(mainEl) {
       <p>${publicationDate}</p>`],
   ]);
 
-  // put article meta (author + link sharings) before tags
-  const tagsBlock = mainEl.querySelector('.tags');
-  tagsBlock.before(articleMeta);
+  // put article meta (author + link sharings) before content
+  const contentBlock = mainEl.querySelector(':scope > div:last-of-type');
+  contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
 }
 
 async function addContentTypeToMainClass(mainEl) {
@@ -405,10 +366,6 @@ export async function buildAutoBlocks() {
       await buildArticleHeroBanner(mainEl);
       buildTagsBlock(mainEl);
       await buildArticleMeta(mainEl);
-
-      // original:
-      // await buildArticleHeader(mainEl);
-      // buildTagsBlock(mainEl);
 
     // TODO: confirm which type of page is this
     } else if (getMetadata('content-type') === 'authors') {

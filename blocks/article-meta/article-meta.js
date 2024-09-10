@@ -1,4 +1,3 @@
-/* TODO: similar to article-header, ask adobe if it's okay to keep or edit milo library directly */
 import { getLibs } from '../../scripts/utils.js';
 
 // can be exported via milo

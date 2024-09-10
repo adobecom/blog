@@ -430,7 +430,7 @@ main div[class*="-up"] .media.border .foreground > .media-row .image {
 
 /* home page specific styles */
 main.page-homepage .masonry-layout {
-  padding-bottom: var(--spacing-xxl);
+  padding-bottom: var(--spacing-xl);
 }
 
 main.page-homepage .masonry-layout .brick.light {
@@ -454,6 +454,20 @@ main.page-homepage .masonry-layout img {
   overflow: hidden;
 }
 
+main.page-homepage .masonry-layout .brick .foreground p.body-m {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 3.2rem;
+}
+
+main.page-homepage .masonry-layout .brick .foreground p.action-area{
+  padding-top: var(--spacing-s);
+  margin-top: auto;
+}
+
 main.page-homepage .category-section {
   padding-bottom: var(--spacing-xxl);
 }
@@ -461,6 +475,10 @@ main.page-homepage .category-section {
 @media (max-width: 600px) {
   main.page-homepage .masonry-layout .foreground {
     padding: var(--spacing-s);
+  }
+
+  main.page-homepage .masonry-layout > .text {
+    text-align: left;
   }
 }
 
@@ -480,14 +498,13 @@ main.page-homepage .category-section {
   main.page-homepage .masonry-layout .brick.stack .foreground .brick-text {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     flex-grow: 1;
   }
 }
 
 @media (min-width: 1200px) {
-  main.page-homepage .masonry-layout {
-    grid-template-rows: auto auto 540px;
+  main.page-homepage .masonry-layout.background-circle-gradient {
+    grid-template-rows: auto auto min(540px, auto);
   }
 
   main.page-homepage .masonry-layout .text-block .foreground {
@@ -499,7 +516,7 @@ main.page-homepage .category-section {
     flex-direction: column;
     justify-content: space-between;
     gap: var(--spacing-m);
-    padding: var(--spacing-m);
+    padding: var(--spacing-l) var(--spacing-s);
   }
 }
 
@@ -544,8 +561,51 @@ main.page-homepage .category-section {
   }
 }
 
+/* marquee */
+.marquee {
+  position: relative;
+}
 
-/* TODO: clean this up after develop, used to hide cookies temporarily */
+.marquee.split .asset {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 16 / 9;
+}
+
+.marquee.split.circle-gradient-pink {
+  flex-direction: column-reverse;
+}
+
+.marquee.circle-gradient-pink::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/img/background/marquee-circle-gradient-pink.png');
+  background-size: 110%;
+  background-repeat: no-repeat;
+  background-position: top left;
+}
+
+@media (min-width: 600px) {
+  .marquee.split .asset {
+    aspect-ratio: auto;
+  }
+
+  .marquee.circle-gradient-pink::before {
+    background-position: bottom left;
+  }
+}
+
+@media (min-width: 700px) {
+  .marquee.circle-gradient-pink::before {
+    background-size: contain;
+  }
+}
+
+/* TODO: clean this up after develop & before submitting PR, used to hide cookies temporarily */
 #onetrust-consent-sdk {
   display: none;
 }

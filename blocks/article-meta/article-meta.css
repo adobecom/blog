@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-xs);
-  margin: var(--spacing-xl) auto var(--spacing-m);
+  margin: var(--spacing-s) auto;
   padding: 0;
 }
 
@@ -28,9 +28,11 @@
 
 .article-byline-sharing {
   display: flex;
-  justify-content: space-around;
   flex: 0 1 100%;
-  margin-top: var(--spacing-s);
+  gap: var(--spacing-l);
+  padding: var(--spacing-xs) 0;
+  border-top: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
 }
 
 .article-byline-sharing a {
@@ -154,6 +156,12 @@
 }
 
 @media (min-width: 600px) {
+  .article-byline {
+    margin: var(--spacing-m) auto;
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
   .article-byline .article-byline-info {
     flex: 1 1 auto;
   }
@@ -161,6 +169,8 @@
   .article-byline .article-byline-sharing {
     flex: 0 1 auto;
     margin-top: 0;
+    gap: var(--spacing-s);
+    border: 0;
   }
 
   .article-byline .article-byline-sharing span:not(:last-child) {
@@ -181,11 +191,14 @@
 @media (min-width: 900px) {
   .article-byline {
     margin-top: 0;
+    padding-bottom: 0;
+    border: 0;
   }
 
   .article-byline .article-byline-sharing {
     width: 100%;
     justify-content: flex-start;
     gap: var(--spacing-xxs);
+    padding: var(--spacing-xxs) 0 0;
   }
 }

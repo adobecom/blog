@@ -4,7 +4,7 @@ main .banner {
   opacity: 0;
   min-height: 152px;
   width: 100%;
-  max-width: var(--grid-container-width);
+  max-width: none;
   margin: 32px auto;
   border-radius: 8px;
   overflow: hidden;
@@ -18,13 +18,23 @@ main .banner.is-loaded {
   min-height: 0;
 }
 
+main .banner-contents {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+}
+
 main .banner .content-wrapper {
+  box-sizing: border-box;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 200px;
+  height: 100%;
   padding: 24px 20px;
+  flex-grow: 1;
 }
 
 main .banner .content-wrapper::before {
@@ -81,6 +91,7 @@ main .banner.bg-gradient-red .content-wrapper::before {
 @media (min-width: 900px) {
   main .banner {
     max-width: none;
+    margin: var(--spacing-s) 0;
   }
 
   main .banner .content-wrapper {

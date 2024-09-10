@@ -217,7 +217,6 @@ function decorateMediaBlock() {
   if (!mediaBlocks || mediaBlocks.length === 0) return;
 
   mediaBlocks.forEach((block) => {
-    // TODO: see if move this to milo
     if (block.classList.contains('card-as-link')) {
       const link = block.querySelector('a');
       if (!link) console.error('missing link in Media card');

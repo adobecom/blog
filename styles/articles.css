@@ -51,8 +51,11 @@ main .blog-wrapper video {
 }
 
 /* Article v3 related styles */
-
-/* TODO: styles here may need to be moved into blocks once ui is approved, but needs to confirm if they're used in other places first */
+@media (max-width: 600px) {
+  main .article-hero-banner .text p {
+    display: none;
+  }
+}
 
 /* tags */
 main .tags {
@@ -77,6 +80,10 @@ main .tags a {
 main .article-hero-category-link {
   display: inline-block;
   color: var(--color-white);
+}
+
+main .light .article-hero-category-link {
+  color: var(--text-color);
 }
 
 .blog-wrapper {
@@ -149,7 +156,7 @@ main .blog-wrapper-sidebar .tags a {
   }
 }
 
-/* TODO: maybe new component */
+/* progress bar */
 .progress-bar-container {
   z-index: 10000;
   position: fixed;
