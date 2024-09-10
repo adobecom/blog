@@ -58,6 +58,17 @@
   overflow: hidden;
 }
 
+.article-grid .con-button {
+  text-transform: capitalize;
+}
+
+.article-grid a.media:hover .con-button {
+  background-color: var(--color-black);
+  border-color: var(--color-black);
+  color: var(--color-white);
+  text-decoration: none;
+}
+
 div.article-grid .media .foreground > div.media-row {
   padding: 0;
 }
@@ -85,10 +96,6 @@ div.article-grid .media .foreground > div.media-row {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.article-grid .con-button {
-  text-transform: capitalize;
 }
 
 @media (min-width: 700px) {

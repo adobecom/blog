@@ -95,6 +95,10 @@ main .inset.text-block .foreground::before {
  margin-bottom: 40px;
 }
 
+.con-button {
+  transition: var(--transition-all-ease-in-out-1);
+}
+
 /* 
  * Modal
 */

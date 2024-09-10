@@ -193,6 +193,9 @@ async function decorateLoadMoreButton() {
 }
 
 async function decorateArticleGrid(block, blogIndex) {
+  const miloLibs = getLibs();
+  const { createTag } = await import(`${miloLibs}/utils/utils.js`);
+
   const articleData = blogIndex.data;
   // const { offset, dataOffset } = blogIndex;
   const { offset } = blogIndex;
@@ -241,7 +244,25 @@ async function decorateArticleGrid(block, blogIndex) {
 
       const articleItem = articleData[articleIndex];
       let mediaBlock = await decorateMediaBlock(articleItem);
+
+      let linkEl = mediaBlock.querySelector('a');
+      if (linkEl.href && linkEl.href.length > 0) { 
+        // let linkedMediaBlock = 
+        const mediaBlockContent = mediaBlock.innerHTML;
+        let linkedMediaBlock = createTag('a',
+          {
+            class: mediaBlock.classList,
+            href: linkEl.href,
+            target: linkEl.target
+          },
+          mediaBlockContent
+        );
+
+        mediaBlock = linkedMediaBlock
+      }
+
       mediaBlock.classList.add('article-grid-item');
+
       resultContainer.append(mediaBlock);
 
       articleIndex++;

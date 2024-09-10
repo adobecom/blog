@@ -247,15 +247,16 @@ function buildAuthorHeader(mainEl) {
  * * @param {string} targetTag, like 'ul' or 'div'
  * result: return the new element with inner content of the element, desired tag and css class
  */
-export function changeHTMLTag(el, targetTag) {
+export function changeHTMLTag(el, targetTag, properties = {}) {
   const newEl = document.createElement(targetTag);
   const innerContent = el.innerHTML;
 
-  for (const attr of el.attributes) {
-    newEl.setAttribute(attr.name, attr.value);
+  for (const [key, value] of Object.entries(properties)) {
+    newEl.setAttribute(key, value);
   }
 
   newEl.innerHTML = innerContent;
+  el.replaceWith(newEl);
 
   return newEl;
 }

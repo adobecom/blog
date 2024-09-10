@@ -1,9 +1,13 @@
 import {
+  getLibs,
   createOptimizedPicture,
   normalizeHeadings,
+  changeHTMLTag,
 } from '../../scripts/utils.js';
 
 export default async function init(block) {
+  const miloLibs = getLibs();
+  const { createTag } = await import(`${miloLibs}/utils/utils.js`);
 
   const bannerContents = document.createElement('div');
   bannerContents.classList.add('banner-contents');
@@ -61,6 +65,22 @@ export default async function init(block) {
           bannerContents.append(bannerContent);
           block.innerHTML = '';
           block.append(bannerContents);
+
+          if (link && link.href) {
+            // switch whole banner to <a> 
+            let linkedBannerProperties = {
+              class: block.classList,
+              href: link.href,
+              target: link.target
+            }
+            let linkedBanner = changeHTMLTag(block, 'a', linkedBannerProperties);
+
+            // switch inner link back to <span> 
+            let linkedBannerLink = linkedBanner.querySelector('a');
+            changeHTMLTag(linkedBannerLink, 'span', {
+              class: linkedBannerLink.classList
+            })
+          }
           
         } else {
           block.remove();
