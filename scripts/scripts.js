@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import { decorateContent, setLibs, buildAutoBlocks, changeHTMLTag } from './utils.js';
 import { initSharingLinkFunction } from '../blocks/article-meta/article-meta.js'
 
 // Add project-wide styles here.
@@ -242,6 +242,22 @@ function decorateMediaBlock() {
   });
 }
 
+function decorateMasonryBrick() { 
+  const bricks = document.querySelectorAll('.masonry-layout .brick');
+  if (!bricks || bricks.length === 0) return;
+
+  // using this approach as decorating after load would cause ui refresh which may affect the lighthouse score 
+  bricks.forEach((brick) => {
+    const link = brick.querySelector('a')
+    if (link && link.href) {
+      brick.setAttribute('data-link', link.href);
+      brick.addEventListener('click', (e) => {
+        window.location.href = link.href
+      });
+    }
+  });
+}
+
 function cloneBlockToSidebar(sidebar, blockClass) {
   const targetBlock = document.querySelector(`.${blockClass}`);
   if (!targetBlock) return;
@@ -356,5 +372,6 @@ async function buildProgressBar() {
   await loadArea();
   await setUpSidebarLayoutForBlogPage();
   decorateMediaBlock();
+  decorateMasonryBrick();
   initSidekick();
 }());
