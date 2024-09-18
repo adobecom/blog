@@ -44,6 +44,17 @@ const CONFIG = {
     'en/uk': { ietf: 'en', tk: 'hah7vzn.css' },
     'en/apac': { ietf: 'en', tk: 'hah7vzn.css' },
   },
+  stageDomainsMap: {
+    'blog.stage.adobe.com': {
+      'blog.adobe.com': 'origin',
+    },
+    '--blog--adobecom.hlx.live': {
+      'blog.adobe.com': 'origin',
+    },
+    '--blog--adobecom.hlx.page': {
+      'blog.adobe.com': 'origin',
+    },
+  },
 };
 
 // Milo blocks overridden by the Blog project
