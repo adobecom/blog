@@ -248,8 +248,9 @@ function decorateMasonryBrick() {
 
   // using this approach as decorating after load would cause ui refresh which may affect the lighthouse score 
   bricks.forEach((brick) => {
-    const link = brick.querySelector('a')
-    if (link && link.href) {
+    const links = brick.querySelectorAll('a');
+    if (links && links.length == 1) {
+      let link = links[0];
       brick.setAttribute('data-link', link.href);
       brick.addEventListener('click', (e) => {
         window.location.href = link.href

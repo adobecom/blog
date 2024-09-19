@@ -376,6 +376,9 @@ main .media.border .text {
 }
 
 main .media.border .image img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   max-height: 316px;
 }
 
@@ -491,17 +494,21 @@ main.page-homepage .masonry-layout .brick .brick-media img {
   object-fit: cover;
 }
 
+main.page-homepage .masonry-layout .brick .brick-media video {
+  margin-top: 0;
+}
+
 main.page-homepage .masonry-layout .brick .foreground p.body-m {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 3.2rem;
 }
 
-main.page-homepage .masonry-layout .brick .foreground p.action-area{
+main.page-homepage .masonry-layout .brick .foreground p.action-area {
   padding-top: var(--spacing-s);
+  gap: var(--spacing-xs);
   margin-top: auto;
 }
 
@@ -567,6 +574,10 @@ main.page-homepage .category-section {
     aspect-ratio: auto;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+  }
+
+  main.page-homepage .masonry-layout .brick.grid-full-width .brick-media video {
+    object-fit: cover;
   }
 }
 

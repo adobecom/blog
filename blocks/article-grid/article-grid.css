@@ -58,7 +58,7 @@
   overflow: hidden;
 }
 
-.article-grid .con-button {
+.article-grid .con-button::first-letter {
   text-transform: capitalize;
 }
 
