@@ -683,7 +683,6 @@ main.page-homepage .category-section {
   }
 }
 
-/* TODO: clean this up after develop & before submitting PR, used to hide cookies temporarily */
 #onetrust-consent-sdk {
   display: none;
 }

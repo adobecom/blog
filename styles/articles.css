@@ -51,6 +51,14 @@ main .blog-wrapper video {
 }
 
 /* Article v3 related styles */
+main .article-hero-banner .text p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 600px) {
   main .article-hero-banner .text p {
     display: none;
