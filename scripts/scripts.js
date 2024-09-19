@@ -299,8 +299,19 @@ async function setUpSidebarLayoutForBlogPage() {
   if (!childContent) return;
 
   // div that holds all content
+  const sections = document.querySelectorAll('.section');
+
+  // select first section to hold all the content
   const mainContent = childContent.closest('.section');
   mainContent.classList.add('blog-wrapper-content');
+
+  sections.forEach((section, index) => {
+    let isArticleBanner = section.querySelector('.marquee') && index == 0;
+    let isMainContent = mainContent == section;
+    if (!isArticleBanner && !isMainContent) {
+      mainContent.appendChild(section);
+    }
+  });
 
   // Put blog wrapper (wraps sidebar + content) first
   const blogWrapper = document.createElement('div');
