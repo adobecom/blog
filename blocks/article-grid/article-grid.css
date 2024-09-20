@@ -103,7 +103,7 @@ div.article-grid .media .foreground > div.media-row {
     gap: var(--spacing-l) var(--spacing-m);
   }
 
-  .article-grid div.article-grid-item:last-of-type:nth-child(odd) {
+  .article-grid.hide-odd-item-on-tablet .article-grid-result > a:last-of-type:nth-child(odd) {
     display: none;
   }
 }
@@ -120,7 +120,7 @@ div.article-grid .media .foreground > div.media-row {
 }
 
 @media (min-width: 1070px) {
-  .article-grid div.article-grid-item:last-of-type:nth-child(odd) {
+  .article-grid.hide-odd-item-on-tablet .article-grid-result > a:last-of-type:nth-child(odd) {
     display: flex;
   }
 }
