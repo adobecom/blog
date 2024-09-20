@@ -267,6 +267,7 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
 /* recommended articles */
 main .recommended-articles-content-wrapper {
   background: var(--color-white);
+  padding-bottom: var(--spacing-m);
 }
 
 main .recommended-articles > h3 {

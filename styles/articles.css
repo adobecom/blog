@@ -37,7 +37,8 @@ main .blog-wrapper video {
 @media (min-width: 700px) {
   main .section > div > :not(div):not(h1),
   main .section > .tags,
-  main .columns, main .columns.contained {
+  main .columns, main .columns.contained,
+  main .blog-wrapper-content > div {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -100,7 +101,7 @@ main .light .article-hero-category-link {
   gap: var(--spacing-xs);
   margin: 0 auto;
   max-width: var(--grid-container-width);
-  padding-bottom: var(--spacing-l);
+  padding-bottom: var(--spacing-m);
 }
 
 .blog-wrapper-sidebar {
@@ -186,4 +187,13 @@ main .blog-wrapper-sidebar .tags a {
   .progress-bar-container {
     top: var(--global-height-nav);
   }
+}
+
+/* quote */
+.blog-wrapper-content .text-block .foreground {
+  max-width: none;
+}
+
+.blog-wrapper-content .inset.text-block .foreground > div {
+  padding-left: var(--spacing-s);
 }
