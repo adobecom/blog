@@ -368,7 +368,6 @@ export async function buildAutoBlocks() {
       buildTagsBlock(mainEl);
       await buildArticleMeta(mainEl);
 
-    // TODO: confirm which type of page is this
     } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }
