@@ -285,7 +285,6 @@ async function buildArticleHeroBanner(el) {
   const tagEl = document.createElement('p');
   tagEl.textContent = category;
 
-  // use marquee (split, large) for hero
   const marqueeEl = buildBlock('marquee', [
     ['<p>transparent</p>'],
     [
@@ -344,10 +343,13 @@ async function buildArticleMeta(mainEl) {
 
   // put article meta (author + link sharings) in front of first content div
   const allContentDivs = mainEl.querySelectorAll(':scope > div');
+  if (!allContentDivs) return;
+
   let contentBlock = [...allContentDivs].find((div) => {
-    return !div.querySelector('.article-hero-banner') && div.querySelector('p')
+    return !div.querySelector('.article-hero-banner') && div.querySelector('p') && !div.querySelector('.recommended-articles')
   })
-  
+  if (!contentBlock) return;
+
   contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
 }
 

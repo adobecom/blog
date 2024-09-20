@@ -308,7 +308,7 @@ function decorateLoadingContainer() {
   return container;
 }
 
-// need to allow custom article + load more latest articles
+// block for loading article + banner
 // column key: articles -> fetch data based on article links
 // column key: feed -> fetch data based on feed single link (has load more button)
 export default async function init(block) { 
@@ -318,7 +318,6 @@ export default async function init(block) {
     data: [],
     byPath: {},
     offset: 0,       // number of total items (article + banner)
-    // dataOffset: 0,   // number of article data used
     complete: false,
     config: {},
     offsetData: [],

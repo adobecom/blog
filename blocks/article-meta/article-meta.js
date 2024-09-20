@@ -1,6 +1,5 @@
 import { getLibs } from '../../scripts/utils.js';
 
-// can be exported via milo
 async function validateAuthorUrl(url) {
   if (!url) return null;
 
@@ -17,7 +16,6 @@ async function validateAuthorUrl(url) {
   return doc;
 }
 
-// can be exported via milo
 function openPopup(e) {
   const target = e.target.closest('a');
   const href = target.getAttribute('data-href');
@@ -29,7 +27,6 @@ function openPopup(e) {
   );
 }
 
-// can be exported via milo
 async function buildAuthorInfo(authorEl, bylineContainer) {
   const miloLibs = getLibs();
   const { createTag, getConfig } = await import(`${miloLibs}/utils/utils.js`);

@@ -298,14 +298,15 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
 async function setUpSidebarLayoutForBlogPage() {
   const main = document.querySelector('main');
   const childContent = document.querySelector('.content');
-  const blogDetailUrlIdentifier = 'publish';
+  const blogDetailUrlIdentifier = '/publish/';
 
-  const isBlogPage = getMetadata('content-type') === 'article' && window.location.href.includes(blogDetailUrlIdentifier);
+  const isBlogPage = getMetadata('content-type') === 'article' && window.location.pathname.includes(blogDetailUrlIdentifier);
 
   if (!isBlogPage || !childContent) return;
 
   // all divs that holds content
   const sections = document.querySelectorAll('.section');
+  if (!sections) return;
 
   // select first section to hold all the content
   const mainContent = childContent.closest('.section');
@@ -348,7 +349,6 @@ async function buildProgressBar() {
   };
 
   function updateProgressBar() {
-    // .blog-wrapper
     const content = document.querySelector("main");
 
     let contentHeight = content.scrollHeight;
@@ -361,12 +361,12 @@ async function buildProgressBar() {
     let progress = initialWidth;
     
     if (scrollPosition >= contentTop && scrollPosition <= contentTop + contentHeight - windowHeight) {
-        var scrolled = scrollPosition - contentTop;
-        var totalScrollableHeight = contentHeight - windowHeight;
-        var scrollProgress = (scrolled / totalScrollableHeight) * (100 - initialWidth);
-        progress = initialWidth + scrollProgress;
+      var scrolled = scrollPosition - contentTop;
+      var totalScrollableHeight = contentHeight - windowHeight;
+      var scrollProgress = (scrolled / totalScrollableHeight) * (100 - initialWidth);
+      progress = initialWidth + scrollProgress;
     } else if (scrollPosition > contentTop + contentHeight - windowHeight) {
-        progress = 100;
+      progress = 100;
     }
 
     progressBar.style.width = progress + "%";
