@@ -293,10 +293,16 @@ function moveRecommendedArticleAsFinalSection(main) {
   main.append(section);
 }
 
+const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+
 async function setUpSidebarLayoutForBlogPage() {
   const main = document.querySelector('main');
   const childContent = document.querySelector('.content');
-  if (!childContent) return;
+  const blogDetailUrlIdentifier = 'publish';
+
+  const isBlogPage = getMetadata('content-type') === 'article' && window.location.href.includes(blogDetailUrlIdentifier);
+
+  if (!isBlogPage || !childContent) return;
 
   // all divs that holds content
   const sections = document.querySelectorAll('.section');
@@ -325,8 +331,6 @@ async function setUpSidebarLayoutForBlogPage() {
   // Move recommended-articles as last separate section if any
   moveRecommendedArticleAsFinalSection(main);
 }
-
-const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 async function buildProgressBar() {
   const { createTag } = await import(`${miloLibs}/utils/utils.js`);

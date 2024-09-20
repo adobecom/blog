@@ -368,6 +368,8 @@ export async function buildAutoBlocks() {
 
   try {
     if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
+      console.log('hi')
+
       await buildArticleHeroBanner(mainEl);
       buildTagsBlock(mainEl);
       await buildArticleMeta(mainEl);

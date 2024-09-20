@@ -67,12 +67,16 @@ async function buildAuthorInfo(authorEl, bylineContainer) {
 }
 
 export async function initSharingLinkFunction(sharing) {
+
   const miloLibs = getLibs();
   const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
   const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
   const { copyToClipboard } = await import(`${miloLibs}/utils/tools.js`);
 
-  sharing.querySelectorAll('[data-href]').forEach((link) => {
+  const sharingLinks = sharing.querySelectorAll('[data-href]');
+  if (!sharingLinks) return;
+
+  sharingLinks.forEach((link) => {
     link.addEventListener('click', openPopup);
   });
   const copyButton = sharing.querySelector('#copy-to-clipboard');
