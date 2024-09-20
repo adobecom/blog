@@ -342,8 +342,12 @@ async function buildArticleMeta(mainEl) {
       <p>${publicationDate}</p>`],
   ]);
 
-  // put article meta (author + link sharings) before content
-  const contentBlock = mainEl.querySelector(':scope > div:last-of-type');
+  // put article meta (author + link sharings) in front of first content div
+  const allContentDivs = mainEl.querySelectorAll(':scope > div');
+  let contentBlock = [...allContentDivs].find((div) => {
+    return !div.querySelector('.article-hero-banner') && div.querySelector('p')
+  })
+  
   contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
 }
 

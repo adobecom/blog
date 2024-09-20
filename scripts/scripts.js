@@ -298,7 +298,7 @@ async function setUpSidebarLayoutForBlogPage() {
   const childContent = document.querySelector('.content');
   if (!childContent) return;
 
-  // div that holds all content
+  // all divs that holds content
   const sections = document.querySelectorAll('.section');
 
   // select first section to hold all the content
