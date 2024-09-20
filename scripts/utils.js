@@ -346,8 +346,8 @@ async function buildArticleMeta(mainEl) {
   if (!allContentDivs) return;
 
   let contentBlock = [...allContentDivs].find((div) => {
-    return !div.querySelector('.article-hero-banner') && div.querySelector('p') && !div.querySelector('.recommended-articles')
-  })
+    return !div.querySelector('.article-hero-banner') && div.querySelector('p')
+  });
   if (!contentBlock) return;
 
   contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
