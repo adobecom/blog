@@ -64,7 +64,6 @@ async function buildAuthorInfo(authorEl, bylineContainer) {
 }
 
 export async function initSharingLinkFunction(sharing) {
-
   const miloLibs = getLibs();
   const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
   const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);

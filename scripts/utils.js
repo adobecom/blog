@@ -244,16 +244,15 @@ function buildAuthorHeader(mainEl) {
 /**
  * * @param {HTMLElement} element
  * * @param {string} targetTag, like 'ul' or 'div'
- * * @param {string} targetTag, like 'ul' or 'div'
  * result: return the new element with inner content of the element, desired tag and css class
  */
 export function changeHTMLTag(el, targetTag, properties = {}) {
   const newEl = document.createElement(targetTag);
   const innerContent = el.innerHTML;
 
-  for (const [key, value] of Object.entries(properties)) {
-    newEl.setAttribute(key, value);
-  }
+  Object.keys(properties).forEach((key) => {
+    newEl.setAttribute(key, properties[key]);
+  });
 
   newEl.innerHTML = innerContent;
   el.replaceWith(newEl);
@@ -345,9 +344,7 @@ async function buildArticleMeta(mainEl) {
   const allContentDivs = mainEl.querySelectorAll(':scope > div');
   if (!allContentDivs) return;
 
-  let contentBlock = [...allContentDivs].find((div) => {
-    return !div.querySelector('.article-hero-banner') && div.querySelector('p')
-  });
+  const contentBlock = [...allContentDivs].find((div) => !div.querySelector('.article-hero-banner') && div.querySelector('p'));
   if (!contentBlock) return;
 
   contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
@@ -362,7 +359,6 @@ async function addContentTypeToMainClass(mainEl) {
   mainEl.classList.add(pageClass);
 }
 
-
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
@@ -373,13 +369,11 @@ export async function buildAutoBlocks() {
       await buildArticleHeroBanner(mainEl);
       buildTagsBlock(mainEl);
       await buildArticleMeta(mainEl);
-
     } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }
 
     await addContentTypeToMainClass(mainEl);
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);

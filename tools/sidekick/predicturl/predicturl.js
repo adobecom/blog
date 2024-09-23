@@ -26,7 +26,7 @@ export default async function predictUrl() {
   const date = getMetadata('publication-date');
   let publishPath = '';
   if (date) {
-    const [month, day, year] = date.split('-');
+    const [ month, day, year ] = date.split('-');
     if (month && day && year) publishPath = `/publish/${year}/${month}/${day}`;
   }
   const url = `https://blog.adobe.com/${pathSplit[1]}${publishPath}/${page}`;

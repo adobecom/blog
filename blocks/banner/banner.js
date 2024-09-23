@@ -1,14 +1,6 @@
-import {
-  getLibs,
-  createOptimizedPicture,
-  normalizeHeadings,
-  changeHTMLTag,
-} from '../../scripts/utils.js';
+import { createOptimizedPicture, normalizeHeadings, changeHTMLTag } from '../../scripts/utils.js';
 
 export default async function init(block) {
-  const miloLibs = getLibs();
-  const { createTag } = await import(`${miloLibs}/utils/utils.js`);
-
   const bannerContents = document.createElement('div');
   bannerContents.classList.add('banner-contents');
 
@@ -67,21 +59,18 @@ export default async function init(block) {
           block.append(bannerContents);
 
           if (link && link.href) {
-            // switch whole banner to <a> 
-            let linkedBannerProperties = {
+            // switch whole banner to <a>
+            const linkedBannerProperties = {
               class: block.classList,
               href: link.href,
-              target: link.target
-            }
-            let linkedBanner = changeHTMLTag(block, 'a', linkedBannerProperties);
+              target: link.target,
+            };
+            const linkedBanner = changeHTMLTag(block, 'a', linkedBannerProperties);
 
-            // switch inner link back to <span> 
-            let linkedBannerLink = linkedBanner.querySelector('a');
-            changeHTMLTag(linkedBannerLink, 'span', {
-              class: linkedBannerLink.classList
-            })
+            // switch inner link back to <span>
+            const linkedBannerLink = linkedBanner.querySelector('a');
+            changeHTMLTag(linkedBannerLink, 'span', { class: linkedBannerLink.classList });
           }
-          
         } else {
           block.remove();
         }

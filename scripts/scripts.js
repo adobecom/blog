@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import { decorateContent, setLibs, buildAutoBlocks, changeHTMLTag } from './utils.js';
-import { initSharingLinkFunction } from '../blocks/article-meta/article-meta.js'
+import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import { initSharingLinkFunction } from '../blocks/article-meta/article-meta.js';
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -28,7 +28,9 @@ const CONFIG = {
     edgeConfigId: '72b074a6-76d2-43de-a210-124acc734f1c',
     marTechUrl: 'https://assets.adobedtm.com/d4d114c60e50/a0e989131fd5/launch-2c94beadc94f-development.min.js',
   },
-  prod: { edgeConfigId: '913eac4d-900b-45e8-9ee7-306216765cd2' },
+  prod: { 
+    edgeConfigId: '913eac4d-900b-45e8-9ee7-306216765cd2' 
+  },
   locales: {
     '': { ietf: 'en-US', tk: 'hah7vzn.css' },
     en: { ietf: 'en-US', tk: 'hah7vzn.css' },
@@ -130,7 +132,7 @@ function decorateVideo() {
   });
 }
 
-function getMediaFilename(a) {
+function getMediaFilename (a) {
   try {
     const mediaUrl = new URL(a.href);
     return mediaUrl.pathname.split('/').pop();
@@ -229,7 +231,7 @@ function decorateMediaBlock() {
       if (block.classList.contains('hide-link-text')) {
         const linkParent = link.closest('p');
         if (linkParent) {
-          linkParent.remove(); 
+          linkParent.remove();
         } else {
           link.remove();
         }
@@ -242,18 +244,17 @@ function decorateMediaBlock() {
   });
 }
 
-function decorateMasonryBrick() { 
+function decorateMasonryBrick() {
   const bricks = document.querySelectorAll('.masonry-layout .brick');
   if (!bricks || bricks.length === 0) return;
 
-  // using this approach as decorating after load would cause ui refresh which may affect the lighthouse score 
   bricks.forEach((brick) => {
     const links = brick.querySelectorAll('a');
-    if (links && links.length == 1) {
-      let link = links[0];
+    if (links && links.length === 1) {
+      const link = links[0];
       brick.setAttribute('data-link', link.href);
-      brick.addEventListener('click', (e) => {
-        window.location.href = link.href
+      brick.addEventListener('click', () => {
+        window.location.href = link.href;
       });
     }
   });
@@ -261,7 +262,7 @@ function decorateMasonryBrick() {
 
 function cloneBlockToSidebar(sidebar, blockClass) {
   const targetBlock = document.querySelector(`.${blockClass}`);
-  if (!targetBlock) return;
+  if (!targetBlock) return false;
 
   const clonedBlock = targetBlock.cloneNode(true);
   targetBlock.classList.add('hide-if-sidebar-visible');
@@ -313,8 +314,8 @@ async function setUpSidebarLayoutForBlogPage() {
   mainContent.classList.add('blog-wrapper-content');
 
   sections.forEach((section, index) => {
-    let isArticleBanner = section.querySelector('.marquee') && index == 0;
-    let isMainContent = mainContent == section;
+    const isArticleBanner = section.querySelector('.marquee') && index === 0;
+    const isMainContent = mainContent === section;
     if (!isArticleBanner && !isMainContent) {
       mainContent.appendChild(section);
     }
@@ -344,33 +345,26 @@ async function buildProgressBar() {
   const body = document.querySelector('body');
   body.append(progressBarContainer);
 
-  window.onscroll = function() {
-    updateProgressBar();
-  };
-
   function updateProgressBar() {
-    const content = document.querySelector("main");
+    const content = document.querySelector('main');
+    const contentHeight = content.scrollHeight - window.innerHeight;
+    const scrollPosition = window.scrollY;
+    const initialWidth = 5;
 
-    let contentHeight = content.scrollHeight;
-    let contentRect = content.getBoundingClientRect();
-    let contentTop = contentRect.top + window.scrollY;
-    var windowHeight = window.innerHeight;
-    var scrollPosition = window.scrollY;
-
-    let initialWidth = 5;
     let progress = initialWidth;
-    
-    if (scrollPosition >= contentTop && scrollPosition <= contentTop + contentHeight - windowHeight) {
-      var scrolled = scrollPosition - contentTop;
-      var totalScrollableHeight = contentHeight - windowHeight;
-      var scrollProgress = (scrolled / totalScrollableHeight) * (100 - initialWidth);
-      progress = initialWidth + scrollProgress;
-    } else if (scrollPosition > contentTop + contentHeight - windowHeight) {
+
+    if (scrollPosition < contentHeight) {
+      progress += (scrollPosition / contentHeight) * (100 - initialWidth);
+    } else {
       progress = 100;
     }
 
-    progressBar.style.width = progress + "%";
+    progressBar.style.width = `${progress}%`;
   }
+
+  window.onscroll = function () {
+    updateProgressBar();
+  };
 }
 
 (async function loadPage() {

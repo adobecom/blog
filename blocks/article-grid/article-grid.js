@@ -17,8 +17,8 @@ const replacePlaceholder = async (key) => {
 // get data
 function getMetadataTags(doc) {
   const metaTagElements = doc.head.querySelectorAll('meta[property="article:tag"]');
-  const tagContents = Array.from(metaTagElements, metaTag => metaTag.getAttribute('content')).filter(Boolean);
-  
+  const tagContents = Array.from(metaTagElements, (metaTag) => metaTag.getAttribute('content')).filter(Boolean);
+
   return JSON.stringify(tagContents);
 }
 
@@ -41,7 +41,7 @@ async function getArticleDetails(articleLink) {
   const ending = trimEndings.find((el) => title.endsWith(el));
   [title] = title.split(ending);
 
-  const image = doc.querySelector('img')
+  const image = doc.querySelector('img');
 
   // same data format for decorating media block
   return {
@@ -70,7 +70,7 @@ async function fetchArticleFeedData(blogIndex) {
     });
     blogIndex.complete = true;
     blogIndex.limit = defaultLimit;
-    return;
+    return false;
   }
 
   // fetch feed data
@@ -82,7 +82,7 @@ async function fetchArticleFeedData(blogIndex) {
   const indexPath = feed
     ? `${feed}${queryParams}`
     : `${defaultPath}${queryParams}`;
-  
+
   return fetch(indexPath)
     .then((response) => response.json())
     .then((json) => {
@@ -122,7 +122,6 @@ async function filterArticleDataBasedOnConfig(blogIndex) {
     const articleTaxonomy = getArticleTaxonomy(article);
 
     const matchedAll = Object.keys(filters).every((key) => {
-
       if (KEYWORDS.includes(key)) {
         const matchedFilter = filters[key]
           .some((val) => (isInList(articleTaxonomy?.allTopics, val)));
@@ -153,6 +152,16 @@ async function filterArticleDataBasedOnConfig(blogIndex) {
   blogIndex.data = filteredArticleData;
 }
 
+function decorateLoadingContainer() {
+  const container = document.createElement('div');
+  container.classList.add('loading-container');
+  const spinner = document.createElement('div');
+  spinner.classList.add('spinner');
+
+  container.append(spinner);
+  return container;
+}
+
 async function decorateMediaBlock(articleItem) {
   const { createOptimizedPicture, getArticleTaxonomy } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
 
@@ -172,15 +181,119 @@ async function decorateMediaBlock(articleItem) {
           `<h2 class="title"> ${title} </h2>`,
           `<p class="body-s description"> ${description} </p>`,
           `<p class="action-area"><a href="${path}" class="con-button outline"> ${readMore} </a></p>`,
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   ]);
 
   mediaBlock.classList.add('small');
   window.initMediaBlock(mediaBlock);
 
   return mediaBlock;
+}
+
+function getOrCreateResultContainer(block) {
+  let resultContainer = block.querySelector('.article-grid-result');
+  if (!resultContainer) {
+    resultContainer = document.createElement('div');
+    resultContainer.classList.add('article-grid-result', 'section', 'three-up', 'l-spacing');
+  }
+  return resultContainer;
+}
+
+function initLoadingState(block, resultContainer) {
+  block.innerHTML = '';
+  const loadingContainer = decorateLoadingContainer();
+  block.prepend(loadingContainer);
+  block.append(resultContainer);
+  block.classList.add('loading');
+}
+
+function calculateDisplayLimit(offset, totalArticles, totalBanners) {
+  const limit = offset + defaultLimit;
+  return limit > totalArticles ? (totalArticles + totalBanners) : limit;
+}
+
+async function loadBannerIfAvailable(bannerPos, bannerData, index, resultContainer) {
+  const existingBannerIndex = bannerPos.indexOf(`${index + 1}`);
+
+  if (existingBannerIndex !== -1 && bannerData[existingBannerIndex]) {
+    const bannerBlock = buildBlock('banner', [
+      [`<p> <a href="${bannerData[existingBannerIndex]}"></a> </p>`],
+    ]);
+    await initBanner(bannerBlock);
+    bannerBlock.classList.add('article-grid-item');
+    resultContainer.append(bannerBlock);
+
+    bannerData[existingBannerIndex] = '';
+    return true;
+  }
+  return false;
+}
+
+async function loadArticleItem(articleItem, resultContainer, createTag) {
+  let mediaBlock = await decorateMediaBlock(articleItem);
+
+  const linkEl = mediaBlock.querySelector('a');
+  if (linkEl.href) {
+    const mediaBlockContent = mediaBlock.innerHTML;
+    mediaBlock = createTag(
+      'a',
+      {
+        class: mediaBlock.classList,
+        href: linkEl.href,
+        target: linkEl.target,
+      },
+      mediaBlockContent,
+    );
+  }
+
+  mediaBlock.classList.add('article-grid-item');
+  resultContainer.append(mediaBlock);
+}
+
+async function loadAndExposeMediaBlock() {
+  try {
+    const module = await import(`${miloLibs}/blocks/media/media.js`);
+    window.initMediaBlock = module.default;
+  } catch (error) {
+    console.error('Error loading the module:', error);
+  }
+}
+
+async function decorateArticleGrid(block, blogIndex) {
+  const { createTag } = await import(`${miloLibs}/utils/utils.js`);
+  const articleData = blogIndex.data;
+  const { offset, config } = blogIndex;
+  const { banner, 'banner-position': bannerPosConfig } = config;
+
+  const bannerData = Array.isArray(banner) ? banner : [banner];
+  const bannerPos = bannerPosConfig ? bannerPosConfig.split(',').map((pos) => pos.trim()) : [];
+  const resultContainer = getOrCreateResultContainer(block);
+
+  if (offset === 0) {
+    initLoadingState(block, resultContainer);
+  }
+
+  let articleIndex = offset;
+  const displayLimit = calculateDisplayLimit(offset, articleData.length, bannerPos.length);
+
+  // Load articles and banners
+  for (let i = offset; i < displayLimit; i += 1) {
+    const bannerLoaded = await loadBannerIfAvailable(bannerPos, bannerData, i, resultContainer);
+
+    if (!bannerLoaded) {
+      await loadArticleItem(articleData[articleIndex], resultContainer, createTag);
+      articleIndex += 1;
+    }
+  }
+
+  blogIndex.offset = articleIndex;
+
+  // If more articles are available, show load more button
+  if (articleData.length > blogIndex.offset) {
+    await setupLoadMoreButton(block, blogIndex, resultContainer);
+  }
 }
 
 async function decorateLoadMoreButton() {
@@ -192,132 +305,30 @@ async function decorateLoadMoreButton() {
   return loadMore;
 }
 
-async function decorateArticleGrid(block, blogIndex) {
-  const miloLibs = getLibs();
-  const { createTag } = await import(`${miloLibs}/utils/utils.js`);
+async function setupLoadMoreButton(block, blogIndex, resultContainer) {
+  const loadMoreButton = await decorateLoadMoreButton();
+  const loadMoreContainer = document.createElement('p');
+  loadMoreContainer.classList.add('load-more-container');
+  loadMoreContainer.append(loadMoreButton);
+  resultContainer.append(loadMoreContainer);
 
-  const articleData = blogIndex.data;
-  // const { offset, dataOffset } = blogIndex;
-  const { offset } = blogIndex;
-  const { banner } = blogIndex.config;
-
-  const bannerPosConfig = blogIndex.config['banner-position'] ? blogIndex.config['banner-position'] : false;
-  const bannerData = typeof banner === 'string' ? [banner] : banner;
-
-  // [5, 9]
-  const bannerPos = bannerPosConfig ? bannerPosConfig.split(',').map(pos => pos.trim()) : [];
-
-  let resultContainer = block.querySelector('.article-grid-result');
-  if (!resultContainer) {
-    resultContainer = document.createElement('div');
-    resultContainer.classList.add('article-grid-result','section', 'three-up', 'l-spacing');
-  }
-
-  if (offset == 0) {
-    block.innerHTML = "";
-    let loadingContainer = decorateLoadingContainer();
-    block.prepend(loadingContainer);
-    block.append(resultContainer);
-    block.classList.add('loading');
-  }
-
-  let articleIndex = offset;
-  let limit = offset + defaultLimit; // 9
-  let displayLimit = limit > articleData.length ? (articleData.length + bannerPos.length) : limit;
-  
-  for (let i = offset; i < displayLimit; i++) { 
-    let existingBannerIndex = bannerPos.indexOf(`${i + 1}`);
-
-    if (existingBannerIndex != -1 && bannerData && bannerData[existingBannerIndex].length > 0) {
-
-      const bannerBlock = buildBlock('banner', [
-        [`<p> <a href="${bannerData[existingBannerIndex]}"></a> </p>`]
-      ]);
-      await initBanner(bannerBlock);
-      bannerBlock.classList.add('article-grid-item')
-      resultContainer.append(bannerBlock);
-
-      // remove banner link after already loaded on page
-      bannerData[existingBannerIndex] = '';
-
-    } else {
-
-      const articleItem = articleData[articleIndex];
-      let mediaBlock = await decorateMediaBlock(articleItem);
-
-      let linkEl = mediaBlock.querySelector('a');
-      if (linkEl.href && linkEl.href.length > 0) { 
-        // let linkedMediaBlock = 
-        const mediaBlockContent = mediaBlock.innerHTML;
-        let linkedMediaBlock = createTag('a',
-          {
-            class: mediaBlock.classList,
-            href: linkEl.href,
-            target: linkEl.target
-          },
-          mediaBlockContent
-        );
-
-        mediaBlock = linkedMediaBlock
-      }
-
-      mediaBlock.classList.add('article-grid-item');
-
-      resultContainer.append(mediaBlock);
-
-      articleIndex++;
-    }
-  }
-
-  blogIndex.offset = articleIndex;
-  
-  if (articleData.length > blogIndex.offset) {
-    let loadMoreButton = await decorateLoadMoreButton();
-    // used p to allow selecting last odd item in tablet mode easier
-    const loadMoreContainer = document.createElement('p');
-    loadMoreContainer.classList.add('load-more-container');
-    loadMoreContainer.append(loadMoreButton);
-    resultContainer.append(loadMoreContainer);
-
-    loadMoreButton.addEventListener('click', async (e) => {
-      e.preventDefault();
-      loadMoreContainer.remove();
-      await decorateArticleGrid(block, blogIndex);
-    });
-  }
-
-}
-
-async function loadAndExposeMediaBlock() {
-  try {
-      const module = await import(`${miloLibs}/blocks/media/media.js`);
-      window.initMediaBlock = module.default;
-      // console.log('initMediaBlock function is now globally accessible.');
-  } catch (error) {
-      console.error('Error loading the module:', error);
-  }
-}
-
-function decorateLoadingContainer() {
-  const container = document.createElement('div');
-  container.classList.add('loading-container');
-  const spinner = document.createElement('div');
-  spinner.classList.add('spinner');
-
-  container.append(spinner);
-  return container;
+  loadMoreButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+    loadMoreContainer.remove();
+    await decorateArticleGrid(block, blogIndex);
+  });
 }
 
 // block for loading article + banner
 // column key: articles -> fetch data based on article links
 // column key: feed -> fetch data based on feed single link (has load more button)
-export default async function init(block) { 
+export default async function init(block) {
   const { readBlockConfig } = await import(`${miloLibs}/blocks/article-feed/article-feed.js`);
 
   const blogIndex = {
     data: [],
     byPath: {},
-    offset: 0,       // number of total items (article + banner)
+    offset: 0, // number of total items (article + banner)
     complete: false,
     config: {},
     offsetData: [],
@@ -325,29 +336,29 @@ export default async function init(block) {
   blogIndex.config = readBlockConfig(block);
 
   const initArticleGrid = async () => {
-    await loadAndExposeMediaBlock();          // for reusing media block init
+    await loadAndExposeMediaBlock(); // for reusing media block init
 
-    await fetchArticleFeedData(blogIndex);             // fetch data
-    await filterArticleDataBasedOnConfig(blogIndex);   // filtered data based on config
+    await fetchArticleFeedData(blogIndex); // fetch data
+    await filterArticleDataBasedOnConfig(blogIndex); // filtered data based on config
 
     await decorateArticleGrid(block, blogIndex);
-    
+
     block.classList.add('ready');
-  }
+  };
 
   async function handleIntersection(entries, observer) {
-    for (const entry of entries) {
-        if (entry.isIntersecting) {
-            await initArticleGrid();
-            observer.unobserve(entry.target);
-        }
-    }
+    entries.forEach(async (entry) => {
+      if (entry.isIntersecting) {
+        await initArticleGrid();
+        observer.unobserve(entry.target);
+      }
+    });
   }
 
   // reduce inital load time
   const observer = new IntersectionObserver(handleIntersection, {
-      root: null,          // Use the viewport as the root
-      rootMargin: `${ROOT_MARGIN}px`,
+    root: null, // Use the viewport as the root
+    rootMargin: `${ROOT_MARGIN}px`,
   });
   observer.observe(block);
 }
