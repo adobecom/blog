@@ -299,9 +299,7 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
 async function setUpSidebarLayoutForBlogPage() {
   const main = document.querySelector('main');
   const childContent = document.querySelector('.content');
-  const blogDetailUrlIdentifier = '/publish/';
-
-  const isBlogPage = getMetadata('content-type') === 'article' && window.location.pathname.includes(blogDetailUrlIdentifier);
+  const isBlogPage = getMetadata('content-type') === 'article';
 
   if (!isBlogPage || !childContent) return;
 
