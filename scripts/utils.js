@@ -350,15 +350,6 @@ async function buildArticleMeta(mainEl) {
   contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
 }
 
-async function addContentTypeToMainClass(mainEl) {
-  const miloLibs = getLibs();
-  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
-  const pageText = getMetadata('content-type');
-  const pageClass = `page-${pageText}`;
-
-  mainEl.classList.add(pageClass);
-}
-
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
@@ -373,7 +364,6 @@ export async function buildAutoBlocks() {
       buildAuthorHeader(mainEl);
     }
 
-    await addContentTypeToMainClass(mainEl);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
