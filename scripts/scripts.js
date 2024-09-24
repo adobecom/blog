@@ -296,12 +296,12 @@ function moveRecommendedArticleAsFinalSection(main) {
 
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
-async function setUpSidebarLayoutForBlogPage() {
+async function setUpSidebarLayoutForArticlePage() {
   const main = document.querySelector('main');
   const childContent = document.querySelector('.content');
-  const isBlogPage = getMetadata('content-type') === 'article';
+  const isArticlePage = getMetadata('content-type') === 'article';
 
-  if (!isBlogPage || !childContent) return;
+  if (!isArticlePage || !childContent) return;
 
   // all divs that holds content
   const sections = document.querySelectorAll('.section');
@@ -378,7 +378,7 @@ async function buildProgressBar() {
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
-  await setUpSidebarLayoutForBlogPage();
+  await setUpSidebarLayoutForArticlePage();
   decorateMediaBlock();
   decorateMasonryBrick();
   initSidekick();
