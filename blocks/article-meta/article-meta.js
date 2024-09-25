@@ -1,4 +1,4 @@
-import { getLibs } from '../../scripts/utils.js';
+import { getLibs, buildBlock } from '../../scripts/utils.js';
 
 async function validateAuthorUrl(url) {
   if (!url) return null;
@@ -16,15 +16,18 @@ async function validateAuthorUrl(url) {
   return doc;
 }
 
-function openPopup(e) {
-  const target = e.target.closest('a');
-  const href = target.getAttribute('data-href');
-  const type = target.getAttribute('data-type');
-  window.open(
-    href,
-    type,
-    'popup,top=233,left=233,width=700,height=467',
-  );
+async function validateDate(date) {
+  const miloLibs = getLibs();
+  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
+  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
+
+  const { env } = getConfig();
+  if (env?.name === 'prod') return;
+  if (date && !/^[0-1]\d{1}-[0-3]\d{1}-[2]\d{3}$/.test(date.textContent.trim())) {
+    // match publication date to MM-DD-YYYY format
+    date.classList.add('article-date-invalid');
+    date.setAttribute('title', await replaceKey('invalid-date', getConfig()));
+  }
 }
 
 async function buildAuthorInfo(authorEl, bylineContainer) {
@@ -63,93 +66,22 @@ async function buildAuthorInfo(authorEl, bylineContainer) {
   }
 }
 
-export async function initSharingLinkFunction(sharing) {
-  const miloLibs = getLibs();
-  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
-  const { copyToClipboard } = await import(`${miloLibs}/utils/tools.js`);
+export function initCopyLinkButtonFunction(block) {
+  const copyButton = block.querySelector('.copy-to-clipboard')
+  if (!copyButton) return false;
 
-  const sharingLinks = sharing.querySelectorAll('[data-href]');
-  if (!sharingLinks) return;
+  copyButton.addEventListener('click', (e) => {
+    e.preventDefault();
 
-  sharingLinks.forEach((link) => {
-    link.addEventListener('click', openPopup);
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      copyButton.classList.add('copy-to-clipboard-copied');
+      setTimeout(() => document.activeElement.blur(), 500);
+      setTimeout(
+        () => copyButton.classList.remove('copy-to-clipboard-copied'),
+        2000,
+      );
+    });
   });
-  const copyButton = sharing.querySelector('#copy-to-clipboard');
-  copyButton.addEventListener('click', async () => {
-    const copyText = await replaceKey('copied-to-clipboard', getConfig());
-    await copyToClipboard(copyButton, copyText);
-  });
-}
-
-export async function buildSharing() {
-  const miloLibs = getLibs();
-  const { createTag, getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
-  const { fetchIcons } = await import(`${miloLibs}/features/icons/icons.js`);
-
-  const url = encodeURIComponent(window.location.href);
-  const title = encodeURIComponent(document.querySelector('h1').textContent);
-  const description = encodeURIComponent(getMetadata('description'));
-
-  const platformMap = {
-    twitter: {
-      'data-href': `https://www.twitter.com/share?&url=${url}&text=${title}`,
-      alt: `${await replaceKey('share-twitter', getConfig())}`,
-      'aria-label': `${await replaceKey('share-twitter', getConfig())}`,
-    },
-    linkedin: {
-      'data-type': 'LinkedIn',
-      'data-href': `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}&summary=${description || ''}`,
-      alt: `${await replaceKey('share-linkedin', getConfig())}`,
-      'aria-label': `${await replaceKey('share-linkedin', getConfig())}`,
-    },
-    facebook: {
-      'data-type': 'Facebook',
-      'data-href': `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      alt: `${await replaceKey('share-facebook', getConfig())}`,
-      'aria-label': `${await replaceKey('share-facebook', getConfig())}`,
-    },
-    link: {
-      id: 'copy-to-clipboard',
-      alt: `${await replaceKey('copy-to-clipboard', getConfig())}`,
-      'aria-label': `${await replaceKey('copy-to-clipboard', getConfig())}`,
-    },
-  };
-
-  const platforms = Object.keys(platformMap);
-  const svgs = await fetchIcons(getConfig());
-  const allAnchorTags = platforms.map((platform) => {
-    const platformProperties = platformMap[platform];
-    if (platformProperties) {
-      return createTag('a', platformProperties, svgs[platform].cloneNode(true));
-    }
-    return null;
-  }).filter(Boolean);
-
-  const sharing = createTag('div', { class: 'article-byline-sharing' });
-  allAnchorTags.forEach((anchorTag) => {
-    const span = createTag('span', null, anchorTag);
-    sharing.append(span);
-  });
-
-  await initSharingLinkFunction(sharing);
-
-  return sharing;
-}
-
-async function validateDate(date) {
-  const miloLibs = getLibs();
-  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
-
-  const { env } = getConfig();
-  if (env?.name === 'prod') return;
-  if (date && !/^[0-1]\d{1}-[0-3]\d{1}-[2]\d{3}$/.test(date.textContent.trim())) {
-    // match publication date to MM-DD-YYYY format
-    date.classList.add('article-date-invalid');
-    date.setAttribute('title', await replaceKey('invalid-date', getConfig()));
-  }
 }
 
 export default async function init(blockEl) {
@@ -158,6 +90,7 @@ export default async function init(blockEl) {
     console.warn('Block does not have enough children');
   }
 
+  // build author info
   const bylineContainer = childrenEls[0];
   bylineContainer.classList.add('article-byline');
   bylineContainer.firstElementChild.classList.add('article-byline-info');
@@ -172,6 +105,37 @@ export default async function init(blockEl) {
   date.classList.add('article-date');
   await validateDate(date);
 
-  const shareBlock = await buildSharing();
-  bylineContainer.append(shareBlock);
+  // build link sharing
+  const miloLibs = getLibs();
+  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  const miloShareModule = await import(`${miloLibs}/blocks/share/share.js`);
+  const initMiloShareBlock = miloShareModule.default;
+  
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(document.querySelector('h1').textContent);
+  const description = encodeURIComponent(getMetadata('description'));
+
+  const platformLinks = {
+    twitter: `https://www.twitter.com/share?&url=${url}&text=${title}`,
+    linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}&summary=${description || ''}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`
+  }
+
+  const miloShareBlock = buildBlock('share', [
+    [
+      {
+        elems: [
+          `<a href="${platformLinks.twitter}"> Twitter </a>`,
+          `<a href="${platformLinks.linkedin}"> Linkedin </a>`,
+          `<a href="${platformLinks.facebook}"> Facebook </a>`,
+        ]
+      }
+    ],
+  ]);
+  await initMiloShareBlock(miloShareBlock);
+
+  const trackingHeader = miloShareBlock.querySelector('.tracking-header');
+  if (trackingHeader) trackingHeader.innerHTML = "";
+
+  bylineContainer.append(miloShareBlock);
 }

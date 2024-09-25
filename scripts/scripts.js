@@ -11,7 +11,7 @@
  */
 
 import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
-import { initSharingLinkFunction } from '../blocks/article-meta/article-meta.js';
+import { initCopyLinkButtonFunction } from '../blocks/article-meta/article-meta.js';
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -277,7 +277,7 @@ async function initSidebar() {
   sidebar.classList.add('blog-wrapper-sidebar');
 
   const sidebarArticleMeta = cloneBlockToSidebar(sidebar, 'article-meta');
-  await initSharingLinkFunction(sidebarArticleMeta);
+  initCopyLinkButtonFunction(sidebarArticleMeta);
   cloneBlockToSidebar(sidebar, 'banner');
   cloneBlockToSidebar(sidebar, 'tags');
 

@@ -1,4 +1,5 @@
-/* similar to article-header */
+@import "https://main--milo--adobecom.hlx.live/libs/blocks/share/share.css";
+
 .article-byline {
   display: flex;
   flex-wrap: wrap;
@@ -24,99 +25,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.article-byline-sharing {
-  display: flex;
-  flex: 0 1 100%;
-  gap: var(--spacing-l);
-  padding: var(--spacing-xs) 0;
-  border-top: 1px solid var(--color-gray-200);
-  border-bottom: 1px solid var(--color-gray-200);
-}
-
-.article-byline-sharing a {
-  text-decoration: none;
-  cursor: pointer;
-  color: var(--color-black);
-}
-
-.article-byline-sharing svg {
-  height: 22px;
-  width: 22px;
-  fill: currentcolor;
-  transition: var(--transition-all-ease-in-out-1);
-}
-
-.article-byline-sharing a[data-href*="twitter"]:hover,
-.article-byline-sharing a[data-href*="twitter"]:focus {
-  color: #1DA1F2;
-}
-
-.article-byline-sharing a[data-href*="linkedin"]:hover,
-.article-byline-sharing a[data-href*="linkedin"]:focus {
-  color: #0077b5;
-}
-
-.article-byline-sharing a[data-href*="facebook"]:hover,
-.article-byline-sharing a[data-href*="facebook"]:focus {
-  color: #3b5998;
-}
-
-#copy-to-clipboard {
-  position: relative;
-}
-
-#copy-to-clipboard:hover svg,
-#copy-to-clipboard:focus svg {
-  color: var(--color-info-accent-hover);
-}
-
-#copy-to-clipboard.copy-success {
-  fill: var(--color-info-accent);
-  position: relative;
-}
-
-#copy-to-clipboard .copied-to-clipboard {
-  position: absolute;
-  top: 30px;
-  right: -8px;
-  display: flex;
-  justify-content: center;
-  width: 112px;
-  padding: 8px 4px;
-  background: var(--color-gray-800);
-  color: var(--color-white);
-  font-size: var(--type-body-xxs-size);
-  line-height: var(--type-body-xxs-lh);
-  text-align: center;
-  animation: fade-out ease 1s;
-  animation-delay: 4.1s;
-  z-index: 10;
-}
-
-#copy-to-clipboard .copied-to-clipboard::after {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  right: 11px;
-  margin-left: -8px;
-  border: 8px solid transparent;
-  border-bottom-color: var(--color-gray-800);
-}
-
-@keyframes fade-out {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-#copy-to-clipboard.copy-failure {
-  fill: var(--color-gray-600);
 }
 
 .article-author {
@@ -155,6 +63,63 @@
   background: yellow;
 }
 
+/* sharing */
+.article-meta .share {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+}
+
+.article-meta .share .icon-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--spacing-m);
+  width: 100%;
+  padding: var(--spacing-xs) 0;
+  margin-bottom: 0;
+  border-top: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.article-meta .share .icon-container a {
+  cursor: pointer;
+}
+
+.article-meta .share .icon-container .icon {
+  color: var(--color-black);
+}
+
+.article-meta .share .icon-container svg.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.article-meta .share p.icon-container > a,
+.article-meta .share p.icon-container > button {
+  margin: 0;
+}
+
+.article-meta .share .icon-container a:hover .icon.icon-twitter,
+.article-meta .share .icon-container a:focus .icon.icon-twitter {
+  color: #1DA1F2;
+}
+
+.article-meta .share .icon-container a:hover .icon.icon-linkedin,
+.article-meta .share .icon-container a:focus .icon.icon-linkedin {
+  color: #0077b5;
+}
+
+.article-meta .share .icon-container a:hover .icon.icon-facebook,
+.article-meta .share .icon-container a:focus .icon.icon-facebook {
+  color: #3b5998;
+}
+
+.article-meta .share .icon-container .copy-to-clipboard:hover svg,
+.article-meta .share .icon-container .copy-to-clipboard:focus svg {
+  color: var(--color-info-accent-hover);
+}
+
 @media (min-width: 600px) {
   .article-byline {
     margin: var(--spacing-m) auto;
@@ -166,15 +131,15 @@
     flex: 1 1 auto;
   }
 
-  .article-byline .article-byline-sharing {
+  .article-meta .share {
+    width: fit-content;
+  }
+
+  .article-meta .share .icon-container {
     flex: 0 1 auto;
     margin-top: 0;
     gap: var(--spacing-s);
-    border: 0;
-  }
-
-  .article-byline .article-byline-sharing span:not(:last-child) {
-    margin-right: 8px;
+    border: 0;  
   }
 }
 
@@ -195,10 +160,14 @@
     border: 0;
   }
 
-  .article-byline .article-byline-sharing {
+  .article-meta .share {
+    width: 100%;
+  }
+
+  .article-meta .share .icon-container {
     width: 100%;
     justify-content: flex-start;
-    gap: var(--spacing-xxs);
+    gap: var(--spacing-xs);
     padding: var(--spacing-xxs) 0 0;
   }
 }
