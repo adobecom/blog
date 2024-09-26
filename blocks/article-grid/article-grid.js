@@ -188,7 +188,7 @@ function getOrCreateResultContainer(block) {
   let resultContainer = block.querySelector('.article-grid-result');
   if (!resultContainer) {
     resultContainer = document.createElement('div');
-    resultContainer.classList.add('article-grid-result', 'section', 'three-up', 'l-spacing');
+    resultContainer.classList.add('article-grid-result');
   }
   return resultContainer;
 }
