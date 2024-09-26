@@ -250,7 +250,7 @@ async function loadAndExposeMediaBlock() {
     window.initMediaBlock = module.default;
 
     const { loadStyle } = await import(`${miloLibs}/utils/utils.js`);
-    loadStyle('/blocks/media/media.css');
+    loadStyle(`${miloLibs}/blocks/media/media.css`);
   } catch (error) {
     console.error('Error loading the module:', error);
   }
