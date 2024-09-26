@@ -248,6 +248,9 @@ async function loadAndExposeMediaBlock() {
   try {
     const module = await import(`${miloLibs}/blocks/media/media.js`);
     window.initMediaBlock = module.default;
+
+    const { loadStyle } = await import(`${miloLibs}/utils/utils.js`);
+    loadStyle('/blocks/media/media.css');
   } catch (error) {
     console.error('Error loading the module:', error);
   }
@@ -330,8 +333,8 @@ export default async function init(block) {
   const initArticleGrid = async () => {
     await loadAndExposeMediaBlock(); // for reusing media block init
 
-    await fetchArticleFeedData(blogIndex); // fetch data
-    await filterArticleDataBasedOnConfig(blogIndex); // filtered data based on config
+    await fetchArticleFeedData(blogIndex);
+    await filterArticleDataBasedOnConfig(blogIndex);
 
     await decorateArticleGrid(block, blogIndex);
 
