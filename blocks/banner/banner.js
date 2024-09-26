@@ -58,7 +58,7 @@ export default async function init(block) {
           block.innerHTML = '';
           block.append(bannerContents);
 
-          if (link && link.href) {
+          if (link?.href) {
             // switch whole banner to <a>
             const linkedBannerProperties = {
               class: block.classList,

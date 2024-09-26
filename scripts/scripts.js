@@ -219,38 +219,38 @@ function decorateMediaBlock() {
   if (!mediaBlocks || mediaBlocks.length === 0) return;
 
   mediaBlocks.forEach((block) => {
-    if (block.classList.contains('card-as-link')) {
-      const link = block.querySelector('a');
-      if (!link) console.error('missing link in Media card');
+    if (!block.classList.contains('card-as-link')) return;
 
-      const cardLink = document.createElement('a');
-      cardLink.setAttribute('class', block.classList);
-      cardLink.href = link.href;
-      cardLink.target = link.target;
+    const link = block.querySelector('a');
+    if (!link) console.error('missing link in Media card');
 
-      if (block.classList.contains('hide-link-text')) {
-        const linkParent = link.closest('p');
-        if (linkParent) {
-          linkParent.remove();
-        } else {
-          link.remove();
-        }
+    const cardLink = document.createElement('a');
+    cardLink.setAttribute('class', block.classList);
+    cardLink.href = link.href;
+    cardLink.target = link.target;
+
+    if (block.classList.contains('hide-link-text')) {
+      const linkParent = link.closest('p');
+      if (linkParent) {
+        linkParent.remove();
+      } else {
+        link.remove();
       }
-
-      cardLink.innerHTML = block.innerHTML;
-
-      block.parentNode.replaceChild(cardLink, block);
     }
+
+    cardLink.innerHTML = block.innerHTML;
+
+    block.parentNode.replaceChild(cardLink, block);
   });
 }
 
 function decorateMasonryBrick() {
   const bricks = document.querySelectorAll('.masonry-layout .brick');
-  if (!bricks || bricks.length === 0) return;
+  if (!bricks?.length === 0) return;
 
   bricks.forEach((brick) => {
     const links = brick.querySelectorAll('a');
-    if (links && links.length === 1) {
+    if (links?.length === 1) {
       const link = links[0];
       brick.setAttribute('data-link', link.href);
       brick.addEventListener('click', () => {
@@ -303,7 +303,6 @@ async function setUpSidebarLayoutForArticlePage() {
 
   if (!isArticlePage || !childContent) return;
 
-  // all divs that holds content
   const sections = document.querySelectorAll('.section');
   if (!sections) return;
 

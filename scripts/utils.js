@@ -248,17 +248,32 @@ function buildAuthorHeader(mainEl) {
  */
 export function changeHTMLTag(el, targetTag, properties = {}) {
   const newEl = document.createElement(targetTag);
-  const innerContent = el.innerHTML;
-
   Object.keys(properties).forEach((key) => {
     newEl.setAttribute(key, properties[key]);
   });
 
-  newEl.innerHTML = innerContent;
+  newEl.innerHTML = el.innerHTML;
   el.replaceWith(newEl);
 
   return newEl;
 }
+
+/**
+ * * @param {string} key key of the localized text
+ * return localized text based on inputted key
+ */
+export async function replacePlaceholderForLocalizedText(key) {
+  const miloLibs = getLibs();
+  const [{ replaceKey }, { getConfig }] = await Promise.all([
+    await import(`${miloLibs}/features/placeholders.js`),
+    await import(`${miloLibs}/utils/utils.js`)
+  ])  
+
+  const result = await replaceKey(key, getConfig());
+
+  return result;
+}
+
 
 async function buildArticleHeroBanner(el) {
   const miloLibs = getLibs();
@@ -272,7 +287,7 @@ async function buildArticleHeroBanner(el) {
 
   const tag = getMetadata('article:tag');
   const category = tag || 'News';
-  const categoryTag = getLinkForTopic(category); // category link
+  const categoryTag = getLinkForTopic(category);
 
   const h1 = el.querySelector('h1');
   const description = getMetadata('description');
@@ -328,7 +343,6 @@ async function buildArticleMeta(mainEl) {
   const miloLibs = getLibs();
   const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
 
-  // author + publication date
   const author = getMetadata('author') || 'Adobe Communications Team';
   const { codeRoot } = getConfig();
   const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}` : null);

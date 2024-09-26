@@ -1,23 +1,16 @@
-import { getLibs, buildBlock } from '../../scripts/utils.js';
+import { getLibs, buildBlock, replacePlaceholderForLocalizedText } from '../../scripts/utils.js';
 import initBanner from '../banner/banner.js';
 
 const miloLibs = getLibs();
-const defaultLimit = 9;
+const DEFAULT_GRID_LIMIT = 9;
+const DEFAULT_FEED_DATA_LIMIT = 500;
 const ROOT_MARGIN = 20;
-
-// Used for getting localized text
-const replacePlaceholder = async (key) => {
-  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
-  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const result = await replaceKey(key, getConfig());
-
-  return result;
-};
 
 // get data
 function getMetadataTags(doc) {
   const metaTagElements = doc.head.querySelectorAll('meta[property="article:tag"]');
-  const tagContents = Array.from(metaTagElements, (metaTag) => metaTag.getAttribute('content')).filter(Boolean);
+  const tagContents = [...metaTagElements].map(metaTag =>
+    metaTag.getAttribute('content')).filter(Boolean);
 
   return JSON.stringify(tagContents);
 }
@@ -27,7 +20,7 @@ async function getArticleDetails(articleLink) {
 
   const path = new URL(articleLink).pathname;
   const resp = await fetch(path);
-  if (!resp || !resp.ok) {
+  if (!resp?.ok) {
     // eslint-disable-next-line no-console
     console.log(`Could not retrieve metadata for ${path}`);
     return null;
@@ -48,7 +41,7 @@ async function getArticleDetails(articleLink) {
     title,
     description: getMetadata('description', doc),
     image: image.src,
-    imageAlt: image.alt ? image.alt : title,
+    imageAlt: image.alt || title,
     tags: getMetadataTags(doc),
     path,
   };
@@ -62,19 +55,18 @@ async function fetchArticleFeedData(blogIndex) {
   // fetch article data based on links
   if (articles) {
     const fetchArticleDataPromise = articles.map((article) => getArticleDetails(article));
-    let articleData = [];
+    const articleData = await Promise.all(fetchArticleDataPromise);
 
-    articleData = await Promise.all(fetchArticleDataPromise);
     articleData.forEach((data) => {
       if (data) blogIndex.data.push(data);
     });
     blogIndex.complete = true;
-    blogIndex.limit = defaultLimit;
+    blogIndex.limit = DEFAULT_GRID_LIMIT;
     return false;
   }
 
   // fetch feed data
-  const finalLimit = limit || 500;
+  const finalLimit = limit || DEFAULT_FEED_DATA_LIMIT;
   blogIndex.limit = finalLimit;
   const queryParams = `?limit=${finalLimit}&offset=${blogIndex.offset}`;
   const defaultPath = updateLinkWithLangRoot(`${getConfig().locale.contentRoot}/query-index.json`);
@@ -99,7 +91,7 @@ async function fetchArticleFeedData(blogIndex) {
 }
 
 // filter data
-const isInList = (list, val) => list && list.map((t) => t.toLowerCase()).includes(val);
+const isInList = (list, val) => list?.map((t) => t.toLowerCase()).includes(val);
 
 async function filterArticleDataBasedOnConfig(blogIndex) {
   const { getArticleTaxonomy } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
@@ -170,7 +162,7 @@ async function decorateMediaBlock(articleItem) {
   const pictureTag = picture.outerHTML;
   const articleTax = getArticleTaxonomy(articleItem);
 
-  const readMore = await replacePlaceholder('read-more');
+  const readMore = await replacePlaceholderForLocalizedText('read-more');
 
   const mediaBlock = buildBlock('media', [
     [
@@ -210,7 +202,7 @@ function initLoadingState(block, resultContainer) {
 }
 
 function calculateDisplayLimit(offset, totalArticles, totalBanners) {
-  const limit = offset + defaultLimit;
+  const limit = offset + DEFAULT_GRID_LIMIT;
   return limit > totalArticles ? (totalArticles + totalBanners) : limit;
 }
 
@@ -300,7 +292,7 @@ async function decorateLoadMoreButton() {
   const loadMore = document.createElement('a');
   loadMore.className = 'load-more con-button outline';
   loadMore.href = '#';
-  loadMore.textContent = await replacePlaceholder('load-more');
+  loadMore.textContent = await replacePlaceholderForLocalizedText('load-more');
 
   return loadMore;
 }

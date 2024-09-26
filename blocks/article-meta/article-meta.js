@@ -1,4 +1,4 @@
-import { getLibs, buildBlock } from '../../scripts/utils.js';
+import { getLibs, buildBlock, replacePlaceholderForLocalizedText } from '../../scripts/utils.js';
 
 async function validateAuthorUrl(url) {
   if (!url) return null;
@@ -19,14 +19,13 @@ async function validateAuthorUrl(url) {
 async function validateDate(date) {
   const miloLibs = getLibs();
   const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { replaceKey } = await import(`${miloLibs}/features/placeholders.js`);
-
   const { env } = getConfig();
+
   if (env?.name === 'prod') return;
   if (date && !/^[0-1]\d{1}-[0-3]\d{1}-[2]\d{3}$/.test(date.textContent.trim())) {
     // match publication date to MM-DD-YYYY format
     date.classList.add('article-date-invalid');
-    date.setAttribute('title', await replaceKey('invalid-date', getConfig()));
+    date.setAttribute('title', await replacePlaceholderForLocalizedText('invalid-date'));
   }
 }
 
