@@ -106,8 +106,6 @@ export default async function init(blockEl) {
 
   // build link sharing
   const miloLibs = getLibs();
-  console.log(miloLibs);
-
   const { getMetadata, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
   const miloShareModule = await import(`${miloLibs}/blocks/share/share.js`);  
   const initMiloShareBlock = miloShareModule.default;
