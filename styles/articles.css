@@ -112,7 +112,7 @@ main .light .article-hero-category-link {
   max-width: none;
 }
 
-main .blog-wrapper-sidebar .tags a {
+.blog-wrapper-sidebar .tags a {
   padding: 12px;
   margin: 0 8px 8px 0;
 }
