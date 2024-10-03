@@ -253,3 +253,35 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
     padding-right: inherit;
   }
 }
+
+/*
+ * Hero Mansonry styles
+*/
+
+
+/* 
+ * Editorial Card
+*/
+main .editorial-card.click a {
+  color: var(--text-color);
+}
+
+main .editorial-card .foreground {
+  padding-bottom: 20px;
+}
+
+main .section:has(.editorial-card) {
+  padding-bottom: var(--spacing-xxl);
+}
+
+main .editorial-card .media-area > div {
+  background: var(--color-black);
+}
+
+main .editorial-card .media-area img {
+  transition: var(--transition-all-ease-in-out-1);
+}
+
+main .editorial-card:hover .media-area img {
+  opacity: 0.6;
+}
