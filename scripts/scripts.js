@@ -11,6 +11,7 @@
  */
 
 import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import { decorateArticlePageUI } from './articles.js'
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -197,7 +198,7 @@ function overrideMiloBlocks() {
 function decorateTopicPage() {
   if (window.location.href.includes('/topics/')) {
     const sections = [...document.querySelectorAll('main > div')];
-    if (sections.length = 1) {
+    if (sections.length === 1) {
       const articleFeed = document.querySelector('main div .article-feed');
       if (!articleFeed) return;
       const newSection = document.createElement('div');
@@ -237,5 +238,6 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  await decorateArticlePageUI();
   initSidekick();
 }());

@@ -1,7 +1,7 @@
 /* 
  * Put project specific base styles here.
  *
- * Note: The proect does not load this file.
+ * Note: The project does not load this file.
  *       You will need to load these using scripts.js.
  * 
  *
@@ -12,8 +12,8 @@ main h1, main h2, main h3, main h4, main h5, main h6 {
   scroll-margin-top: 90px;
 }
 
-main .section{
-  margin-top: 64px
+main .section:first-of-type {
+  margin-top: 57px;
 }
 
 main .figure .figure img {
@@ -28,7 +28,7 @@ main .article-header .article-byline {
   max-width: 800px;
 }
 
-main video {
+main .blog-wrapper video {
   max-height: 600px;
   margin: 40px auto;
   display: block;
@@ -37,9 +37,163 @@ main video {
 @media (min-width: 700px) {
   main .section > div > :not(div):not(h1),
   main .section > .tags,
-  main .columns, main .columns.contained {
+  main .columns, main .columns.contained,
+  main .blog-wrapper-content > div {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+@media (min-width: 900px) {
+  main .section:first-of-type {
+    margin-top: var(--global-height-nav);
+  } 
+}
+
+/* Article v3 related styles */
+main .article-hero-banner .text p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  main .article-hero-banner .text p {
+    display: none;
+  }
+}
+
+/* tags */
+main .tags {
+  max-width: none;
+  margin-top: var(--spacing-m);
+}
+
+main .tags a {
+  font-weight: 700;
+  letter-spacing: normal;
+  padding: 12px;
+  margin: 0 12px 12px 0;
+}
+
+@media (min-width: 900px) {
+  main .tags {
+    margin-top: var(--spacing-s);
+  }
+}
+
+/* Blog Styles (sidebar + content) */
+main .article-hero-category-link {
+  display: inline-block;
+  color: var(--color-white);
+}
+
+main .light .article-hero-category-link {
+  color: var(--text-color);
+}
+
+.blog-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--spacing-xs);
+  margin: 0 auto;
+  max-width: var(--grid-container-width);
+  padding-bottom: var(--spacing-m);
+}
+
+.blog-wrapper-sidebar {
+  display: none;
+}
+
+.blog-wrapper-sidebar .tags {
+  max-width: none;
+}
+
+.blog-wrapper-sidebar .tags a {
+  padding: 12px;
+  margin: 0 8px 8px 0;
+}
+
+@media (min-width: 900px) {
+  .blog-wrapper {
+    flex-direction: row;
+    gap: var(--spacing-s);
+  }
+
+  .blog-wrapper-sidebar {
+    display: block;
+    position: sticky;
+    top: var(--spacing-m);
+    min-width: 240px;
+    width: 30%;
+    height: fit-content;
+    padding: calc(24px + var(--spacing-m)) 0 24px;
+    max-height: calc(100vh - var(--global-height-nav));
+    overflow-y: auto;
+    padding-right: var(--spacing-xxs);
+  }
+
+  .blog-wrapper-content {
+    max-width: 70%;
+    padding: 24px 0;
+  }
+
+  .blog-wrapper-content p:first-of-type {
+    margin-top: var(--spacing-m);
+  }
+
+  main .embed-instagram, main .embed-instagram iframe.instagram-media {
+    max-width: max-content;
+  }
+
+  .hide-if-sidebar-visible {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .blog-wrapper {
+    gap: var(--spacing-m);
+  }
+
+  .blog-wrapper-sidebar {
+    width: 28%;
+    min-width: 280px;
+  }
+}
+
+/* progress bar */
+.progress-bar-container {
+  z-index: 10000;
+  position: fixed;
+  top: 57px;
+  left: 0;
+  right: 0;
+  transform-origin: 0%;
+  width: 100%;
+  height: 4px;
+}
+
+.progress-bar {
+  background-color: var(--feds-color-adobeBrand);
+  height: 100%;
+  width: 5%;
+}
+
+@media (min-width: 900px) {
+  .progress-bar-container {
+    top: var(--global-height-nav);
+  }
+}
+
+/* quote */
+.blog-wrapper-content .text-block .foreground {
+  max-width: none;
+}
+
+.blog-wrapper-content .inset.text-block .foreground > div {
+  padding-left: var(--spacing-s);
 }

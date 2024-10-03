@@ -1,8 +1,16 @@
+
+/* v3 code */
 main .banner {
   opacity: 0;
   min-height: 152px;
-  max-width: var(--grid-container-width);
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 32px auto;
+  border-radius: 8px;
+  overflow: hidden;
+
+  /* fallback color without image */
+  background: var(--color-red-gradient);
 }
 
 main .banner.is-loaded {
@@ -10,23 +18,51 @@ main .banner.is-loaded {
   min-height: 0;
 }
 
-main .banner .content-wrapper {
-  max-width: 600px;
+main .banner-contents {
   display: flex;
-  padding: 16px 0;
-  border-top: 2px solid var(--color-gray-300);
-  border-bottom: 2px solid var(--color-gray-300);
-  align-items: center;
-  margin: 64px auto;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  overflow: hidden;
 }
 
-main .banner-text {
-  margin-left: 40px;
+main .banner .content-wrapper {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 24px 20px;
+  flex-grow: 1;
+}
+
+main .banner .content-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-black);
+  opacity: 0.5;
+  z-index: 1;
 }
 
 main .banner img {
-  width: 100px;
-  max-width: unset;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-all-ease-in-out-1);
+}
+
+
+main .banner-text {
+  color: var(--color-white);
+  width: 100%;
+  z-index: 2;
 }
 
 main .banner .banner-text h3,
@@ -36,14 +72,45 @@ main .banner .banner-text p {
 }
 
 main .banner .banner-text h3 {
-  font-size: var(--body-font-size-xs);
-  line-height: var(--body-line-height);
-  letter-spacing: .1em;
   text-transform: uppercase;
-  margin: 16px 0;
+  margin-bottom: 24px;
 }
 
-main .banner .banner-text p {
-  font-size: var(--body-font-size-s);
-  margin: 16px 0;
+main .banner .banner-text .banner-description {
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+main .banner.bg-gradient-red {
+  background: var(--color-red-gradient);
+}
+
+main .banner.bg-gradient-red img,
+main .banner.bg-gradient-red .content-wrapper::before {
+  display: none;
+}
+
+main a.banner:hover {
+  text-decoration: none;
+}
+
+main a.banner:hover img {
+  transform: scale(1.07);
+}
+
+main a.banner:hover .con-button {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  main .banner {
+    max-width: none;
+    margin: var(--spacing-s) 0;
+  }
+
+  main .banner .content-wrapper {
+    padding: 24px 20px 48px;
+  }
 }
