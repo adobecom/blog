@@ -178,11 +178,28 @@ export async function decorateContent() {
 }
 
 /**
+ * * @param {HTMLElement} element
+ * * @param {string} targetTag, like 'ul' or 'div'
+ * result: return the new element with inner content of the element, desired tag and css class
+ */
+export function changeHTMLTag(el, targetTag, properties = {}) {
+  const newEl = document.createElement(targetTag);
+  Object.keys(properties).forEach((key) => {
+    newEl.setAttribute(key, properties[key]);
+  });
+
+  newEl.innerHTML = el.innerHTML;
+  el.replaceWith(newEl);
+
+  return newEl;
+}
+
+/**
  * Builds a block DOM Element from a two dimensional array
  * @param {string} blockName name of the block
  * @param {any} content two dimensional array or string or object of content
  */
-function buildBlock(blockName, content) {
+export function buildBlock(blockName, content) {
   const table = Array.isArray(content) ? content : [[content]];
   const blockEl = document.createElement('div');
   // build image block nested div structure
@@ -206,6 +223,22 @@ function buildBlock(blockName, content) {
     blockEl.appendChild(rowEl);
   });
   return (blockEl);
+}
+
+/**
+ * * @param {string} key key of the localized text
+ * return localized text based on inputted key
+ */
+export async function replacePlaceholderForLocalizedText(key) {
+  const miloLibs = getLibs();
+  const [{ replaceKey }, { getConfig }] = await Promise.all([
+    await import(`${miloLibs}/features/placeholders.js`),
+    await import(`${miloLibs}/utils/utils.js`)
+  ])  
+
+  const result = await replaceKey(key, getConfig());
+
+  return result;
 }
 
 function buildAuthorHeader(mainEl) {

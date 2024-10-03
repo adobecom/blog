@@ -9,6 +9,12 @@
 :root {
   --color-quote: #367ea8;
   --page-top-spacing: 128px;
+
+  /* banner */
+  --color-banner-red-gradient: radial-gradient(110.12% 95.52% at 25.93% 25.98%, #EB1000 -5%, #E9740A 60.34%, #FF61F6 110%);  
+
+  /* animation */
+  --transition-all-ease-in-out-1: all 0.3s ease-in-out;
 }
 
 body header .gnav-wrapper a.gnav-brand {
@@ -31,6 +37,10 @@ body header .gnav-wrapper a.gnav-brand {
 figcaption {
  margin-top: 0;
  text-align: center;
+}
+
+.con-button {
+  transition: var(--transition-all-ease-in-out-1);
 }
 
 main .section:first-of-type:not([class*='-spacing']) > .content:first-of-type {
@@ -285,3 +295,43 @@ main .editorial-card .media-area img {
 main .editorial-card:hover .media-area img {
   opacity: 0.6;
 }
+
+/*
+ * spinner for loading animation
+*/
+.spinner {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: calc(50% - 1.6rem);
+  border: 2px dotted var(--color-gray-100);
+  border-bottom: 2px dotted var(--color-gray-200);
+  border-left: 2px dotted var(--color-gray-400);
+  border-top: 2px dotted var(--color-gray-800);
+  border-radius: 50%;
+  width: 1.6rem;
+  height: 1.6rem;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
