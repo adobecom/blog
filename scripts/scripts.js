@@ -213,53 +213,6 @@ function decorateFeatImg(getMetadata) {
   if (featImgMeta === 'off') document.body.classList.add('hide-feat-img');
 }
 
-// new functions
-function decorateMediaBlock() {
-  const mediaBlocks = document.querySelectorAll('.media');
-  if (!mediaBlocks || mediaBlocks.length === 0) return;
-
-  mediaBlocks.forEach((block) => {
-    if (!block.classList.contains('card-as-link')) return;
-
-    const link = block.querySelector('a');
-    if (!link) console.error('missing link in Media card');
-
-    const cardLink = document.createElement('a');
-    cardLink.setAttribute('class', block.classList);
-    cardLink.href = link.href;
-    cardLink.target = link.target;
-
-    if (block.classList.contains('hide-link-text')) {
-      const linkParent = link.closest('p');
-      if (linkParent) {
-        linkParent.remove();
-      } else {
-        link.remove();
-      }
-    }
-
-    cardLink.innerHTML = block.innerHTML;
-
-    block.parentNode.replaceChild(cardLink, block);
-  });
-}
-
-function decorateMasonryBrick() {
-  const bricks = document.querySelectorAll('.masonry-layout .brick');
-  if (!bricks?.length === 0) return;
-
-  bricks.forEach((brick) => {
-    const links = brick.querySelectorAll('a');
-    if (links?.length === 1) {
-      const link = links[0];
-      brick.setAttribute('data-link', link.href);
-      brick.addEventListener('click', () => {
-        window.location.href = link.href;
-      });
-    }
-  });
-}
-
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
@@ -275,7 +228,5 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   overrideMiloBlocks();
   await loadArea();
   await decorateArticlePageUI();
-  decorateMediaBlock();
-  decorateMasonryBrick();
   initSidekick();
 }());

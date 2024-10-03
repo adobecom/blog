@@ -342,61 +342,36 @@ main .aside .foreground.container .text .heading-xl:last-of-type {
 }
 
 
+
+
 /* 
- * Media: added link + new variant - border styles 
+ * Editorial Card
 */
-main a.media {
+main .editorial-card.click a {
   color: var(--text-color);
 }
 
-main a.media .image {
-  background: var(--color-black);
-  border-radius: 8px 8px 0 0;
-  aspect-ratio: 16 / 9;
+main .editorial-card .foreground {
+  padding-bottom: 20px;
 }
 
-main a.media .image img {
+main .section:has(.editorial-card) {
+  padding-bottom: var(--spacing-xxl);
+}
+
+/* 
+ * Standardize card hovering effect based on design feedback 
+*/
+main .editorial-card .media-area > div {
+  background: var(--color-black);
+}
+
+main .editorial-card .media-area img {
   transition: var(--transition-all-ease-in-out-1);
 }
 
-main a.media:hover {
-  text-decoration: none;
-}
-
-main a.media:hover .image img {
+main .editorial-card:hover .media-area img {
   opacity: 0.6;
-}
-
-main .media.border {
-  padding: 0;
-  border: 1px solid var(--color-gray-200);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-main .media.border .text {
-  box-sizing: border-box;
-  padding: 20px 20px 24px;
-}
-
-main .media.border .image img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  max-height: 316px;
-}
-
-main .media.border .foreground > .media-row {
-  gap: 0;
-}
-
-main div[class*="-up"] .media.border .foreground > .media-row {
-  padding: 0;
-}
-
-main .media[class*="-up"].border .foreground > .media-row .image, 
-main div[class*="-up"] .media.border .foreground > .media-row .image {
-  margin-bottom: 0;
 }
 
 /*
@@ -455,28 +430,17 @@ main .masonry-layout .brick .brick-media img {
   transition: var(--transition-all-ease-in-out-1);
 }
 
-main .masonry-layout .brick[data-link]:hover {
+main .masonry-layout .brick a:hover {
   cursor: pointer;
 }
 
-main .masonry-layout .brick[data-link]:hover .brick-media img {
+main .masonry-layout .brick a:hover .brick-media img {
   opacity: 0.7;
-}
-
-main .masonry-layout .brick[data-link]:hover .con-button {
-  background-color: var(--color-black);
-  border-color: var(--color-black);
-  color: var(--color-white);
-  text-decoration: none;
 }
 
 main .masonry-layout.hero-masonry {
   padding-bottom: var(--spacing-xl);
 }
-
-main .masonry-layout.hero-masonry .brick.light {
-  border: 1px solid var(--color-gray-300);
-} 
 
 main .masonry-layout.hero-masonry .brick .foreground {
   flex-direction: column-reverse;
@@ -516,10 +480,6 @@ main .masonry-layout.hero-masonry .brick .foreground p.action-area {
   padding-top: var(--spacing-s);
   gap: var(--spacing-xs);
   margin-top: auto;
-}
-
-main .section.category-section {
-  padding-bottom: var(--spacing-xxl);
 }
 
 @media (max-width: 600px) {

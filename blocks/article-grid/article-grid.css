@@ -38,11 +38,13 @@
 
 /* media */
 .article-grid .media {
+  color: var(--text-color);
   padding: 0;
 }
 
 .article-grid a.media .image {
   border-radius: 8px;
+  background: var(--color-black);
 }
 
 .article-grid .media .image img {
@@ -51,6 +53,7 @@
   object-fit: cover;
   border-radius: 8px;
   overflow: hidden;
+  transition: var(--transition-all-ease-in-out-1);
 }
 
 .article-grid .media > .foreground {
@@ -87,6 +90,14 @@
 
 div.article-grid .media .foreground > div.media-row {
   padding: 0;
+}
+
+.article-grid a.media:hover {
+  text-decoration: none;
+}
+
+.article-grid a.media:hover .image img {
+  opacity: 0.6;
 }
 
 /* banner */
