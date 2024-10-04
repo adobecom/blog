@@ -157,7 +157,7 @@ function decorateLoadingContainer() {
 async function decorateMediaBlock(articleItem) {
   const { createOptimizedPicture, getArticleTaxonomy } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
 
-  const { title, description, image, imageAlt, path } = articleItem;
+  const { title, description = '', image, imageAlt = title || '', path } = articleItem;
   const picture = createOptimizedPicture(image, imageAlt, [{ width: '750' }]);
   const pictureTag = picture.outerHTML;
   const articleTax = getArticleTaxonomy(articleItem);
@@ -216,10 +216,10 @@ async function loadBannerIfAvailable(bannerPos, bannerData, index, resultContain
     await initBanner(bannerBlock);
     bannerBlock.classList.add('article-grid-item');
     resultContainer.append(bannerBlock);
-
     bannerData[existingBannerIndex] = '';
     return true;
   }
+  
   return false;
 }
 
@@ -256,14 +256,30 @@ async function loadAndExposeMediaBlock() {
   }
 }
 
+function getBannerPosition(bannerData) {
+  const bannerPos = [];
+  if (!bannerData?.length) return bannerPos;
+  
+  bannerData.forEach((banner) => {
+    if (!banner?.length) return;
+
+    const url = new URL(banner);
+    const position = url.hash?.match(/position-(\d+)/)?.[1];
+
+    if (position) bannerPos.push(position);
+  });
+
+  return bannerPos;
+}
+
 async function decorateArticleGrid(block, blogIndex) {
   const { createTag } = await import(`${miloLibs}/utils/utils.js`);
   const articleData = blogIndex.data;
   const { offset, config } = blogIndex;
-  const { banner, 'banner-position': bannerPosConfig } = config;
+  const { banner } = config;
 
-  const bannerData = Array.isArray(banner) ? banner : [banner];
-  const bannerPos = bannerPosConfig ? bannerPosConfig.split(',').map((pos) => pos.trim()) : [];
+  const bannerData = banner ? (Array.isArray(banner) ? banner : [banner]) : [];
+  const bannerPos = getBannerPosition(bannerData);
   const resultContainer = getOrCreateResultContainer(block);
 
   if (offset === 0) {
@@ -314,6 +330,13 @@ async function setupLoadMoreButton(block, blogIndex, resultContainer) {
   });
 }
 
+function hideOddButtonOnTabletIfIsFeedData(block, blogIndex) {
+  const { feed } = blogIndex.config;
+  if (feed) {
+    block.classList.add('hide-odd-item-on-tablet');
+  }
+}
+
 // block for loading article + banner
 // column key: articles -> fetch data based on article links
 // column key: feed -> fetch data based on feed single link (has load more button)
@@ -337,6 +360,7 @@ export default async function init(block) {
     await filterArticleDataBasedOnConfig(blogIndex);
 
     await decorateArticleGrid(block, blogIndex);
+    hideOddButtonOnTabletIfIsFeedData(block, blogIndex);
 
     block.classList.add('ready');
   };
