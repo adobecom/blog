@@ -141,10 +141,10 @@ main .masonry-layout.hero-masonry .brick .foreground p.body-m {
 }
 
 .background-circle-gradient::after {
-  background-image: linear-gradient(30deg, rgba(var(--bg-circle-gradient-1) / 80%) 0%, rgba(var(--bg-circle-gradient-1) / 80%) 45%,  rgba(255 255 255 / 0%) 75%, rgba(255 255 255 / 0%) 100%);
+  background-image: linear-gradient(30deg, rgba(var(--bg-circle-gradient-1) / 80%) 0%, rgba(var(--bg-circle-gradient-1) / 80%) 30%,  rgba(255 255 255 / 0%) 75%, rgba(255 255 255 / 0%) 100%);
   bottom: 0;
   left: 0;
-  height: 50%;
+  height: 55%;
   z-index: 1;
 }
 
@@ -157,7 +157,7 @@ main .masonry-layout.hero-masonry .brick .foreground p.body-m {
   }
 
   .background-circle-gradient::after {
-    background-image: radial-gradient(circle 1400px at 5% 40%, rgba(var(--bg-circle-gradient-1) / 60%) 0%, transparent 30%, transparent 100%), radial-gradient(circle 1200px at 5% 57%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, transparent 30%, transparent 100%);
+    background-image: radial-gradient(circle 1600px at 0% 45%, rgba(var(--bg-circle-gradient-1) / 70%) 0%, transparent 30%, transparent 100%), radial-gradient(circle 1500px at 0% 60%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, transparent 30%, transparent 100%);
     background-position: bottom left;
     width: 90%;
     height: 90%;
