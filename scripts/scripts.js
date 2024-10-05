@@ -223,6 +223,59 @@ function decorateFeatImg(getMetadata) {
   if (featImgMeta === 'off') document.body.classList.add('hide-feat-img');
 }
 
+function getCircleGradientValue(infoWrapper) {
+  return Array.from(infoWrapper.querySelectorAll('div'))
+    .find(div => div.innerText === 'circle-gradient')
+    ?.nextElementSibling?.innerText.trim() || null
+}
+
+function decorateMasonry() {
+  const masonryBlocks = document.querySelectorAll('.masonry-layout');
+  if (!masonryBlocks) return;
+  
+  // load blog specific masonry stylesheet
+  const link = document.createElement('link');
+  link.setAttribute('rel', 'stylesheet');
+  link.setAttribute('href', '/styles/masonry.css');
+  document.head.appendChild(link);
+
+  function hexToRgb(hex) {
+    if (!/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) {
+      console.warn(`Invalid hex color: ${hex}`);
+      return false;
+    }
+
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+
+    return `${r} ${g} ${b}`;
+  }
+
+  // add circle gradient bg based on hexcode provided (require 2 hexcode to work)
+  masonryBlocks.forEach((masonry) => {
+    const sectionMetadata = masonry.querySelector('.section-metadata');
+    if (!sectionMetadata) return;
+
+    const circleGradientValue = getCircleGradientValue(sectionMetadata);
+    if (!circleGradientValue) return;
+
+    masonry.classList.add('background-circle-gradient');
+
+    const circleGradients = circleGradientValue.split(',').map(gradient => gradient.trim());
+    if (!circleGradients?.length == 2) return;
+    
+    const gradient1 = hexToRgb(circleGradients[0]);
+    const gradient2 = hexToRgb(circleGradients[1]);
+
+    if (!gradient1 || !gradient2) return;
+
+    // only set `rgb` values, as `a` value will be set by css
+    masonry.style.setProperty('--bg-circle-gradient-1', gradient1);
+    masonry.style.setProperty('--bg-circle-gradient-2', gradient2);
+  });
+}
+
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 (async function loadPage() {
@@ -237,5 +290,6 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  decorateMasonry();
   initSidekick();
 }());

@@ -219,7 +219,7 @@ async function loadBannerIfAvailable(bannerPos, bannerData, index, resultContain
     bannerData[existingBannerIndex] = '';
     return true;
   }
-  
+
   return false;
 }
 
@@ -332,9 +332,7 @@ async function setupLoadMoreButton(block, blogIndex, resultContainer) {
 
 function hideOddButtonOnTabletIfIsFeedData(block, blogIndex) {
   const { feed } = blogIndex.config;
-  if (feed) {
-    block.classList.add('hide-odd-item-on-tablet');
-  }
+  if (feed) block.classList.add('hide-odd-item-on-tablet');
 }
 
 // block for loading article + banner
