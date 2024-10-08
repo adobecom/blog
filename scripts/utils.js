@@ -241,6 +241,23 @@ export async function replacePlaceholderForLocalizedText(key) {
   return result;
 }
 
+/**
+ * * @param {string} hexcode hexcode of color
+ * return rgb color for reusing in rgba()
+ */
+export function hexToRgb(hex) {
+  if (!/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) {
+    console.warn(`Invalid hex color: ${hex}`);
+    return false;
+  }
+
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  return `${r} ${g} ${b}`;
+}
+
 function buildAuthorHeader(mainEl) {
   const div = mainEl.querySelector('div');
   const heading = div.querySelector('h1, h2');
@@ -305,19 +322,6 @@ async function buildArticleHeader(el) {
   ]);
   div.append(articleHeaderBlockEl);
   el.prepend(div);
-}
-
-export function hexToRgb(hex) {
-  if (!/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) {
-    console.warn(`Invalid hex color: ${hex}`);
-    return false;
-  }
-
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-
-  return `${r} ${g} ${b}`;
 }
 
 function getCircleGradientValue(str) {
