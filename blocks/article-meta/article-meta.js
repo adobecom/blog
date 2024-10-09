@@ -1,4 +1,4 @@
-import { getLibs, buildBlock, replacePlaceholderForLocalizedText } from '../../scripts/utils.js';
+import { getLibs, buildBlock, replacePlaceholderForLocalizedText, getImageCaption } from '../../scripts/utils.js';
 
 async function validateAuthorUrl(url) {
   if (!url) return null;
@@ -83,6 +83,34 @@ export function initCopyLinkButtonFunction(block) {
   });
 }
 
+async function updateArticleMetaWithArticleHeaderStyle(block) {
+  const miloLibs = getLibs();
+  const { createTag, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  const { getLinkForTopic } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
+
+  const h1 = document.querySelector('h1');
+  const picture = document.querySelector('a[href*=".mp4"], picture');
+  const caption = getImageCaption(picture);
+  const figure = document.createElement('div');
+  figure.append(picture, caption);
+  const tag = getMetadata('article:tag');
+  const category = tag || 'News';
+  const categoryTag = getLinkForTopic(category);
+
+  const titleSection = createTag('div', {
+    class: 'article-title-section'
+  }, categoryTag || '')
+  if (h1) titleSection.append(h1);
+
+  const featureImage = createTag('div', {
+    class: 'article-feature-image'
+  })
+  featureImage.append(figure);
+
+  block.prepend(titleSection);
+  block.append(featureImage);
+}
+
 export default async function init(blockEl) {
   const childrenEls = Array.from(blockEl.children);
   if (childrenEls.length < 1) {
@@ -138,4 +166,8 @@ export default async function init(blockEl) {
   if (trackingHeader) trackingHeader.innerHTML = "";
 
   bylineContainer.append(miloShareBlock);
+
+  if (blockEl.classList.contains('as-article-header')) {
+    updateArticleMetaWithArticleHeaderStyle(blockEl);
+  }
 }

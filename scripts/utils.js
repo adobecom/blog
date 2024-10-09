@@ -109,7 +109,7 @@ export function createOptimizedPicture(
  * ------------------------------------------------------------
  */
 
-function getImageCaption(picture) {
+export function getImageCaption(picture) {
   // Check if the parent element has a caption
   const parentEl = picture.parentNode;
   let caption = parentEl.querySelector('em');
@@ -290,40 +290,6 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
-async function buildArticleHeader(el) {
-  const miloLibs = getLibs();
-  const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
-  if (!getTaxonomyModule()) {
-    await loadTaxonomy();
-  }
-  const div = document.createElement('div');
-  // div.setAttribute('class', 'section');
-  const h1 = el.querySelector('h1');
-  const picture = el.querySelector('a[href*=".mp4"], picture');
-  const caption = getImageCaption(picture);
-  const figure = document.createElement('div');
-  figure.append(picture, caption);
-  const tag = getMetadata('article:tag');
-  const category = tag || 'News';
-  const author = getMetadata('author') || 'Adobe Communications Team';
-  const { codeRoot } = getConfig();
-  const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}` : null);
-  const publicationDate = getMetadata('publication-date');
-
-  const categoryTag = getLinkForTopic(category);
-
-  const articleHeaderBlockEl = buildBlock('article-header', [
-    [`<p>${categoryTag}</p>`],
-    [h1],
-    [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
-      <p>${publicationDate}</p>`],
-    [figure],
-  ]);
-  div.append(articleHeaderBlockEl);
-  el.prepend(div);
-}
-
 function getCircleGradientValue(str) {
   if (!str) return false;
 
@@ -413,6 +379,9 @@ async function buildArticleMeta(mainEl) {
       <p>${publicationDate}</p>`],
   ]);
 
+  const isSidebarLayout = getMetadata('page-template') === 'sidebar';
+  if (!isSidebarLayout) articleMeta.classList.add('as-article-header');
+
   // put article meta (author + link sharings) in front of first content div
   const allContentDivs = mainEl.querySelectorAll(':scope > div');
   if (!allContentDivs) return;
@@ -458,13 +427,9 @@ export async function buildAutoBlocks() {
     if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
 
       const isSidebarLayout = getMetadata('page-template') === 'sidebar';
-      if (isSidebarLayout) {
-        await buildArticleHeroSplitBanner(mainEl);
-        await buildArticleMeta(mainEl);
-      } else {
-        await buildArticleHeader(mainEl);
-      }
+      if (isSidebarLayout) await buildArticleHeroSplitBanner(mainEl);
 
+      await buildArticleMeta(mainEl);
       buildTagsBlock();
       await buildProgressBar(mainEl);
     
