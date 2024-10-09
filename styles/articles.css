@@ -61,30 +61,6 @@ main .article-header .article-byline-sharing {
   justify-content: space-between;
 }
 
-/* article hero banner */
-main .article-hero-category-link {
-  display: inline-block;
-  color: var(--color-white);
-}
-
-main .light .article-hero-category-link {
-  color: var(--text-color);
-}
-
-main .article-hero-banner .text p {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 600px) {
-  main .article-hero-banner .text p {
-    display: none;
-  }
-}
-
 /* tags */
 main .tags {
   margin-top: var(--spacing-m);

@@ -1,0 +1,44 @@
+.article-hero-banner {
+  position: relative;
+}
+
+.article-hero-banner::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(100% - 56.25% + 0.5%);   /* 56.25% = img ratio */
+  z-index: -1;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+main .article-hero-category-link {
+  display: inline-block;
+  color: var(--color-white);
+}
+
+main .light .article-hero-category-link {
+  color: var(--text-color);
+}
+
+main .article-hero-banner .text p {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .article-hero-banner::before {
+    width: 50%;
+    height: 100%;
+  }
+
+  main .article-hero-banner .text p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+} 

@@ -290,7 +290,7 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
-function getCircleGradientValue(str) {
+export function getCircleGradientValue(str) {
   if (!str) return false;
 
   // Regular expression to match `circle-gradient(#hexcode - #hexcode)`
@@ -298,70 +298,6 @@ function getCircleGradientValue(str) {
   const match = str.match(regex);
 
   return match ? [`#${match[1]}`, `#${match[2]}`] : false;
-}
-
-async function buildArticleHeroSplitBanner(el) {
-  const miloLibs = getLibs();
-  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
-  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
-  if (!getTaxonomyModule()) {
-    await loadTaxonomy();
-  }
-
-  const div = document.createElement('div');
-
-  const tag = getMetadata('article:tag');
-  const category = tag || 'News';
-  const categoryTag = getLinkForTopic(category);
-
-  const h1 = el.querySelector('h1');
-  const description = getMetadata('description');
-  const picture = el.querySelector('a[href*=".mp4"], picture');
-  const caption = getImageCaption(picture);
-  const figure = document.createElement('div');
-  figure.append(picture, caption);
-
-  const tagEl = document.createElement('p');
-  tagEl.textContent = category;
-
-  // update marquee background based on metadata 'Hero Background'
-  const heroBackground = getMetadata('hero-background');
-  const circleGradients = getCircleGradientValue(heroBackground);
-  const marqueeBackground = circleGradients || !heroBackground ? 'transparent' : heroBackground;
-
-  const marqueeEl = buildBlock('marquee', [
-    [`<p>${marqueeBackground}</p>`],
-    [
-      {
-        elems: [
-          categoryTag,
-          h1,
-          `<p>${description}</p>`,
-        ],
-      },
-      picture,
-    ],
-  ]);
-
-  if (circleGradients || !heroBackground) {
-    marqueeEl.classList.add('marquee-circle-gradient');
-  }
-
-  if (circleGradients) {
-    const gradient1 = hexToRgb(circleGradients[0]);
-    const gradient2 = hexToRgb(circleGradients[1]);
-
-    marqueeEl.style.setProperty('--bg-circle-gradient-1', gradient1);
-    marqueeEl.style.setProperty('--bg-circle-gradient-2', gradient2);
-  } 
-
-  marqueeEl.classList.add('split', 'medium', 'light', 'article-hero-banner');
-
-  const categoryLink = marqueeEl.querySelector('a');
-  categoryLink.classList.add('article-hero-category-link');
-
-  div.append(marqueeEl);
-  el.prepend(div);
 }
 
 async function buildArticleMeta(mainEl) {
@@ -425,14 +361,10 @@ export async function buildAutoBlocks() {
   const mainEl = document.querySelector('main');
   try {
     if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
-
-      const isSidebarLayout = getMetadata('page-template') === 'sidebar';
-      if (isSidebarLayout) await buildArticleHeroSplitBanner(mainEl);
-
+      // NOTE: if article-hero-marquee block is present, it'll render split marquee, else it'll render the regular one
       await buildArticleMeta(mainEl);
       buildTagsBlock();
       await buildProgressBar(mainEl);
-    
     } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }
