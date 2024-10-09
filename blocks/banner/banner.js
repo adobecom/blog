@@ -1,4 +1,4 @@
-import { createOptimizedPicture, normalizeHeadings, changeHTMLTag } from '../../scripts/utils.js';
+import { createOptimizedPicture, normalizeHeadings, changeHTMLTag, hasDarkOrLightClass } from '../../scripts/utils.js';
 
 export default async function init(block) {
   const bannerContents = document.createElement('div');
@@ -22,8 +22,12 @@ export default async function init(block) {
           const bannerImage = document.createElement('div');
           const bannerText = document.createElement('div');
           bannerImage.classList.add('banner-image');
-          bannerText.classList.add('banner-text', 'dark');
+          bannerText.classList.add('banner-text');
 
+          if (!hasDarkOrLightClass(block)) {
+            block.classList.add('dark'); // add default class
+          }
+        
           // banner image content
           const img = responseEl.querySelector('img');
           const picture = img.closest('picture');

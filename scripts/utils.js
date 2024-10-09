@@ -258,6 +258,11 @@ export function hexToRgb(hex) {
   return `${r} ${g} ${b}`;
 }
 
+export function hasDarkOrLightClass(element) {
+  const darkLightClass = ['dark', 'light'];
+  return darkLightClass.some(cls => element.classList.contains(cls));
+}
+
 function buildAuthorHeader(mainEl) {
   const div = mainEl.querySelector('div');
   const heading = div.querySelector('h1, h2');
@@ -303,6 +308,8 @@ export function getCircleGradientValue(str) {
 async function buildArticleMeta(mainEl) {
   const miloLibs = getLibs();
   const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
+
+  if (getMetadata('content-type') != 'article') return;
 
   const author = getMetadata('author') || 'Adobe Communications Team';
   const { codeRoot } = getConfig();

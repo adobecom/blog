@@ -1,4 +1,4 @@
-import { getLibs, buildBlock, getCircleGradientValue, hexToRgb, getImageCaption } from '../../scripts/utils.js';
+import { getLibs, buildBlock, hasDarkOrLightClass, getCircleGradientValue, hexToRgb, getImageCaption } from '../../scripts/utils.js';
 
 function getBackgroundConfig(block) {
   const backgroundConfig = {
@@ -32,11 +32,6 @@ function getBackgroundConfig(block) {
   }
 
   return backgroundConfig;
-}
-
-function hasDarkOrLightClass(element) {
-  const darkLightClass = ['dark', 'light'];
-  return darkLightClass.some(cls => element.classList.contains(cls));
 }
 
 async function initMarquee(el) {

@@ -140,7 +140,7 @@ export default async function init(blockEl) {
   loadStyle(`${miloLibs}/blocks/share/share.css`);
   
   const url = encodeURIComponent(window.location.href);
-  const title = encodeURIComponent(document.querySelector('h1').textContent);
+  const title = encodeURIComponent(document.querySelector('h1')?.textContent);
   const description = encodeURIComponent(getMetadata('description'));
 
   const platformLinks = {
