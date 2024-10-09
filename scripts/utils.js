@@ -241,6 +241,11 @@ export async function replacePlaceholderForLocalizedText(key) {
   return result;
 }
 
+export function hasDarkOrLightClass(element) {
+  const darkLightClass = ['dark', 'light'];
+  return darkLightClass.some(cls => element.classList.contains(cls));
+}
+
 function buildAuthorHeader(mainEl) {
   const div = mainEl.querySelector('div');
   const heading = div.querySelector('h1, h2');

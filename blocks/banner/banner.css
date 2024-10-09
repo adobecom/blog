@@ -52,7 +52,6 @@ main .banner img {
 }
 
 main .banner .banner-text {
-  color: var(--color-white);
   width: 100%;
   z-index: 2;
 }
@@ -73,7 +72,23 @@ main .banner .banner-text .banner-description {
   margin-bottom: var(--spacing-s);
 }
 
-/* gradient variant */
+/* varaint: dark, light, no-overlay, gradient */
+main .banner.dark .banner-text { 
+  color: var(--color-white); 
+}
+
+main .banner.light .banner-text {
+  color: var(--text-color); 
+}
+
+main a.banner.light .con-button {
+  background: rgba(255 255 255 / 90%);
+}
+
+main .banner.no-overlay .banner-contents::before {
+  display: none;
+}
+
 main .banner.bg-gradient-red {
   background: var(--color-banner-red-gradient);
 }
@@ -93,9 +108,18 @@ main a.banner:hover img {
 }
 
 main a.banner:hover .con-button {
+  text-decoration: none;
+}
+
+main a.banner.dark:hover .con-button {
   background-color: var(--color-white);
   color: var(--color-black);
-  text-decoration: none;
+}
+
+main a.banner.light:hover .con-button {
+  background-color: var(--color-black);
+  border-color: var(--color-black);
+  color: var(--color-white);
 }
 
 @media (min-width: 600px) {

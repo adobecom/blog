@@ -11,7 +11,7 @@
   --page-top-spacing: 128px;
 
   /* banner */
-  --color-banner-red-gradient: radial-gradient(110.12% 95.52% at 25.93% 25.98%, #EB1000 -5%, #E9740A 60.34%, #FF61F6 110%);  
+  --color-banner-red-gradient: radial-gradient(110.12% 95.52% at 25.93% 25.98%, #EB1000 -5%, #E9740A 60.34%, #FF61F6 110%);
 
   /* animation */
   --transition-all-ease-in-out-1: all 0.3s ease-in-out;
