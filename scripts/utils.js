@@ -329,7 +329,7 @@ async function buildArticleMeta(mainEl) {
   const allContentDivs = mainEl.querySelectorAll(':scope > div');
   if (!allContentDivs) return;
 
-  const contentBlock = [...allContentDivs].find((div) => !div.querySelector('.article-hero-banner') && div.querySelector('p'));
+  const contentBlock = [...allContentDivs].find((div) => !div.querySelector('.article-hero-banner') && div.querySelector('div'));
   if (!contentBlock) return;
 
   contentBlock.insertBefore(articleMeta, contentBlock.firstChild);

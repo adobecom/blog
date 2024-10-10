@@ -203,6 +203,7 @@
   .article-meta.as-article-header .article-byline {
     padding: var(--spacing-m) 0 var(--spacing-l);
     margin: 0 auto;
+    border-bottom: 0;
   }
 
   .article-meta .share {

@@ -36,7 +36,6 @@ main video {
 
 @media (min-width: 700px) {
   main .section > div > :not(div):not(h1),
-  main .section > .tags,
   main .columns, main .columns.contained {
     max-width: 800px;
     margin-left: auto;
@@ -48,6 +47,10 @@ main video {
   main .section:first-of-type {
     margin-top: var(--global-height-nav);
   } 
+
+  main .section > .tags {
+    max-width: min(var(--grid-container-width), 800px);
+  }
 }
 
 /* article header */
