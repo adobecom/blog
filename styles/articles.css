@@ -36,6 +36,7 @@ main video {
 
 @media (min-width: 700px) {
   main .section > div > :not(div):not(h1),
+  main .blog-wrapper-content > div,
   main .columns, main .columns.contained {
     max-width: 800px;
     margin-left: auto;
@@ -105,6 +106,16 @@ main .tags a {
 
 .section.blog-wrapper-content {
   margin-top: 0;
+}
+
+.blog-wrapper .banner {
+  max-width: none;
+}
+
+@media (min-width: 600px) {
+  .blog-wrapper .banner {
+    max-width: 480px;
+  }
 }
 
 @media (min-width: 900px) {

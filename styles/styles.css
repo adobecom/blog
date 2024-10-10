@@ -366,17 +366,7 @@ main .marquee.marquee-circle-gradient::before {
     radial-gradient(circle var(--bg-circle-radius-2) at 0% 95%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, rgba(var(--bg-circle-gradient-2) / 100%) 10%, transparent 55%, transparent 100%);
 }
 
-main .marquee.marquee-image {
-  background-image: var(--bg-image);
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
 @media (min-width: 600px) {
-  main .marquee.split .asset {
-    aspect-ratio: auto;
-  }
-  
   main .marquee.marquee-circle-gradient::before {
     --bg-circle-radius-1: 550px;
     --bg-circle-radius-2: 650px;
