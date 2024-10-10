@@ -13,6 +13,7 @@ export default async function init(block) {
       const path = pathname?.replace(/\.html$/, '');
       if (path) {
         const response = await fetch(`${path}.plain.html`);
+
         if (response.ok) {
           const responseEl = document.createElement('div');
           responseEl.innerHTML = await response.text();
@@ -30,19 +31,21 @@ export default async function init(block) {
         
           // banner image content
           const img = responseEl.querySelector('img');
-          const picture = img.closest('picture');
-          const newPicture = createOptimizedPicture(img.src, img.alt);
-          if (picture) {
+          if (img) {
+            const picture = img.closest('picture');
+            const newPicture = createOptimizedPicture(img.src, img.alt);
             picture.parentElement.replaceChild(newPicture, picture);
             bannerImage.append(newPicture);
+          } else {
+            block.classList.add('bg-gradient-red');
           }
 
           // banner text content
           normalizeHeadings(responseEl, ['h3']);
           const heading = responseEl.querySelector('h3');
-          heading.classList.add('detail-m');
+          if (heading) heading.classList.add('detail-m');
           const descriptions = responseEl.querySelectorAll('p');
-          descriptions.forEach((desc) => {
+          descriptions?.forEach((desc) => {
             if (!desc.querySelector('a') && desc.textContent.trim().length > 0) {
               desc.classList.add('heading-m', 'banner-description');
             }
