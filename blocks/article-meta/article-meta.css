@@ -257,7 +257,7 @@
 }
 
 @media (min-width: 1440px) {
-  .article-feature-image .figure-feature img {
+  .article-feature-image img {
     object-fit: contain;
   }
 }
