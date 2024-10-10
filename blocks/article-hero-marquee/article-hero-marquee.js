@@ -57,6 +57,14 @@ function getFeaturedImage(block) {
 export default async function init(block) { 
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+
+  // remove article hero marquee if it's not in sidebar layout, as it'll have duplicated content information with the original full-width article header
+  const isSidebarLayout = getMetadata('page-template') === 'sidebar';
+  if (!isSidebarLayout) {
+    block.remove();
+    return;
+  }
+
   const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
   if (!getTaxonomyModule()) {
     await loadTaxonomy();

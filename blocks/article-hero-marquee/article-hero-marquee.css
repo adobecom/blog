@@ -28,6 +28,14 @@ main .article-hero-banner .text p {
   display: none;
 }
 
+main .article-hero-banner.light .asset {
+  background: var(--color-white);
+}
+
+main .article-hero-banner.dark .asset {
+  background: var(--color-black);
+}
+
 @media (min-width: 600px) {
   .article-hero-banner::before {
     width: 50%;
