@@ -206,6 +206,20 @@ function calculateDisplayLimit(offset, totalArticles, totalBanners) {
   return limit > totalArticles ? (totalArticles + totalBanners) : limit;
 }
 
+function getBannerStyle(url) {
+  const urlFragment = url?.split('#')[1];
+  if (!urlFragment) return false;
+
+  const result = [];
+  const params = urlFragment.split('&');
+
+  params.forEach((param) => {
+    const [key, ...valueParts] = param.split('-');
+    if (key === 'style') result.push(valueParts.join('-'));
+  });
+  return result;
+}
+
 async function loadBannerIfAvailable(bannerPos, bannerData, index, resultContainer) {
   const existingBannerIndex = bannerPos.indexOf(`${index + 1}`);
 
@@ -213,6 +227,14 @@ async function loadBannerIfAvailable(bannerPos, bannerData, index, resultContain
     const bannerBlock = buildBlock('banner', [
       [`<p> <a href="${bannerData[existingBannerIndex]}"></a> </p>`],
     ]);
+
+    const bannerClasses = getBannerStyle(bannerData[existingBannerIndex]);
+    if (bannerClasses?.length > 0) {
+      bannerClasses.forEach((className) => {
+        bannerBlock.classList.add(className);
+      });
+    }
+
     await initBanner(bannerBlock);
     bannerBlock.classList.add('article-grid-item');
     resultContainer.append(bannerBlock);
