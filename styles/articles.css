@@ -112,6 +112,50 @@ main .tags a {
   max-width: none;
 }
 
+/* carousel */
+main .blog-wrapper .blog-carousel-slides,
+main .blog-wrapper .blog-carousel-slide {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+main .blog-wrapper .blog-carousel-slides > div {
+  width: 90%;
+  box-sizing: border-box;
+  transform: none;
+}
+
+main .blog-wrapper .blog-carousel-slide.slide-prev {
+  left: -100%;
+}
+
+main .blog-wrapper .blog-carousel-slide.slide-next {
+  left: 100%;
+}
+
+@media screen and (max-width: 1085px) {
+  main .blog-carousel-slide p {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: calc(100% - 16px);
+  }
+
+  main .blog-carousel-controls {
+    padding-left: 4px;
+    padding-right: 4px;
+    box-sizing: border-box;
+  }
+
+  main .blog-carousel-dots {
+    transform: translateY(20px);
+  }
+
+  main .blog-carousel {
+    padding-bottom: 24px;
+  }
+}
+
 @media (min-width: 600px) {
   .blog-wrapper .banner {
     max-width: 480px;

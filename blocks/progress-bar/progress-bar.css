@@ -1,5 +1,5 @@
 .progress-bar-container {
-  z-index: 10000;
+  z-index: 109;   /* lower than carousel lightbox one */
   position: fixed;
   top: 57px;
   left: 0;
