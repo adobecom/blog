@@ -345,22 +345,8 @@ main .recommended-articles .article-card-body p.article-card-date {
 }
 
 /*
- * Marquee
+ * Marquee gradient
 */
-main .marquee {
-  position: relative;
-}
-
-main .marquee.split .asset {
-  position: relative;
-  z-index: 1;
-  aspect-ratio: 16 / 9;
-}
-
-main .marquee.split {
-  flex-direction: column-reverse;
-}
-
 main .marquee.marquee-circle-gradient {
   --bg-circle-gradient-1: 248 204 251;   /* #F8CCFB */
   --bg-circle-gradient-2: 251 186 216;   /* #FBBAD8 */

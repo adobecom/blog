@@ -1,5 +1,15 @@
-.article-hero-banner {
+.marquee.article-hero-banner {
   position: relative;
+}
+
+.marquee.split.article-hero-banner {
+  flex-direction: column-reverse;
+}
+
+.marquee.split.article-hero-banner .asset {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 16 / 9;
 }
 
 .article-hero-banner::before {
@@ -8,7 +18,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: calc(100% - 56.25% + 0.5%);   /* 56.25% = img ratio */
+  height: max(56.25%, calc(100% - 360px));
   z-index: -1;
   background-image: var(--bg-img);
   background-size: cover;
@@ -20,7 +30,7 @@ main .article-hero-category-link {
   color: var(--color-white);
 }
 
-main .light .article-hero-category-link {
+main .article-hero-banner.light .article-hero-category-link {
   color: var(--text-color);
 }
 
@@ -40,6 +50,10 @@ main .article-hero-banner.dark .asset {
   .article-hero-banner::before {
     width: 50%;
     height: 100%;
+  }
+
+  .marquee.split.article-hero-banner .asset {
+    aspect-ratio: auto;
   }
 
   main .article-hero-banner .text p {
