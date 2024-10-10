@@ -373,7 +373,12 @@ export default async function init(block) {
   };
   blogIndex.config = readBlockConfig(block);
 
+  let isLoading = false;
+
   const initArticleGrid = async () => {
+    if (isLoading) return;
+    isLoading = true;
+
     await loadAndExposeMediaBlock(); // for reusing media block init
 
     await fetchArticleFeedData(blogIndex);
@@ -383,6 +388,7 @@ export default async function init(block) {
     hideOddButtonOnTabletIfIsFeedData(block, blogIndex);
 
     block.classList.add('ready');
+    isLoading = false;
   };
 
   async function handleIntersection(entries, observer) {
