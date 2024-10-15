@@ -34,14 +34,14 @@ function getBackgroundConfig(block) {
   return backgroundConfig;
 }
 
-async function initMarquee(el) {
+async function loadAndExposeMarqueeBlock() {
   const miloLibs = getLibs();
   const [{ default: initMiloMarqueeBlock }, { loadStyle }] = await Promise.all([
     import(`${miloLibs}/blocks/marquee/marquee.js`),
     import(`${miloLibs}/utils/utils.js`)
   ]);
-  initMiloMarqueeBlock(el);
   loadStyle(`${miloLibs}/blocks/marquee/marquee.css`);
+  window.initMarqueeBlock = initMiloMarqueeBlock;
 }
 
 function getFeaturedImage(block) {
@@ -56,7 +56,11 @@ function getFeaturedImage(block) {
 
 export default async function init(block) { 
   const miloLibs = getLibs();
-  const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
+  const [{ getMetadata }, { loadTaxonomy, getLinkForTopic, getTaxonomyModule }] = await Promise.all([
+    import(`${miloLibs}/utils/utils.js`),
+    import(`${miloLibs}/blocks/article-feed/article-helpers.js`),
+    loadAndExposeMarqueeBlock()
+  ]);
 
   // remove article hero marquee if it's not in sidebar layout, as it'll have duplicated content information with the original full-width article header
   const isSidebarLayout = getMetadata('page-template') === 'sidebar';
@@ -65,7 +69,6 @@ export default async function init(block) {
     return;
   }
 
-  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
   if (!getTaxonomyModule()) {
     await loadTaxonomy();
   }
@@ -105,9 +108,9 @@ export default async function init(block) {
       picture,
     ],
   ]);
-  initMarquee(marqueeEl);
-
   marqueeEl.classList.add('split', 'medium', 'article-hero-banner');
+  window.initMarqueeBlock(marqueeEl);
+
   const categoryLink = marqueeEl.querySelector('a');
   categoryLink.classList.add('article-hero-category-link');
 
