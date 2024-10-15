@@ -298,7 +298,7 @@ function buildAuthorHeader(mainEl) {
 export function getCircleGradientValue(str) {
   if (!str) return false;
 
-  // Regular expression to match `circle-gradient(#hexcode - #hexcode)`
+  // Regular expression to match `circle-gradient(#hexcode, #hexcode)`
   const regex = /^circle-gradient\(#([A-Fa-f0-9]{6})\s*,\s*#([A-Fa-f0-9]{6})\)$/;
   const match = str.match(regex);
 
@@ -368,7 +368,7 @@ export async function buildAutoBlocks() {
   const mainEl = document.querySelector('main');
   try {
     if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
-      // NOTE: if article-hero-marquee block is present, it'll render split marquee, else it'll render the regular one
+      // NOTE: if article-hero-marquee block is present, it'll render split marquee
       await buildArticleMeta(mainEl);
       buildTagsBlock();
       await buildProgressBar(mainEl);

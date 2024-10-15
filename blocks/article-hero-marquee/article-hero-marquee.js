@@ -2,7 +2,7 @@ import { getLibs, buildBlock, hasDarkOrLightClass, getCircleGradientValue, hexTo
 
 function getBackgroundConfig(block) {
   const backgroundConfig = {
-    backgroundEl: '<p> transparent </p>',  // for single color
+    backgroundEl: '<p> transparent </p>',
     addGradientClass: true,
     customGradients: false,
     customImage: false,
