@@ -36,10 +36,10 @@ function getBackgroundConfig(block) {
 
 async function initMarquee(el) {
   const miloLibs = getLibs();
-   const { loadStyle } = await import(`${miloLibs}/utils/utils.js`);
-  const miloMarqueeModule = await import(`${miloLibs}/blocks/marquee/marquee.js`);
-  const initMiloMarqueeBlock = miloMarqueeModule.default;
-
+  const [{ default: initMiloMarqueeBlock }, { loadStyle }] = await Promise.all([
+    import(`${miloLibs}/blocks/marquee/marquee.js`),
+    import(`${miloLibs}/utils/utils.js`)
+  ]);
   initMiloMarqueeBlock(el);
   loadStyle(`${miloLibs}/blocks/marquee/marquee.css`);
 }

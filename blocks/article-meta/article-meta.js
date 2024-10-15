@@ -85,8 +85,12 @@ export function initCopyLinkButtonFunction(block) {
 
 async function updateArticleMetaWithArticleHeaderStyle(block) {
   const miloLibs = getLibs();
-  const { createTag, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
-  const { getLinkForTopic } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
+  const [utilsModule, articleHelpersModule] = await Promise.all([
+    import(`${miloLibs}/utils/utils.js`),
+    import(`${miloLibs}/blocks/article-feed/article-helpers.js`)
+  ]);
+  const { createTag, getMetadata } = utilsModule;
+  const { getLinkForTopic } = articleHelpersModule;
 
   const h1 = document.querySelector('h1');
   const picture = document.querySelector('a[href*=".mp4"], picture');
@@ -134,9 +138,10 @@ export default async function init(blockEl) {
 
   // build link sharing
   const miloLibs = getLibs();
-  const { getMetadata, loadStyle } = await import(`${miloLibs}/utils/utils.js`);
-  const miloShareModule = await import(`${miloLibs}/blocks/share/share.js`);  
-  const initMiloShareBlock = miloShareModule.default;
+  const [{ default: initMiloShareBlock }, { getMetadata, loadStyle }] = await Promise.all([
+    import(`${miloLibs}/blocks/share/share.js`),
+    import(`${miloLibs}/utils/utils.js`)
+  ]);  
   loadStyle(`${miloLibs}/blocks/share/share.css`);
   
   const url = encodeURIComponent(window.location.href);
