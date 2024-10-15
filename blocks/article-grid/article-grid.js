@@ -48,8 +48,10 @@ async function getArticleDetails(articleLink) {
 }
 
 async function fetchArticleFeedData(blogIndex) {
-  const { getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { updateLinkWithLangRoot } = await import(`${miloLibs}/utils/helpers.js`);
+  const [{ getConfig }, { updateLinkWithLangRoot }] = await Promise.all([
+    import(`${miloLibs}/utils/utils.js`),
+    import(`${miloLibs}/utils/helpers.js`)
+  ]);
   const { feed, articles, limit } = blogIndex.config;
 
   // fetch article data based on links
@@ -268,10 +270,12 @@ async function loadArticleItem(articleItem, resultContainer, createTag) {
 
 async function loadAndExposeMediaBlock() {
   try {
-    const module = await import(`${miloLibs}/blocks/media/media.js`);
-    window.initMediaBlock = module.default;
+    const [{ default: initMediaBlock }, { loadStyle }] = await Promise.all([
+      import(`${miloLibs}/blocks/media/media.js`),
+      import(`${miloLibs}/utils/utils.js`)
+    ]);
 
-    const { loadStyle } = await import(`${miloLibs}/utils/utils.js`);
+    window.initMediaBlock = initMediaBlock;
     loadStyle(`${miloLibs}/blocks/media/media.css`);
   } catch (error) {
     console.error('Error loading the module:', error);
@@ -379,11 +383,12 @@ export default async function init(block) {
     if (isLoading) return;
     isLoading = true;
 
-    await loadAndExposeMediaBlock(); // for reusing media block init
+    await Promise.all([
+      loadAndExposeMediaBlock(), // for reusing media block init
+      fetchArticleFeedData(blogIndex)
+    ]);
 
-    await fetchArticleFeedData(blogIndex);
     await filterArticleDataBasedOnConfig(blogIndex);
-
     await decorateArticleGrid(block, blogIndex);
     hideOddButtonOnTabletIfIsFeedData(block, blogIndex);
 
