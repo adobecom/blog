@@ -11,6 +11,7 @@
  */
 
 import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import { initSidebarLayoutForArticlePage } from './article.js';
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -237,5 +238,6 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  initSidebarLayoutForArticlePage();
   initSidekick();
 }());
