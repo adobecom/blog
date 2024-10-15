@@ -357,12 +357,6 @@ export function decorateMasonry() {
   const masonryBlocks = document.querySelectorAll('.masonry-layout');
   if (!masonryBlocks) return;
   
-  // load blog specific masonry stylesheet
-  const link = document.createElement('link');
-  link.setAttribute('rel', 'stylesheet');
-  link.setAttribute('href', '/styles/masonry.css');
-  document.head.appendChild(link);
-
   // add circle gradient bg based on hexcode provided (require 2 hexcode to work)
   masonryBlocks.forEach((masonry) => {
     const sectionMetadata = masonry.querySelector('.section-metadata');

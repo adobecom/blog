@@ -329,3 +329,176 @@ main .editorial-card:hover .media-area img {
     transform: rotate(360deg);
   }
 }
+
+/* 
+ * Masnory
+*/
+main .masonry-layout .brick {
+  overflow: hidden;
+}
+
+/* Blog Specific hover styles based on creative feedback */
+main .masonry-layout .brick .brick-media {
+  background: var(--color-black);
+  overflow: hidden;
+}
+
+main .masonry-layout .brick .brick-media img {
+  transition: var(--transition-all-ease-in-out-1);
+}
+
+main .masonry-layout .brick a:hover .brick-media img {
+  opacity: 0.7;
+}
+
+/* Blog Specific Variant: Hero Mansory */
+main .masonry-layout.hero-masonry .brick .foreground {
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+}
+
+main .masonry-layout.hero-masonry .brick .foreground p.action-area {
+  padding-top: var(--spacing-s);
+  gap: var(--spacing-xs);
+  margin-top: auto;
+}
+
+main .masonry-layout.hero-masonry .brick .brick-media {
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+} 
+
+main .masonry-layout.hero-masonry .brick .foreground .brick-media {
+  display: block;
+}
+
+main .masonry-layout.hero-masonry .brick .brick-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+main .masonry-layout.hero-masonry .brick .brick-media video {
+  margin-top: 0;
+}
+
+main .masonry-layout.hero-masonry .brick .foreground p.body-m {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  main .masonry-layout.hero-masonry > .text {
+    text-align: left;
+  }
+
+  main .masonry-layout.hero-masonry .brick .foreground {
+    padding: var(--spacing-s);
+  }
+}
+
+@media (min-width: 600px) {
+  main .masonry-layout.hero-masonry .brick .brick-media {
+    border-radius: 16px;
+  }
+
+  main .masonry-layout.hero-masonry .brick.stack .foreground .brick-text {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 1200px) {
+  main .masonry-layout.hero-masonry .grid-full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  main .masonry-layout.hero-masonry .text-block .foreground {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  main .masonry-layout.hero-masonry .brick .foreground .brick-media video {
+    object-fit: cover;
+  }
+
+  main .masonry-layout.hero-masonry .brick.grid-full-width .brick-media {
+    aspect-ratio: auto;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  main .masonry-layout.hero-masonry .brick.stack .foreground {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--spacing-m);
+    padding: var(--spacing-l) var(--spacing-s);
+  }
+}
+
+/* Blog Specific Variant: Gradient */
+.background-circle-gradient {
+  /* rbg value to be fit into rgba() for dynamic rendering of circle gradients */
+  --bg-circle-gradient-1: 246 192 240;  /* #f6c0f0; */  
+  --bg-circle-gradient-2: 243 180 158;   /* #f3b49e */
+
+  position: relative;
+}
+
+.background-circle-gradient > div {
+  z-index: 2;
+}
+
+.background-circle-gradient::before,
+.background-circle-gradient::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.background-circle-gradient::before {
+  background-image: linear-gradient(160deg, rgba(var(--bg-circle-gradient-2) / 70%) 0%, rgba(var(--bg-circle-gradient-2) / 40%) 30%, rgba(255 255 255 / 0%) 70%,  rgba(255 255 255 / 0%) 100%);
+  top: 0;
+  right: 0;
+  height: 40%;
+}
+
+.background-circle-gradient::after {
+  background-image: linear-gradient(30deg, rgba(var(--bg-circle-gradient-1) / 80%) 0%, rgba(var(--bg-circle-gradient-1) / 80%) 30%,  rgba(255 255 255 / 0%) 75%, rgba(255 255 255 / 0%) 100%);
+  bottom: 0;
+  left: 0;
+  height: 55%;
+  z-index: 1;
+}
+
+@media (min-width: 900px) {
+  .background-circle-gradient::before {
+    background-image: radial-gradient(circle 2200px at 90% -5%, rgba(var(--bg-circle-gradient-1) / 80%) 0%, transparent 30%, transparent 100%), radial-gradient(circle 2000px at 95% 25%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, transparent 35%, transparent 100%);
+    background-position: top right;
+    width: 80%;
+    height: 80%;
+  }
+
+  .background-circle-gradient::after {
+    background-image: radial-gradient(circle 1600px at 0% 45%, rgba(var(--bg-circle-gradient-1) / 70%) 0%, transparent 30%, transparent 100%), radial-gradient(circle 1500px at 0% 60%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, transparent 30%, transparent 100%);
+    background-position: bottom left;
+    width: 90%;
+    height: 90%;
+  }
+
+  .background-circle-gradient::before,
+  .background-circle-gradient::after {
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
