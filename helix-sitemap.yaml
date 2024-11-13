@@ -6,42 +6,42 @@ sitemaps:
     lastmod: YYYY-MM-DD
     languages:
       en:
-        source: /en/query-index.json
+        source: /en/helix-query.json
         destination: /en/sitemap.xml
         hreflang: en
         alternate: /en/{path}
       ko:
-        source: /ko/query-index.json
+        source: /ko/helix-query.json
         destination: /ko/sitemap.xml
         hreflang: ko
         alternate: /ko/{path}
       jp:
-        source: /jp/query-index.json
+        source: /jp/helix-query.json
         destination: /jp/sitemap.xml
         hreflang: ja
         alternate: /jp/{path}
       it:
-        source: /it/query-index.json
+        source: /it/helix-query.json
         destination: /it/sitemap.xml
         hreflang: it
         alternate: /it/{path}
       fr:
-        source: /fr/query-index.json
+        source: /fr/helix-query.json
         destination: /fr/sitemap.xml
         hreflang: fr
         alternate: /fr/{path}
       es:
-        source: /es/query-index.json
+        source: /es/helix-query.json
         destination: /es/sitemap.xml
         hreflang: es
         alternate: /es/{path}
       de:
-        source: /de/query-index.json
+        source: /de/helix-query.json
         destination: /de/sitemap.xml
         hreflang: de
         alternate: /de/{path}
       br:
-        source: /br/query-index.json
+        source: /br/helix-query.json
         destination: /br/sitemap.xml
         hreflang: pt
         alternate: /br/{path}

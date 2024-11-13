@@ -1,0 +1,93 @@
+version: 1
+
+indices:
+  english: &default
+    include:
+      - /en/publish/*/*/*/*
+    exclude:
+      - '**/Document.*'
+    target: /en/helix-query.xlsx
+    properties:
+      author:
+        select: head > meta[name="author"]
+        value: |
+          attribute(el, 'content')
+      title:
+        select: main h1:first-of-type
+        value: |
+          textContent(el)
+      date:
+        select: head > meta[name="publication-date"]
+        value: |
+          dateValue(attribute(el, 'content'), 'MM-DD-YYYY')
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+      imageAlt:
+        select: head > meta[property="og:image:alt"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, 'content')
+      tags:
+        select: head > meta[property="article:tag"]
+        values: |
+          attribute(el, 'content')
+      robots:
+        select: head > meta[name="robots"]
+        value: |
+          attribute(el, 'content')
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
+  no-en:
+    <<: *default
+    include:
+      - /en/publish/*/*/*/*
+    target: /helix-query.xlsx
+
+  brazilian:
+    <<: *default
+    include:
+      - /br/publish/*/*/*/*
+    target: /br/helix-query.xlsx
+
+  german:
+    <<: *default
+    include:
+      - /de/publish/*/*/*/*
+    target: /de/helix-query.xlsx
+
+  spanish:
+    <<: *default
+    include:
+      - /es/publish/*/*/*/*
+    target: /es/helix-query.xlsx
+
+  french:
+    <<: *default
+    include:
+      - /fr/publish/*/*/*/*
+    target: /fr/helix-query.xlsx
+
+  italian:
+    <<: *default
+    include:
+      - /it/publish/*/*/*/*
+    target: /it/helix-query.xlsx
+
+  japanese:
+    <<: *default
+    include:
+      - /jp/publish/*/*/*/*
+    target: /jp/helix-query.xlsx
+
+  korean:
+    <<: *default
+    include:
+      - /ko/publish/*/*/*/*
+    target: /ko/helix-query.xlsx
