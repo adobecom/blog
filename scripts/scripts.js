@@ -54,6 +54,12 @@ const CONFIG = {
     '--blog--adobecom.hlx.page': {
       'blog.adobe.com': 'origin',
     },
+    '--blog--adobecom.aem.live': {
+      'blog.adobe.com': 'origin',
+    },
+    '--blog--adobecom.aem.page': {
+      'blog.adobe.com': 'origin',
+    },
   },
 };
 
