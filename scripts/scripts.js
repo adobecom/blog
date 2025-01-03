@@ -48,16 +48,7 @@ const CONFIG = {
     'blog.stage.adobe.com': {
       'blog.adobe.com': 'origin',
     },
-    '--blog--adobecom.hlx.live': {
-      'blog.adobe.com': 'origin',
-    },
-    '--blog--adobecom.hlx.page': {
-      'blog.adobe.com': 'origin',
-    },
-    '--blog--adobecom.aem.live': {
-      'blog.adobe.com': 'origin',
-    },
-    '--blog--adobecom.aem.page': {
+    '^https://.*--blog--.*.(hlx|aem).(page|live)': {
       'blog.adobe.com': 'origin',
     },
   },

@@ -1,8 +1,6 @@
 {
   "project": "Blog",
   "host": "blog.adobe.com",
-  "previewHost": "main--blog--adobecom.aem.page",
-  "liveHost": "main--blog--adobecom.aem.live",
   "plugins": [
     {
       "id": "path",
