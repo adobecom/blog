@@ -91,3 +91,9 @@ indices:
     include:
       - /ko/publish/*/*/*/*
     target: /ko/query-index.xlsx
+
+  security:
+    <<: *default
+    include:
+      - /security/**
+    target: /security-query-index.xlsx
