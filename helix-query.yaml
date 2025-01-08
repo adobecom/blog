@@ -95,5 +95,5 @@ indices:
   security:
     <<: *default
     include:
-      - /security/*
+      - /security/**
     target: /security-query-index.xlsx
