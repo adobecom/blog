@@ -206,7 +206,7 @@ function decorateTopicPage() {
 
 function initSidekick() {
   const initPlugins = async () => { await import('./sidekick.js'); };
-  if (document.querySelector('helix-sidekick')) {
+  if (document.querySelector('aem-sidekick, helix-sidekick')) {
     initPlugins();
   } else {
     document.addEventListener('sidekick-ready', () => {
