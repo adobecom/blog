@@ -45,3 +45,12 @@ sitemaps:
         destination: /br/sitemap.xml
         hreflang: pt
         alternate: /br/{path}
+  security-blog:
+    origin: https://blog.adobe.com
+    lastmod: YYYY-MM-DD
+    languages:
+      en:
+        source: /security-query-index.json?sheet=sitemap
+        destination: /en/sitemap.xml
+        hreflang: en
+        alternate: /en/{path}
