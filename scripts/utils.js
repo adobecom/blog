@@ -178,11 +178,28 @@ export async function decorateContent() {
 }
 
 /**
+ * * @param {HTMLElement} element
+ * * @param {string} targetTag, like 'ul' or 'div'
+ * result: return the new element with inner content of the element, desired tag and css class
+ */
+export function changeHTMLTag(el, targetTag, properties = {}) {
+  const newEl = document.createElement(targetTag);
+  Object.keys(properties).forEach((key) => {
+    newEl.setAttribute(key, properties[key]);
+  });
+
+  newEl.innerHTML = el.innerHTML;
+  el.replaceWith(newEl);
+
+  return newEl;
+}
+
+/**
  * Builds a block DOM Element from a two dimensional array
  * @param {string} blockName name of the block
  * @param {any} content two dimensional array or string or object of content
  */
-function buildBlock(blockName, content) {
+export function buildBlock(blockName, content) {
   const table = Array.isArray(content) ? content : [[content]];
   const blockEl = document.createElement('div');
   // build image block nested div structure
@@ -206,6 +223,44 @@ function buildBlock(blockName, content) {
     blockEl.appendChild(rowEl);
   });
   return (blockEl);
+}
+
+/**
+ * * @param {string} key key of the localized text
+ * return localized text based on inputted key
+ */
+export async function replacePlaceholderForLocalizedText(key) {
+  const miloLibs = getLibs();
+  const [{ replaceKey }, { getConfig }] = await Promise.all([
+    await import(`${miloLibs}/features/placeholders.js`),
+    await import(`${miloLibs}/utils/utils.js`)
+  ])  
+
+  const result = await replaceKey(key, getConfig());
+
+  return result;
+}
+
+/**
+ * * @param {string} hexcode hexcode of color
+ * return rgb color for reusing in rgba()
+ */
+export function hexToRgb(hex) {
+  if (!/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) {
+    console.warn(`Invalid hex color: ${hex}`);
+    return false;
+  }
+
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  return `${r} ${g} ${b}`;
+}
+
+export function hasDarkOrLightClass(element) {
+  const darkLightClass = ['dark', 'light'];
+  return darkLightClass.some(cls => element.classList.contains(cls));
 }
 
 function buildAuthorHeader(mainEl) {
@@ -290,6 +345,40 @@ function buildTagsBlock() {
   } else {
     main.lastElementChild.append(tagsBlock);
   }
+}
+
+function getCircleGradientValue(infoWrapper) {
+  return Array.from(infoWrapper.querySelectorAll('div'))
+    .find(div => div.innerText === 'circle-gradient')
+    ?.nextElementSibling?.innerText.trim() || null
+}
+
+export function decorateMasonry() {
+  const masonryBlocks = document.querySelectorAll('.masonry-layout');
+  if (!masonryBlocks) return;
+  
+  // add circle gradient bg based on hexcode provided (require 2 hexcode to work)
+  masonryBlocks.forEach((masonry) => {
+    const sectionMetadata = masonry.querySelector('.section-metadata');
+    if (!sectionMetadata) return;
+
+    const circleGradientValue = getCircleGradientValue(sectionMetadata);
+    if (!circleGradientValue) return;
+
+    masonry.classList.add('background-circle-gradient');
+
+    const circleGradients = circleGradientValue.split(',').map(gradient => gradient.trim());
+    if (!circleGradients?.length == 2) return;
+    
+    const gradient1 = hexToRgb(circleGradients[0]);
+    const gradient2 = hexToRgb(circleGradients[1]);
+
+    if (!gradient1 || !gradient2) return;
+
+    // only set `rgb` values, as `a` value will be set by css
+    masonry.style.setProperty('--bg-circle-gradient-1', gradient1);
+    masonry.style.setProperty('--bg-circle-gradient-2', gradient2);
+  });
 }
 
 export async function buildAutoBlocks() {
