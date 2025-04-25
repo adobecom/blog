@@ -1,6 +1,7 @@
 {
   "project": "Blog",
   "host": "blog.adobe.com",
+  "trustedHosts": ["milo.adobe.com", "*--milo--adobecom.aem.page"],
   "plugins": [
     {
       "id": "path",
