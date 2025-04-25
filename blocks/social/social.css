@@ -1,0 +1,57 @@
+.social {
+  display: flex;
+  gap: 14px;
+  margin: 0 auto;
+  max-width: var(--grid-container-width);
+}
+
+.section.center .social,
+.social.center {
+  justify-content: center;
+}
+
+.social-item img {
+  width: 28px;
+  height: 28px;  
+}
+
+.social-item a {
+  cursor: pointer;
+}
+
+.social-item a:hover {
+  opacity: 0.8;
+}
+
+.social.small,
+.social.sm {
+  gap: 14px;
+}
+
+.social.medium,
+.social.md {
+  gap: 20px;
+}
+
+.social.large,
+.social.lg {
+  gap: 32px;
+}
+
+.social.small .social-item img,
+.social.sm .social-item img {
+  width: 28px;
+  height: 28px;
+}
+
+.social.medium .social-item img,
+.social.md .social-item img {
+  width: 32px;
+  height: 32px;
+}
+
+.social.large .social-item img,
+.social.lg .social-item img {
+  width: 44px;
+  height: 44px;
+}
