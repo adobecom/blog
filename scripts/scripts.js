@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import { decorateContent, setLibs, buildAutoBlocks, decorateMasonry } from './utils.js';
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -234,5 +234,6 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   await buildAutoBlocks();
   overrideMiloBlocks();
   await loadArea();
+  decorateMasonry();
   initSidekick();
 }());
