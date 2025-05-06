@@ -109,7 +109,7 @@ export function createOptimizedPicture(
  * ------------------------------------------------------------
  */
 
-function getImageCaption(picture) {
+export function getImageCaption(picture) {
   // Check if the parent element has a caption
   const parentEl = picture.parentNode;
   let caption = parentEl.querySelector('em');
@@ -182,7 +182,7 @@ export async function decorateContent() {
  * @param {string} blockName name of the block
  * @param {any} content two dimensional array or string or object of content
  */
-function buildBlock(blockName, content) {
+export function buildBlock(blockName, content) {
   const table = Array.isArray(content) ? content : [[content]];
   const blockEl = document.createElement('div');
   // build image block nested div structure
@@ -206,6 +206,61 @@ function buildBlock(blockName, content) {
     blockEl.appendChild(rowEl);
   });
   return (blockEl);
+}
+
+/**
+ * * @param {HTMLElement} element
+ * * @param {string} targetTag, like 'ul' or 'div'
+ * result: return the new element with inner content of the element, desired tag and css class
+ */
+export function changeHTMLTag(el, targetTag, properties = {}) {
+  const newEl = document.createElement(targetTag);
+  Object.keys(properties).forEach((key) => {
+    newEl.setAttribute(key, properties[key]);
+  });
+
+  newEl.innerHTML = el.innerHTML;
+  el.replaceWith(newEl);
+
+  return newEl;
+}
+
+/**
+ * * @param {string} key key of the localized text
+ * return localized text based on inputted key
+ */
+export async function replacePlaceholderForLocalizedText(key) {
+  const miloLibs = getLibs();
+  const [{ replaceKey }, { getConfig }] = await Promise.all([
+    await import(`${miloLibs}/features/placeholders.js`),
+    await import(`${miloLibs}/utils/utils.js`)
+  ])  
+
+  const result = await replaceKey(key, getConfig());
+
+  return result;
+}
+
+/**
+ * * @param {string} hexcode hexcode of color
+ * return rgb color for reusing in rgba()
+ */
+export function hexToRgb(hex) {
+  if (!/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) {
+    console.warn(`Invalid hex color: ${hex}`);
+    return false;
+  }
+
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  return `${r} ${g} ${b}`;
+}
+
+export function hasDarkOrLightClass(element) {
+  const darkLightClass = ['dark', 'light'];
+  return darkLightClass.some(cls => element.classList.contains(cls));
 }
 
 function buildAuthorHeader(mainEl) {
@@ -240,38 +295,44 @@ function buildAuthorHeader(mainEl) {
   div.prepend(authorHeader);
 }
 
-async function buildArticleHeader(el) {
+export function getCircleGradientValue(str) {
+  if (!str) return false;
+
+  // Regular expression to match `circle-gradient(#hexcode, #hexcode)`
+  const regex = /^circle-gradient\(#([A-Fa-f0-9]{6})\s*,\s*#([A-Fa-f0-9]{6})\)$/;
+  const match = str.match(regex);
+
+  return match ? [`#${match[1]}`, `#${match[2]}`] : false;
+}
+
+async function buildArticleMeta(mainEl) {
   const miloLibs = getLibs();
   const { getMetadata, getConfig } = await import(`${miloLibs}/utils/utils.js`);
-  const { loadTaxonomy, getLinkForTopic, getTaxonomyModule } = await import(`${miloLibs}/blocks/article-feed/article-helpers.js`);
-  if (!getTaxonomyModule()) {
-    await loadTaxonomy();
-  }
-  const div = document.createElement('div');
-  // div.setAttribute('class', 'section');
-  const h1 = el.querySelector('h1');
-  const picture = el.querySelector('a[href*=".mp4"], picture');
-  const caption = getImageCaption(picture);
-  const figure = document.createElement('div');
-  figure.append(picture, caption);
-  const tag = getMetadata('article:tag');
-  const category = tag || 'News';
+
+  if (getMetadata('content-type') != 'article') return;
+
   const author = getMetadata('author') || 'Adobe Communications Team';
   const { codeRoot } = getConfig();
   const authorURL = getMetadata('author-url') || (author ? `${codeRoot}/authors/${author.replace(/[^0-9a-z]/gi, '-').toLowerCase()}` : null);
+
   const publicationDate = getMetadata('publication-date');
 
-  const categoryTag = getLinkForTopic(category);
-
-  const articleHeaderBlockEl = buildBlock('article-header', [
-    [`<p>${categoryTag}</p>`],
-    [h1],
+  const articleMeta = buildBlock('article-meta', [
     [`<p>${authorURL ? `<a href="${authorURL}">${author}</a>` : author}</p>
       <p>${publicationDate}</p>`],
-    [figure],
   ]);
-  div.append(articleHeaderBlockEl);
-  el.prepend(div);
+
+  const isSidebarLayout = getMetadata('page-template') === 'sidebar';
+  if (!isSidebarLayout) articleMeta.classList.add('as-article-header');
+
+  // put article meta (author + link sharings) in front of first content div
+  const allContentDivs = mainEl.querySelectorAll(':scope > div');
+  if (!allContentDivs) return;
+
+  const contentBlock = [...allContentDivs].find((div) => !div.querySelector('.article-hero-banner') && div.querySelector('div'));
+  if (!contentBlock) return;
+
+  contentBlock.insertBefore(articleMeta, contentBlock.firstChild);
 }
 
 function buildTagsBlock() {
@@ -292,14 +353,25 @@ function buildTagsBlock() {
   }
 }
 
+async function buildProgressBar(mainEl) {
+  if (!mainEl) return;
+  const miloLibs = getLibs();
+  const { loadBlock } = await import(`${miloLibs}/utils/utils.js`);
+
+  const progressBar = buildBlock('progress-bar', '');
+  loadBlock(progressBar);
+}
+
 export async function buildAutoBlocks() {
   const miloLibs = getLibs();
   const { getMetadata } = await import(`${miloLibs}/utils/utils.js`);
   const mainEl = document.querySelector('main');
   try {
     if (getMetadata('content-type') === 'article' && !mainEl.querySelector('.article-header')) {
-      await buildArticleHeader(mainEl);
+      // NOTE: if article-hero-marquee block is present, it'll render split marquee
+      await buildArticleMeta(mainEl);
       buildTagsBlock();
+      await buildProgressBar(mainEl);
     } else if (getMetadata('content-type') === 'authors') {
       buildAuthorHeader(mainEl);
     }
