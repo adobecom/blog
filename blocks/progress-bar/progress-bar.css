@@ -1,0 +1,22 @@
+.progress-bar-container {
+  z-index: 109;   /* lower than carousel lightbox one */
+  position: fixed;
+  top: 57px;
+  left: 0;
+  right: 0;
+  transform-origin: 0%;
+  width: 100%;
+  height: 4px;
+}
+
+.progress-bar {
+  background-color: var(--feds-color-adobeBrand);
+  height: 100%;
+  width: 5%;
+}
+
+@media (min-width: 900px) {
+  .progress-bar-container {
+    top: var(--global-height-nav);
+  }
+}

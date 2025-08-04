@@ -9,6 +9,10 @@
 :root {
   --color-quote: #367ea8;
   --page-top-spacing: 128px;
+  --color-banner-red-gradient: radial-gradient(110.12% 95.52% at 25.93% 25.98%, #EB1000 -5%, #E9740A 60.34%, #FF61F6 110%);
+
+  /* animation */
+  --transition-all-ease-in-out-1: all 0.3s ease-in-out;
 }
 
 body header .gnav-wrapper a.gnav-brand {
@@ -87,6 +91,10 @@ main .inset.text-block .foreground::before {
  object-fit: cover;
  border-radius: 100%;
  margin-bottom: 40px;
+}
+
+.con-button {
+  transition: var(--transition-all-ease-in-out-1);
 }
 
 /* 
@@ -251,5 +259,127 @@ main + footer .feds-regionPicker-wrapper > .fragment p strong > a::after {
     justify-content: center;
     padding-left: inherit;
     padding-right: inherit;
+  }
+}
+
+/*
+ * Recommended Articles 
+*/
+main .recommended-articles-content-wrapper {
+  padding-bottom: var(--spacing-m);
+}
+
+main.page-template-sidebar .recommended-articles-content-wrapper {
+  background: var(--color-white);
+}
+
+main.page-template-sidebar .section:has(.recommended-articles) {
+  margin-top: 0;
+}
+
+main .recommended-articles > h3 {
+  padding-top: 0;
+  margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-s);
+}
+
+main .recommended-articles .article-card {
+  display: flex;
+  flex-direction: column;
+}
+
+main .recommended-articles .article-card-body {
+  padding: 20px 20px 24px;
+  flex-grow: 1;
+}
+
+main .recommended-articles .article-card-body h3 {
+  margin-bottom: var(--spacing-xxs);
+}
+
+main .recommended-articles .article-card .article-card-image {
+  height: 215px;
+}
+
+main .recommended-articles .article-card .article-card-category {
+  margin-top: 0;
+  min-height: var(--type-body-xs-lh);
+}
+
+main .recommended-articles .article-card .article-card-body h3 {
+  font-size: var(--type-heading-xs-size);
+  line-height: var(--type-heading-xs-lh);
+  margin: 0 0 8px;
+}
+
+main .recommended-articles .article-card .article-card-body .article-card-description {
+  font-size: var(--type-body-xs-size);
+  line-height: var(--type-body-xs-lh);
+  margin: 8px 0;
+}
+
+main .recommended-articles .article-card-body p.article-card-category, 
+main .recommended-articles .article-card-body p.article-card-category a, 
+main .recommended-articles .article-card-body p.article-card-date {
+  font-size: var(--type-body-xs-size);
+  line-height: var(--type-body-xs-lh);
+  letter-spacing: normal;
+  font-weight: 400;
+  color: var(--text-color);
+}
+
+main .recommended-articles .article-card-body p.article-card-date {
+  margin-bottom: 0;
+}
+
+@media (min-width: 600px) {
+  main .recommended-articles h3 {
+    margin-bottom: var(--spacing-m);
+  }
+
+  main .recommended-articles .article-card-body h3 {
+    margin-bottom: var(--spacing-xxs);
+    -webkit-line-clamp: 2;
+    min-height: calc(var(--type-heading-xs-lh) * 2);
+  }
+}
+
+/*
+ * Marquee gradient
+*/
+main .marquee.marquee-circle-gradient {
+  --bg-circle-gradient-1: 248 204 251;   /* #F8CCFB */
+  --bg-circle-gradient-2: 251 186 216;   /* #FBBAD8 */
+  --bg-circle-radius-1: 800px;
+  --bg-circle-radius-2: 800px;
+}
+
+main .marquee.marquee-circle-gradient::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle var(--bg-circle-radius-1) at 0% 45%, rgba(var(--bg-circle-gradient-1) / 100%) 0%, transparent 30%, transparent 100%),
+    radial-gradient(circle var(--bg-circle-radius-2) at 0% 95%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, rgba(var(--bg-circle-gradient-2) / 100%) 10%, transparent 55%, transparent 100%);
+}
+
+@media (min-width: 600px) {
+  main .marquee.marquee-circle-gradient::before {
+    --bg-circle-radius-1: 550px;
+    --bg-circle-radius-2: 650px;
+  }
+}
+
+@media (min-width: 1200px) {
+  main .marquee.marquee-circle-gradient::before {
+    --bg-circle-radius-1: 1200px;
+    --bg-circle-radius-2: 1000px;
+
+    background-image: 
+      radial-gradient(circle var(--bg-circle-radius-1) at 2.5% 55%, rgba(var(--bg-circle-gradient-1) / 100%) 0%, transparent 30%, transparent 100%),
+      radial-gradient(circle var(--bg-circle-radius-2) at 5% 100%, rgba(var(--bg-circle-gradient-2) / 100%) 0%, rgba(var(--bg-circle-gradient-2) / 100%) 15%, transparent 55%, transparent 100%);
   }
 }
