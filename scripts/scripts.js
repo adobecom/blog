@@ -229,9 +229,9 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   decorateVideo();
   decorateQuote();
   decorateGif();
-  await decorateContent();
   setConfig({ ...CONFIG, miloLibs });
   await buildAutoBlocks();
+  await decorateContent();
   overrideMiloBlocks();
   await loadArea();
   initSidekick();
