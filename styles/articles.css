@@ -12,15 +12,35 @@ main h1, main h2, main h3, main h4, main h5, main h6 {
   scroll-margin-top: 90px;
 }
 
+.content:has(+ .figure) > :last-child {
+  margin-bottom: 0;
+}
+
+.figure + .content > :first-child {
+  margin-top: 0;
+}
+
+.figure + .content > :is(h1, h2, h3, h4, h5, h6):first-child {
+  margin-top: 8px;
+}
+
+.section .figure:first-child {
+  padding-top: 0;
+}
+
+.section .figure:last-child {
+  padding-bottom: 0;
+}
+
 main .section{
   margin-top: 64px
 }
 
-main .figure .figure img {
+main .figure figure img {
   object-fit: contain;
 }
 
-main .figure .figure .infograph,
+main .figure figure .infograph,
 main .article-header .article-category,
 main .article-header .article-title,
 main .article-header .article-byline {
@@ -35,6 +55,22 @@ main video {
 }
 
 @media (min-width: 700px) {
+  .figure.figure-list + .content > :first-child:not(h1, h2, h3, h4, h5, h6) {
+    margin-top: revert;
+  }
+
+  .content:has(+ .figure.figure-list) > :last-child:not(h1, h2, h3, h4, h5, h6) {
+    margin-bottom: revert;
+  }
+
+  .figure.figure-list + .content > :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 48px;
+  }
+
+  .content:has(+ .figure.figure-list) > :is(h1, h2, h3, h4, h5, h6):last-child {
+    margin-bottom: 16px;
+  }
+
   main .section > div > :not(div):not(h1),
   main .section > .tags,
   main .columns, main .columns.contained {
