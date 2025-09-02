@@ -1,0 +1,35 @@
+name: Recurring Admin Tasks
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "55 * * * *"
+
+jobs:
+  publish-indices:
+    name: Publish Indices
+    runs-on: ubuntu-latest
+    steps:
+    - name: Publish english index
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://admin.hlx.page/index/adobecom/blog/main/en/query-index.json'
+        method: 'POST'
+        timeout: 30000
+    - name: Publish french index
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://admin.hlx.page/index/adobecom/blog/main/fr/query-index.json'
+        method: 'POST'
+        timeout: 30000
+    - name: Publish japanese index
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://admin.hlx.page/index/adobecom/blog/main/jp/query-index.json'
+        method: 'POST'
+        timeout: 30000
+    - name: Publish korean index
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://admin.hlx.page/index/adobecom/blog/main/ko/query-index.json'
+        method: 'POST'
+        timeout: 30000
