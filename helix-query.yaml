@@ -92,6 +92,74 @@ indices:
       - /ko/publish/*/*/*/*
     target: /ko/query-index.xlsx
 
+  authors-english: &authors
+    include:
+      - /en/authors/**
+    target: /en/query-index-authors.xlsx
+    properties:
+      title:
+        select: main h1:first-of-type
+        value: |
+          textContent(el)
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+      imageAlt:
+        select: head > meta[property="og:image:alt"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, 'content')
+      robots:
+        select: head > meta[name="robots"]
+        value: |
+          attribute(el, 'content')
+
+  authors-brazilian:
+    <<: *authors
+    include:
+      - /br/authors/**
+    target: /br/query-index-authors.xlsx
+
+  authors-german:
+    <<: *authors
+    include:
+      - /de/authors/**
+    target: /de/query-index-authors.xlsx
+
+  authors-spanish:
+    <<: *authors
+    include:
+      - /es/authors/**
+    target: /es/query-index-authors.xlsx
+
+  authors-french:
+    <<: *authors
+    include:
+      - /fr/authors/**
+    target: /fr/query-index-authors.xlsx
+
+  authors-italian:
+    <<: *authors
+    include:
+      - /it/authors/**
+    target: /it/query-index-authors.xlsx
+
+  authors-japanese:
+    <<: *authors
+    include:
+      - /jp/authors/**
+    target: /jp/query-index-authors.xlsx
+
+  authors-korean:
+    <<: *authors
+    include:
+      - /ko/authors/**
+    target: /ko/query-index-authors.xlsx
+
   security:
     <<: *default
     include:
