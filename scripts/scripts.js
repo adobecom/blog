@@ -51,6 +51,9 @@ const CONFIG = {
     '^https://.*--blog--.*.(hlx|aem).(page|live)': {
       'blog.adobe.com': 'origin',
     },
+    'preview.da.live': {
+      'blog.adobe.com': 'origin',
+    },
   },
 };
 
@@ -222,7 +225,7 @@ function decorateFeatImg(getMetadata) {
 
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
-(async function loadPage() {
+async function loadPage() {
   decorateFeatImg(getMetadata);
   decorateTopicPage();
   decorateFigure();
@@ -235,4 +238,11 @@ const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/uti
   overrideMiloBlocks();
   await loadArea();
   initSidekick();
+}
+
+loadPage();
+
+(async function loadDa() {
+  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
 }());
