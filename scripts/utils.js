@@ -19,7 +19,7 @@ export const [setLibs, getLibs] = (() => {
     (prodLibs, location) => {
       libs = (() => {
         const { hostname, search } = location || window.location;
-        if (!(hostname.includes('.aem.') || hostname.includes('.hlx.') || hostname.includes('local'))) return prodLibs;
+        if (!(hostname.includes('.aem.') || hostname.includes('.hlx.') || hostname.includes('.da.') || hostname.includes('local'))) return prodLibs;
         const branch = new URLSearchParams(search).get('milolibs') || 'main';
         if (!/^[a-zA-Z0-9_-]+$/.test(branch)) throw new Error('Invalid branch name.');
         if (branch === 'local') return 'http://localhost:6456/libs';
