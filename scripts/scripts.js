@@ -10,7 +10,13 @@
  * governing permissions and limitations under the License.
  */
 
-import { decorateContent, setLibs, buildAutoBlocks } from './utils.js';
+import {
+  decorateContent,
+  setLibs,
+  buildAutoBlocks,
+  persistRegionFromPath,
+  applyRegionGnavOverride,
+} from './utils.js';
 
 // Add project-wide styles here.
 const STYLES = ['/styles/styles.css', '/styles/articles.css'];
@@ -226,6 +232,8 @@ function decorateFeatImg(getMetadata) {
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 async function loadPage() {
+  persistRegionFromPath();
+  applyRegionGnavOverride();
   decorateFeatImg(getMetadata);
   decorateTopicPage();
   decorateFigure();
