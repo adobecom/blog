@@ -112,23 +112,47 @@ export function createOptimizedPicture(
  */
 export const REGION_GNAV_OVERRIDES = { uk: '/gnav-old', apac: '/gnav-old' };
 export const REGION_COOKIE = 'blog-region';
+// The only gnav-source value this override ever replaces - a page authored with any other
+// (deliberately non-default) value is left alone, so a custom/campaign nav can't be clobbered.
+const DEFAULT_GNAV_SOURCE = '/gnav';
+// TODO(tattva): confirm this is the correct OneTrust category for functional/preference
+// cookies on blog.adobe.com - this is a best-effort default, not yet verified against the
+// site's actual OneTrust category mapping.
+const ONETRUST_FUNCTIONAL_CATEGORY = 'C0003';
+
+/**
+ * Best-effort OneTrust consent check for functional/preference cookies. Returns true if
+ * OneTrust hasn't loaded or recorded a decision yet (so we don't permanently block on an
+ * as-yet-unknown state, since OneTrust initializes asynchronously and this runs early in the
+ * page lifecycle), or if the reader has explicitly consented to the functional category;
+ * false only when they've explicitly declined it.
+ * @returns {boolean}
+ */
+export function hasFunctionalCookieConsent() {
+  const activeGroups = window.OnetrustActiveGroups;
+  if (typeof activeGroups !== 'string') return true;
+  return activeGroups.includes(ONETRUST_FUNCTIONAL_CATEGORY);
+}
 
 /**
  * Reads the persisted region preference, if any.
  * @returns {string|null} the region key (e.g. 'uk', 'apac') or null if unset
  */
 export function getRegionCookie() {
-  return document.cookie.match(/(?:^|; )blog-region=([^;]*)/)?.[1] || null;
+  const pattern = new RegExp(`(?:^|; )${REGION_COOKIE}=([^;]*)`);
+  return document.cookie.match(pattern)?.[1] || null;
 }
 
 /**
  * Persists the reader's region based on the current URL: sets the cookie when landing on a
- * region homepage, clears it when landing back on the bare US-English root.
+ * region homepage (subject to functional-cookie consent), clears it when landing back on the
+ * bare US-English root. Clearing is always allowed regardless of consent state.
  */
 export function persistRegionFromPath() {
   const { pathname } = window.location;
   const regionMatch = pathname.match(/^\/en\/(uk|apac)(\/|$)/);
   if (regionMatch) {
+    if (!hasFunctionalCookieConsent()) return;
     document.cookie = `${REGION_COOKIE}=${regionMatch[1]}; path=/; max-age=${60 * 60 * 24 * 365}`;
   } else if (pathname === '/' || pathname === '/en' || pathname === '/en/') {
     document.cookie = `${REGION_COOKIE}=; path=/; max-age=0`;
@@ -136,8 +160,9 @@ export function persistRegionFromPath() {
 }
 
 /**
- * If a region preference is persisted and the current page's own gnav-source metadata would
- * otherwise default away from it, overrides the meta tag before the gnav block reads it.
+ * If a region preference is persisted and the current page's own gnav-source metadata is
+ * still the site default, overrides the meta tag before the gnav block reads it. Pages that
+ * ship a deliberate non-default gnav-source (a campaign/custom nav) are left untouched.
  */
 export function applyRegionGnavOverride() {
   const override = REGION_GNAV_OVERRIDES[getRegionCookie()];
@@ -146,7 +171,9 @@ export function applyRegionGnavOverride() {
   const inEnglishTree = pathname === '/' || pathname === '/en' || pathname.startsWith('/en/');
   const alreadyRegionScoped = /^\/en\/(uk|apac)(\/|$)/.test(pathname);
   if (!inEnglishTree || alreadyRegionScoped) return;
-  document.querySelector('meta[name="gnav-source"]')?.setAttribute('content', override);
+  const meta = document.querySelector('meta[name="gnav-source"]');
+  if (meta?.getAttribute('content') !== DEFAULT_GNAV_SOURCE) return;
+  meta.setAttribute('content', override);
 }
 
 /*

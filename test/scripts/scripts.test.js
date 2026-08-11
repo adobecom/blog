@@ -5,6 +5,7 @@ import {
   getRegionCookie,
   persistRegionFromPath,
   applyRegionGnavOverride,
+  hasFunctionalCookieConsent,
   REGION_COOKIE,
 } from '../../scripts/utils.js';
 
@@ -31,6 +32,24 @@ describe('region gnav persistence', () => {
   afterEach(() => {
     clearRegionCookie();
     document.head.querySelector('meta[name="gnav-source"]')?.remove();
+    delete window.OnetrustActiveGroups;
+  });
+
+  describe('hasFunctionalCookieConsent', () => {
+    it('returns true when OneTrust has not loaded yet', () => {
+      delete window.OnetrustActiveGroups;
+      expect(hasFunctionalCookieConsent()).to.be.true;
+    });
+
+    it('returns true when the functional category is active', () => {
+      window.OnetrustActiveGroups = ',C0001,C0002,C0003,';
+      expect(hasFunctionalCookieConsent()).to.be.true;
+    });
+
+    it('returns false when OneTrust has decided and the functional category is not active', () => {
+      window.OnetrustActiveGroups = ',C0001,';
+      expect(hasFunctionalCookieConsent()).to.be.false;
+    });
   });
 
   describe('persistRegionFromPath', () => {
@@ -64,6 +83,28 @@ describe('region gnav persistence', () => {
       goTo('/en/publish/2026/01/01/some-story');
       persistRegionFromPath();
       expect(getRegionCookie()).to.equal('uk');
+    });
+
+    it('does not set the cookie when the reader has declined functional cookies', () => {
+      window.OnetrustActiveGroups = ',C0001,';
+      goTo('/en/uk');
+      persistRegionFromPath();
+      expect(getRegionCookie()).to.be.null;
+    });
+
+    it('sets the cookie when the reader has consented to functional cookies', () => {
+      window.OnetrustActiveGroups = ',C0001,C0002,C0003,';
+      goTo('/en/uk');
+      persistRegionFromPath();
+      expect(getRegionCookie()).to.equal('uk');
+    });
+
+    it('still clears the cookie on "/" even when functional cookies are declined', () => {
+      document.cookie = `${REGION_COOKIE}=uk; path=/`;
+      window.OnetrustActiveGroups = ',C0001,';
+      goTo('/');
+      persistRegionFromPath();
+      expect(getRegionCookie()).to.be.null;
     });
   });
 
@@ -105,6 +146,14 @@ describe('region gnav persistence', () => {
       goTo('/de/some-page');
       applyRegionGnavOverride();
       expect(meta.getAttribute('content')).to.equal('/gnav');
+    });
+
+    it('does not clobber a deliberate non-default gnav-source (e.g. a campaign nav)', () => {
+      document.cookie = `${REGION_COOKIE}=uk; path=/`;
+      const meta = setGnavSourceMeta('/gnav-campaign');
+      goTo('/en/publish/2026/01/01/some-story');
+      applyRegionGnavOverride();
+      expect(meta.getAttribute('content')).to.equal('/gnav-campaign');
     });
 
     it('is a no-op when there is no gnav-source meta tag on the page', () => {
