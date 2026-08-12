@@ -232,7 +232,7 @@ function decorateFeatImg(getMetadata) {
 const { loadArea, setConfig, getMetadata } = await import(`${miloLibs}/utils/utils.js`);
 
 async function loadPage() {
-  persistRegionFromPath();
+  await persistRegionFromPath();
   applyRegionGnavOverride();
   decorateFeatImg(getMetadata);
   decorateTopicPage();

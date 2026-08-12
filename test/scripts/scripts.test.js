@@ -5,9 +5,14 @@ import {
   getRegionCookie,
   persistRegionFromPath,
   applyRegionGnavOverride,
-  hasFunctionalCookieConsent,
+  setLibs,
   REGION_COOKIE,
 } from '../../scripts/utils.js';
+import { setMockConsent } from './mocks/martech/helpers.js';
+
+// Forces getLibs() to resolve to our local mock instead of a real milo host, by taking the
+// "non-.aem/.hlx/.da/local hostname" branch of setLibs's own hostname check.
+setLibs('/test/scripts/mocks', { hostname: 'example.com', search: '' });
 
 function goTo(pathname) {
   window.history.pushState(null, '', pathname);
@@ -29,81 +34,67 @@ function setGnavSourceMeta(content) {
 }
 
 describe('region gnav persistence', () => {
+  beforeEach(() => {
+    setMockConsent({ functional: true });
+  });
+
   afterEach(() => {
     clearRegionCookie();
     document.head.querySelector('meta[name="gnav-source"]')?.remove();
-    delete window.OnetrustActiveGroups;
-  });
-
-  describe('hasFunctionalCookieConsent', () => {
-    it('returns true when OneTrust has not loaded yet', () => {
-      delete window.OnetrustActiveGroups;
-      expect(hasFunctionalCookieConsent()).to.be.true;
-    });
-
-    it('returns true when the functional category is active', () => {
-      window.OnetrustActiveGroups = ',C0001,C0002,C0003,';
-      expect(hasFunctionalCookieConsent()).to.be.true;
-    });
-
-    it('returns false when OneTrust has decided and the functional category is not active', () => {
-      window.OnetrustActiveGroups = ',C0001,';
-      expect(hasFunctionalCookieConsent()).to.be.false;
-    });
   });
 
   describe('persistRegionFromPath', () => {
-    it('sets the region cookie when landing on /en/uk', () => {
+    it('sets the region cookie when landing on /en/uk', async () => {
       goTo('/en/uk');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.equal('uk');
     });
 
-    it('sets the region cookie when landing on /en/apac', () => {
+    it('sets the region cookie when landing on /en/apac', async () => {
       goTo('/en/apac');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.equal('apac');
     });
 
-    it('sets the region cookie for nested paths under /en/uk/', () => {
+    it('sets the region cookie for nested paths under /en/uk/', async () => {
       goTo('/en/uk/some-section');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.equal('uk');
     });
 
-    it('clears the region cookie when landing on the bare US root "/"', () => {
+    it('clears the region cookie when landing on the bare US root "/"', async () => {
       document.cookie = `${REGION_COOKIE}=uk; path=/`;
       goTo('/');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.be.null;
     });
 
-    it('leaves an existing cookie untouched on unrelated pages', () => {
+    it('leaves an existing cookie untouched on unrelated pages', async () => {
       document.cookie = `${REGION_COOKIE}=uk; path=/`;
       goTo('/en/publish/2026/01/01/some-story');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.equal('uk');
     });
 
-    it('does not set the cookie when the reader has declined functional cookies', () => {
-      window.OnetrustActiveGroups = ',C0001,';
+    it('does not set the cookie when the reader has declined functional cookies', async () => {
+      setMockConsent({ functional: false });
       goTo('/en/uk');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.be.null;
     });
 
-    it('sets the cookie when the reader has consented to functional cookies', () => {
-      window.OnetrustActiveGroups = ',C0001,C0002,C0003,';
+    it('sets the cookie when the reader has consented to functional cookies', async () => {
+      setMockConsent({ functional: true });
       goTo('/en/uk');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.equal('uk');
     });
 
-    it('still clears the cookie on "/" even when functional cookies are declined', () => {
+    it('still clears the cookie on "/" even when functional cookies are declined', async () => {
       document.cookie = `${REGION_COOKIE}=uk; path=/`;
-      window.OnetrustActiveGroups = ',C0001,';
+      setMockConsent({ functional: false });
       goTo('/');
-      persistRegionFromPath();
+      await persistRegionFromPath();
       expect(getRegionCookie()).to.be.null;
     });
   });

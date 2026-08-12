@@ -115,24 +115,6 @@ export const REGION_COOKIE = 'blog-region';
 // The only gnav-source value this override ever replaces - a page authored with any other
 // (deliberately non-default) value is left alone, so a custom/campaign nav can't be clobbered.
 const DEFAULT_GNAV_SOURCE = '/gnav';
-// TODO(tattva): confirm this is the correct OneTrust category for functional/preference
-// cookies on blog.adobe.com - this is a best-effort default, not yet verified against the
-// site's actual OneTrust category mapping.
-const ONETRUST_FUNCTIONAL_CATEGORY = 'C0003';
-
-/**
- * Best-effort OneTrust consent check for functional/preference cookies. Returns true if
- * OneTrust hasn't loaded or recorded a decision yet (so we don't permanently block on an
- * as-yet-unknown state, since OneTrust initializes asynchronously and this runs early in the
- * page lifecycle), or if the reader has explicitly consented to the functional category;
- * false only when they've explicitly declined it.
- * @returns {boolean}
- */
-export function hasFunctionalCookieConsent() {
-  const activeGroups = window.OnetrustActiveGroups;
-  if (typeof activeGroups !== 'string') return true;
-  return activeGroups.includes(ONETRUST_FUNCTIONAL_CATEGORY);
-}
 
 /**
  * Reads the persisted region preference, if any.
@@ -145,14 +127,18 @@ export function getRegionCookie() {
 
 /**
  * Persists the reader's region based on the current URL: sets the cookie when landing on a
- * region homepage (subject to functional-cookie consent), clears it when landing back on the
- * bare US-English root. Clearing is always allowed regardless of consent state.
+ * region homepage (subject to functional-cookie consent, checked via Milo's own
+ * getMepConsentConfig - the same OptanonConsent/C0003 mapping MEP already relies on), clears
+ * it when landing back on the bare US-English root. Clearing is always allowed regardless of
+ * consent state.
  */
-export function persistRegionFromPath() {
+export async function persistRegionFromPath() {
+  const { getMepConsentConfig } = await import(`${getLibs()}/martech/helpers.js`);
+  const hasFunctionalConsent = !!getMepConsentConfig()?.functional;
   const { pathname } = window.location;
   const regionMatch = pathname.match(/^\/en\/(uk|apac)(\/|$)/);
   if (regionMatch) {
-    if (!hasFunctionalCookieConsent()) return;
+    if (!hasFunctionalConsent) return;
     document.cookie = `${REGION_COOKIE}=${regionMatch[1]}; path=/; max-age=${60 * 60 * 24 * 365}`;
   } else if (pathname === '/' || pathname === '/en' || pathname === '/en/') {
     document.cookie = `${REGION_COOKIE}=; path=/; max-age=0`;
