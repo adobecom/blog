@@ -105,6 +105,64 @@ export function createOptimizedPicture(
 }
 
 /*
+ * Region homepages (/en/uk, /en/apac) carry the region in their URL, but story/topic/author
+ * pages don't - they all live under a single shared path (e.g. /en/publish/...). Without this,
+ * a reader who picked UK/APAC loses that context the instant they open anything that isn't a
+ * region homepage, because nothing else on the page signals which region nav to load.
+ */
+export const REGION_GNAV_OVERRIDES = { uk: '/gnav-old', apac: '/gnav-old' };
+export const REGION_COOKIE = 'blog-region';
+// The only gnav-source value this override ever replaces - a page authored with any other
+// (deliberately non-default) value is left alone, so a custom/campaign nav can't be clobbered.
+const DEFAULT_GNAV_SOURCE = '/gnav';
+
+/**
+ * Reads the persisted region preference, if any.
+ * @returns {string|null} the region key (e.g. 'uk', 'apac') or null if unset
+ */
+export function getRegionCookie() {
+  const pattern = new RegExp(`(?:^|; )${REGION_COOKIE}=([^;]*)`);
+  return document.cookie.match(pattern)?.[1] || null;
+}
+
+/**
+ * Persists the reader's region based on the current URL: sets the cookie when landing on a
+ * region homepage (subject to functional-cookie consent, checked via Milo's own
+ * getMepConsentConfig - the same OptanonConsent/C0003 mapping MEP already relies on), clears
+ * it when landing back on the bare US-English root. Clearing is always allowed regardless of
+ * consent state.
+ */
+export async function persistRegionFromPath() {
+  const { getMepConsentConfig } = await import(`${getLibs()}/martech/helpers.js`);
+  const hasFunctionalConsent = !!getMepConsentConfig()?.functional;
+  const { pathname } = window.location;
+  const regionMatch = pathname.match(/^\/en\/(uk|apac)(\/|$)/);
+  if (regionMatch) {
+    if (!hasFunctionalConsent) return;
+    document.cookie = `${REGION_COOKIE}=${regionMatch[1]}; path=/; max-age=${60 * 60 * 24 * 365}`;
+  } else if (pathname === '/' || pathname === '/en' || pathname === '/en/') {
+    document.cookie = `${REGION_COOKIE}=; path=/; max-age=0`;
+  }
+}
+
+/**
+ * If a region preference is persisted and the current page's own gnav-source metadata is
+ * still the site default, overrides the meta tag before the gnav block reads it. Pages that
+ * ship a deliberate non-default gnav-source (a campaign/custom nav) are left untouched.
+ */
+export function applyRegionGnavOverride() {
+  const override = REGION_GNAV_OVERRIDES[getRegionCookie()];
+  if (!override) return;
+  const { pathname } = window.location;
+  const inEnglishTree = pathname === '/' || pathname === '/en' || pathname.startsWith('/en/');
+  const alreadyRegionScoped = /^\/en\/(uk|apac)(\/|$)/.test(pathname);
+  if (!inEnglishTree || alreadyRegionScoped) return;
+  const meta = document.querySelector('meta[name="gnav-source"]');
+  if (meta?.getAttribute('content') !== DEFAULT_GNAV_SOURCE) return;
+  meta.setAttribute('content', override);
+}
+
+/*
  * ------------------------------------------------------------
  * Edit below at your own risk
  * ------------------------------------------------------------
